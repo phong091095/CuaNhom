@@ -17,21 +17,71 @@
 
 ## Phiên tới bắt đầu từ đây
 
-**GĐ 3 · Khung app Expo** (chi tiết ở `KE_HOACH_TRIEN_KHAI.md` mục 3):
-1. Tạo `apps/mobile`: lấy mẫu `expo-template-default` của SDK 58, bỏ phần ví dụ. Thêm `@matadoor/engine` và `@matadoor/data` vào dependencies dạng workspace. Kiểm Metro đọc được file `.ts` và `.json` của workspace.
-2. Viết `src/theme/tokens.ts`: Light/Dark đúng Handoff1, kể cả các màu phụ (`primarySoft`, `onPrimarySoft`, `warningSoft`, `errorSoft`, `snack`…). Lấy từ hàm `tokens()` trong `docs/thiet-ke/artboard/ProjectList.dc.html`.
-3. Nạp font Be Vietnam Pro; dựng các component nền và màn `/dev-components`; thanh tab 3 mục.
-4. Thêm ESLint (`eslint-config-expo`) và Jest cho app; sửa CI để chạy cả hai.
-5. Chạy thử bản web và chụp màn hình ở khổ 390 × 844.
+**GĐ 4 · Lưu trữ** (chi tiết ở `KE_HOACH_TRIEN_KHAI.md` mục 3):
+1. Lấy phiên bản `expo-sqlite` từ `node_modules/expo/bundledNativeModules.json` (lúc lập là `~58.0.15`). Cài bằng `npm install -w @matadoor/mobile expo-sqlite@<bản đó>`, **không dùng `npx expo install`**: proxy chặn api.expo.dev. Đọc tài liệu `expo-sqlite` của SDK 58 trước khi dùng (AGENTS.md trong `apps/mobile`).
+2. Viết `apps/mobile/src/db/`:
+   - giao diện SQL nhỏ (`exec`, `run`, `getAll`, `getFirst`, `transaction`);
+   - adapter cho `expo-sqlite`;
+   - adapter `node:sqlite` cho test.
+3. Viết lược đồ v1 và migration (bảng như kế hoạch GĐ 4); repository cho workshop, materials, projects, door_items, quotes, template_snapshots, drafts, events.
+4. Sao lưu và khôi phục (`dumpAll`, `parseBackup`, `replaceAll`) có kiểm phiên bản lược đồ; file sao lưu chứa logo.
+5. Viết test bằng Jest, chạy trên `node:sqlite`: tạo/sửa/xóa mềm/khôi phục; tự xóa hẳn sau 30 ngày; sao lưu → khôi phục ra cùng dữ liệu; từ chối file từ bản app mới hơn.
+6. Store Zustand cho dự án và cài đặt (chưa cần màn hình).
 
 ## Việc tồn
 
 - [ ] **Chủ dự án:** nếu còn giữ `cửa_mẫu.xlsx`, `QUYET_DINH.md` hoặc mã engine v0.1 cũ, đưa vào `docs/nguon/` để đối chiếu 2 mẫu đã dựng lại (Q15).
 - [ ] **Chủ dự án:** xem Q14 (tiêu chí cắt SRS 4.3 không phải lúc nào cũng đạt được) và Q7–Q18.
 - [ ] Các việc ngoài code ở `KE_HOACH_TRIEN_KHAI.md` mục 6.
-- [ ] Lint: hiện chưa có cấu hình ESLint, sẽ thêm ở GĐ 3 cùng app. `npm run lint` lúc này không chạy gì.
+- [ ] **Chưa chạy trên máy thật / Expo Go:** container không có thiết bị. Chủ dự án chạy `npm install` ở gốc kho, rồi `npx expo start` trong `apps/mobile`, quét QR bằng Expo Go (phải là bản hỗ trợ SDK 58) và báo lại lỗi nếu có.
+- [ ] **Mã ứng dụng** `vn.matadoor.app` (Android package, iOS bundle id) là tạm: chốt trước khi đưa lên cửa hàng.
 
 ## Các phiên
+
+### 2026-11-05 · Phiên 3 · GĐ 3 – Khung app Expo, token, component nền
+
+- **Bối cảnh:** tiếp ngay sau phiên 2, cùng ngày.
+- **Đã làm:**
+  - **`apps/mobile`:** dựng từ mẫu `expo-template-default` của SDK 58 (React Native 0.88, React 19.3, Expo Router, TypeScript 6). Đã bỏ phần ví dụ của mẫu.
+    - Thêm `@matadoor/engine` và `@matadoor/data` dạng workspace. Metro đóng gói được cả file `.ts` lẫn `.json` của workspace.
+    - Thêm `react-native-svg` 15.16.0, `@expo-google-fonts/be-vietnam-pro`, `zustand`.
+  - **`app.json`:** tên MATADOOR, scheme `matadoor`, khóa dọc, giao diện tự động sáng/tối; splash sáng và tối; web xuất kiểu `single`.
+  - **Icon, splash, favicon:** vẽ lại từ SVG logo hướng A trong thiết kế (artboard LogoMark).
+  - **`src/theme`:**
+    - Token Light/Dark đúng Handoff1, gồm các màu phụ lấy từ artboard.
+    - Thang chữ, khoảng cách, bo góc, kích thước, đổ bóng E1/E2 (chế độ tối không có bóng).
+    - Chọn chế độ Theo máy / Sáng / Tối.
+  - **`src/ui`:**
+    - `Txt`, `Icon` (55 icon nét 1,8 lấy từ artboard Icon), `Logo`.
+    - `Button` (chính / phụ / phá hủy / ghost, vô hiệu, đang xử lý), `TextField` (đơn vị trong ô, lỗi viền 2 px, chỉ đọc, bàn phím số hoặc SĐT).
+    - `Stepper`, `Chip`, `ChipRow`, `Segmented`, `Badge` (luôn icon + chữ), `Card`, `ListRow`.
+    - `BottomSheet`, `Select` dạng sheet, `Dialog` (xác nhận / phá hủy / thông tin), `Snackbar` (Hoàn tác 10 giây).
+    - `Header`, `ScreenTitle`, `Screen`, `Body` (đệm đáy 68/84), `BottomBar`, `EmptyState`, `ErrorState`, `SectionTitle`, `TabBar`.
+  - **Điều hướng:**
+    - Thanh tab Dự án · Thư viện · Cài đặt (`expo-router/js-tabs` với thanh tab tự vẽ: viên nền 56 × 30, icon kèm nhãn).
+    - Màn gốc: Dự án (khung B1, trạng thái rỗng); Thư viện (đọc bảng vật tư và mẫu cửa từ `@matadoor/data`); Cài đặt (logo, phiên bản app và dữ liệu, chọn sáng/tối, Công cụ).
+    - Màn ẩn `/dev-components`, chỉ có ở bản dev.
+  - **Engine:** thêm `bindUnits`. Mọi câu thông báo kiểm tra tự dùng khoảng trắng không ngắt giữa số và đơn vị. Lỗi này phát hiện khi xem ảnh chụp: dòng "600–1200 mm" bị xuống dòng trước "mm".
+  - **Công cụ:**
+    - ESLint (`eslint-config-expo`, flat config); Jest (`jest-expo`).
+    - Test token: 19 cặp chữ/nền đạt ≥ 4,5:1 và viền ≥ 3:1 ở cả hai chế độ; chữ ≥ 14; chiều cao dòng.
+  - **Ảnh chụp bản web** khổ 390 × 844 (Chromium): `docs/anh-chup/gd3-man-goc.png`, `docs/anh-chup/gd3-bo-component.png`.
+- **Kiểm thử:**
+  - `npm run check` (typecheck 3 gói, lint, test): xanh.
+    - engine 85/85;
+    - data 25/25;
+    - app 43/43.
+  - `npx expo export --platform web`: đóng gói thành công.
+  - CI GitHub của commit trước: xanh.
+- **Lệch so với thiết kế và lý do:**
+  - Chữ nhỏ nhất 14 (thiết kế 13); nút stepper và chip cao 48 (thiết kế 44). Lý do: NFR-USE-02 yêu cầu chữ ≥ 14 sp và vùng chạm ≥ 48 dp.
+  - Tab "Tài khoản" thành "Cài đặt" (theo `KE_HOACH_GIAO_DIEN.md`), icon bánh răng thay icon người.
+  - Nút lùi luôn có chữ "Quay lại", theo quy tắc "icon luôn có nhãn".
+  - Icon: chỉ đưa vào những icon cần cho MVP (bỏ wifiOff, mail, logout, eye… của phần tài khoản và mạng).
+- **Lưu ý môi trường:** `npx expo install` lỗi vì proxy chặn api.expo.dev. Cách làm thay: lấy phiên bản trong `node_modules/expo/bundledNativeModules.json` rồi cài bằng `npm install -w @matadoor/mobile <gói>@<bản>`.
+- **Chưa kiểm:** chạy trên Android/iOS thật hoặc Expo Go. Mới kiểm bản web.
+- **Commit:** "GĐ 3: khung app Expo, token thiết kế, bộ component nền".
+- **Bước tiếp theo:** GĐ 4 (xem mục "Phiên tới bắt đầu từ đây").
 
 ### 2026-11-05 · Phiên 2 · GĐ 0, 1, 2 – Nền móng, engine, gói dữ liệu
 

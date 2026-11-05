@@ -64,7 +64,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | 0 | Nền móng kho mã: monorepo, tài liệu, thiết kế, CI | ✅ 2026-11-05 |
 | 1 | Engine | ✅ 2026-11-05 |
 | 2 | Gói dữ liệu: 2 mẫu khớp TC, bảng vật tư, đáp án mẫu, khóa phiên bản | ✅ 2026-11-05 |
-| 3 | Khung app Expo, token, font, component nền, thanh tab | ☐ |
+| 3 | Khung app Expo, token, font, component nền, thanh tab | ✅ 2026-11-05 |
 | 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ☐ |
 | 5 | Nhóm B: dự án | ☐ |
 | 6 | Nhóm D: chọn mẫu, nhập cửa, chi tiết cửa | ☐ |
@@ -117,7 +117,15 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 - **Đáp án mẫu:** nằm ở `src/golden/srs-tc.json`. Test bắt buộc mỗi mẫu `verified` phải có ít nhất một ca.
 - **Khóa phiên bản:** `templates.lock.json` và script `npm run lock`.
 
-### GĐ 3 · Khung app Expo
+### GĐ 3 · Khung app Expo ✅
+> **Đã làm (2026-11-05):** xem nhật ký Phiên 3. Ảnh chụp: `docs/anh-chup/gd3-*.png`.
+>
+> **Lệch thiết kế:**
+> - chữ nhỏ nhất 14 (thiết kế 13);
+> - nút stepper và chip cao 48 (thiết kế 44), vì NFR-USE-02 yêu cầu vùng chạm ≥ 48 dp;
+> - tab Cài đặt dùng icon bánh răng;
+> - nút lùi luôn có chữ "Quay lại".
+
 - **Tạo app:** `apps/mobile` bằng Expo SDK 58 (bản mới nhất lúc lập kế hoạch) với Expo Router; import `@matadoor/engine` và `@matadoor/data` qua workspace.
 - **Token** (`src/theme`):
   - Light và Dark đúng bảng bàn giao (Handoff1).
@@ -252,6 +260,8 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | NFR-ACC-01 | `packages/data/src/templates/*.json` | `packages/data/test/golden.test.ts` (TC-01…07, 10) |
 | NFR-USE-03 | `packages/engine/src/format.ts` | `format.test.ts` |
 | NFR-MNT-01 | `validate.ts`, `templates.lock.json` | `data.test.ts`, `npm run coverage` |
+| NFR-USE-02 (tương phản AA, chữ ≥ 14, vùng chạm ≥ 48) | `apps/mobile/src/theme/tokens.ts`, `src/ui/*` | `apps/mobile/src/theme/__tests__/tokens.test.ts` |
+| NFR-USE-03 (không ngắt số–đơn vị) | `format.ts` (`bindUnits`) | `format.test.ts` |
 | FR-MAT-02 (quy đổi giá) | `packages/data/src/pricing.ts` | `data.test.ts` |
 | TC-08, TC-09 | — | GĐ 9, GĐ 13 |
 

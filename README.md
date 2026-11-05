@@ -10,7 +10,7 @@ App di động giúp xưởng nhôm kính đi từ số đo tới báo giá gử
 | --- | --- |
 | `packages/engine` | Engine tính toán, TypeScript thuần: biểu thức, bóc tách một bộ cửa, tổng hợp dự án, tối ưu cắt, báo giá, định dạng số |
 | `packages/data` | Gói dữ liệu: mẫu cửa (JSON), hệ nhôm, bảng vật tư mặc định, đáp án mẫu SRS, quy đổi giá |
-| `apps/mobile` | App Expo (dựng từ GĐ 3) |
+| `apps/mobile` | App Expo SDK 58: Expo Router, token thiết kế, bộ component |
 | `docs/` | SRS, kế hoạch, nhật ký, thiết kế |
 
 ## Bắt đầu
@@ -33,6 +33,12 @@ npm run typecheck
 npm run coverage
 ```
 
+Chạy app (cần điện thoại cài Expo Go bản hỗ trợ SDK 58, hoặc mở bản web):
+
+```bash
+cd apps/mobile && npx expo start
+```
+
 ## Thêm hoặc sửa mẫu cửa
 
 1. Sửa hoặc thêm file trong `packages/data/src/templates/`. Mẫu mới thì đăng ký ở `packages/data/src/index.ts`.
@@ -49,4 +55,5 @@ npm run lock -w @matadoor/data
 | GĐ | Nội dung | Trạng thái |
 | --- | --- | --- |
 | 0–2 | Nền móng, engine, gói dữ liệu | Xong |
-| 3–13 | App: giao diện, lưu trữ, các nhóm màn, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |
+| 3 | Khung app, token, component nền | Xong |
+| 4–13 | Lưu trữ, các nhóm màn, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |

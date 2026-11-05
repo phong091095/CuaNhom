@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import { computeDoor, interpolate } from '../src/compute';
 import { validateTemplate } from '../src/validate';
 import { BOOK, fixtureTemplate } from './fixtures';
+import { NBSP } from '../src/format';
+
+/** Đổi khoảng trắng không ngắt về khoảng trắng thường để so sánh câu chữ. */
+const sp = (s: string) => s.replaceAll(NBSP, ' ');
 
 const near = (a: number, b: number, eps = 1e-6) => assert.ok(Math.abs(a - b) < eps, `${a} ≉ ${b}`);
 
@@ -83,7 +87,7 @@ describe('computeDoor – thứ tự tính và dòng nhôm (BR-01…BR-03)', () 
 
   it('kiểm tra kỹ thuật: cảnh báo có chèn biến, xếp theo mức', () => {
     assert.deepEqual(
-      r.checks.map((c) => [c.level, c.message]),
+      r.checks.map((c) => [c.level, sp(c.message)]),
       [['warning', 'Cánh rộng 364 mm']],
     );
   });
@@ -119,7 +123,7 @@ describe('computeDoor – nhiều bộ, tham số, kính', () => {
     assert.equal(r.ok, false);
     const err = r.checks.find((c) => c.level === 'error')!;
     assert.equal(err.field, 'W');
-    assert.match(err.message, /600–1200 mm/);
+    assert.match(sp(err.message), /600–1200 mm/);
     assert.equal(r.checks[0]!.level, 'error', 'lỗi xếp trước');
   });
 
@@ -127,7 +131,7 @@ describe('computeDoor – nhiều bộ, tham số, kính', () => {
     const r1 = computeDoor(fixtureTemplate(), { W: 800, H: 2200, qty: 1, params: { soCanh: 3 } }, BOOK);
     assert.ok(r1.checks.some((c) => c.level === 'error' && c.field === 'soCanh'));
     const r2 = computeDoor(fixtureTemplate(), { W: 800, H: 2200, qty: 1, params: { khe: 50 } }, BOOK);
-    assert.ok(r2.checks.some((c) => c.level === 'error' && c.field === 'khe' && /tối đa 30 mm/.test(c.message)));
+    assert.ok(r2.checks.some((c) => c.level === 'error' && c.field === 'khe' && /tối đa 30 mm/.test(sp(c.message))));
     const r3 = computeDoor(fixtureTemplate(), { W: 800, H: 2200, qty: 1, params: { khe: -1 } }, BOOK);
     assert.ok(r3.checks.some((c) => c.level === 'error' && /tối thiểu 0/.test(c.message)));
     const r4 = computeDoor(fixtureTemplate(), { W: 800, H: 2200, qty: 1, params: { khe: Number.NaN } }, BOOK);
@@ -250,6 +254,6 @@ describe('validateTemplate', () => {
 
 describe('interpolate', () => {
   it('chèn số theo định dạng mm, giữ nguyên biến lạ', () => {
-    assert.equal(interpolate('Cánh {a} mm, {b}', { a: 1050.25 }), 'Cánh 1050,3 mm, {b}');
+    assert.equal(interpolate('Cánh {a} mm, {b}', { a: 1050.25 }), `Cánh 1050,3${NBSP}mm, {b}`);
   });
 });

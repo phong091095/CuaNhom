@@ -11,6 +11,7 @@ import {
   formatPercent,
   formatQty,
   formatSize,
+  bindUnits,
   matchesSearch,
   NBSP,
   normalizeSearch,
@@ -102,6 +103,16 @@ describe('định dạng (NFR-USE-03)', () => {
     assert.equal(parseMoney('250000'), 250000);
     assert.equal(parseMoney(''), null);
     assert.equal(parseMoney('12a'), null);
+  });
+});
+
+describe('không ngắt giữa số và đơn vị', () => {
+  it('thay khoảng trắng trước đơn vị bằng khoảng trắng không ngắt', () => {
+    assert.equal(bindUnits('trong khoảng 600–1200 mm'), `trong khoảng 600–1200${NBSP}mm`);
+    assert.equal(bindUnits('nặng 23,5 kg, 4 bản lề'), `nặng 23,5${NBSP}kg, 4 bản lề`);
+    assert.equal(bindUnits('giá 2.370.000 đ/m² và 10 đ'), `giá 2.370.000${NBSP}đ/m² và 10${NBSP}đ`);
+    assert.equal(bindUnits('3 mẫu'), '3 mẫu', 'chữ thường không phải đơn vị');
+    assert.equal(bindUnits('2 mang'), '2 mang', 'không ăn vào chữ bắt đầu bằng m');
   });
 });
 

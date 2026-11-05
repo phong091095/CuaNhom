@@ -87,6 +87,17 @@ export function formatPercent(ratio: number, maxDecimals = 1): string {
   return `${formatNumber(ratio * 100, { maxDecimals })}%`;
 }
 
+const UNITS = ['mm', 'm²', 'm', 'kg', 'đ/m²', 'đ', 'bộ', 'cái', 'chai', 'cây', 'tấm', 'thanh', 'ly'];
+const UNIT_RE = new RegExp(`(\\d) (${UNITS.map((u) => u.replace('/', '\\/')).join('|')})(?![\\p{L}\\d])`, 'gu');
+
+/**
+ * Thay khoảng trắng giữa số và đơn vị bằng khoảng trắng không ngắt trong một câu,
+ * để "1200 mm" không bị xuống dòng giữa chừng (quy tắc thiết kế "Không ngắt giữa số và đơn vị").
+ */
+export function bindUnits(text: string): string {
+  return text.replace(UNIT_RE, `$1${NBSP}$2`);
+}
+
 /** Số lượng kèm đơn vị: `9 chai`, `8,64 chai`. */
 export function formatQty(x: number, unit: string, maxDecimals = 2): string {
   return `${formatNumber(x, { maxDecimals })}${NBSP}${unit}`;

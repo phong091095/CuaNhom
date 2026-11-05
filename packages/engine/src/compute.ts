@@ -7,7 +7,7 @@
 
 import { compile, evaluate, ExprError } from './expr';
 import { ceilEps, roundMm } from './round';
-import { formatNumber } from './format';
+import { bindUnits, formatNumber } from './format';
 import type {
   AccessoryLine,
   CheckResult,
@@ -51,10 +51,12 @@ export const RESERVED_VARS = ['W', 'H', 'area', 'glass_perimeter_total'] as cons
  * Biến không có thì giữ nguyên.
  */
 export function interpolate(message: string, scope: Record<string, number>): string {
-  return message.replace(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (all, name: string) =>
-    Object.prototype.hasOwnProperty.call(scope, name)
-      ? formatNumber(scope[name]!, { maxDecimals: 1, grouping: false })
-      : all,
+  return bindUnits(
+    message.replace(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (all, name: string) =>
+      Object.prototype.hasOwnProperty.call(scope, name)
+        ? formatNumber(scope[name]!, { maxDecimals: 1, grouping: false })
+        : all,
+    ),
   );
 }
 
@@ -161,7 +163,7 @@ export function computeDoor(template: DoorTemplate, input: DoorInput, book: Pric
           checks.push({
             id: `param.${p.key}`,
             level: 'error',
-            message: `${p.label} tối thiểu ${formatNumber(p.min, { grouping: false })}${p.unit ? ` ${p.unit}` : ''}`,
+            message: bindUnits(`${p.label} tối thiểu ${formatNumber(p.min, { grouping: false })}${p.unit ? ` ${p.unit}` : ''}`),
             field: p.key,
           });
         }
@@ -169,7 +171,7 @@ export function computeDoor(template: DoorTemplate, input: DoorInput, book: Pric
           checks.push({
             id: `param.${p.key}`,
             level: 'error',
-            message: `${p.label} tối đa ${formatNumber(p.max, { grouping: false })}${p.unit ? ` ${p.unit}` : ''}`,
+            message: bindUnits(`${p.label} tối đa ${formatNumber(p.max, { grouping: false })}${p.unit ? ` ${p.unit}` : ''}`),
             field: p.key,
           });
         }
@@ -204,7 +206,9 @@ export function computeDoor(template: DoorTemplate, input: DoorInput, book: Pric
         checks.push({
           id: `cut.${row.role}`,
           level: 'error',
-          message: `Chiều dài cắt "${row.label}" không hợp lệ (${formatNumber(length, { maxDecimals: 1, grouping: false })} mm) – kiểm tra kích thước`,
+          message: bindUnits(
+            `Chiều dài cắt "${row.label}" không hợp lệ (${formatNumber(length, { maxDecimals: 1, grouping: false })} mm) – kiểm tra kích thước`,
+          ),
         });
       }
       const qty = q * sets;

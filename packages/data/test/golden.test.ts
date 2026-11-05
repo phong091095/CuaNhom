@@ -55,7 +55,7 @@ describe('đáp án mẫu một bộ cửa (TC-01, 02, 03, 05, 06)', () => {
       }
       for (const [level, field, text] of e.checks ?? []) {
         assert.ok(
-          r.checks.some((c) => c.level === level && (field === null || c.field === field) && c.message.includes(text)),
+          r.checks.some((c) => c.level === level && (field === null || c.field === field) && c.message.replaceAll('\u00A0', ' ').includes(text)),
           `thiếu kiểm tra ${level} "${text}": ${JSON.stringify(r.checks)}`,
         );
       }
