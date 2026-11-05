@@ -1,7 +1,7 @@
 /** Jest cho app (SRS 10.1: kiểm thử tích hợp). Engine và dữ liệu dùng node:test ở packages/. */
 module.exports = {
   preset: 'jest-expo',
-  testMatch: ['<rootDir>/src/**/__tests__/**/*.test.ts?(x)'],
+  testMatch: ['<rootDir>/src/**/__tests__/**/*.test.ts?(x)', '<rootDir>/src/app-tests/**/*.test.ts?(x)'],
   moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   // Độ phủ lớp lưu trữ / nghiệp vụ / store. Adapter expo-sqlite và client chỉ chạy trên máy thật.
   collectCoverageFrom: [

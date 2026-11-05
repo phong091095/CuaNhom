@@ -49,7 +49,9 @@ describe('dự án – tạo, sửa (FR-PRJ-01, 03)', () => {
     expect(projects.phoneHint('0923 456 789')).toBeNull();
     expect(projects.phoneHint('+84923456789')).toBeNull();
     expect(projects.phoneHint('')).toBeNull();
-    expect(projects.phoneHint('12345')).toMatch(/10 số/);
+    expect(projects.phoneHint('028 3822 1234')).toBeNull();
+    expect(projects.phoneHint('(028) 3822-1234')).toBeNull();
+    expect(projects.phoneHint('0923 45')).toMatch(/chưa đúng/);
   });
 });
 

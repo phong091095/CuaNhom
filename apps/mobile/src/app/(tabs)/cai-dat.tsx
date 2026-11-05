@@ -1,16 +1,19 @@
 /**
- * Cài đặt (C1 → SCR-09). GĐ 3: logo, chọn giao diện, lối vào bộ component (chỉ bản dev).
- * Thông tin xưởng, mặc định dự án mới, sao lưu/khôi phục, đã xóa gần đây làm ở GĐ 10.
+ * Cài đặt (C1 → SCR-09). GĐ 5: logo, giao diện, Đã xóa gần đây, công cụ bản dev.
+ * Thông tin xưởng, mặc định dự án mới, sao lưu/khôi phục làm ở GĐ 10.
  */
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { View } from 'react-native';
 import { DATA_VERSION } from '@matadoor/data';
+import { getDb } from '@/db/client';
+import { createSampleProject } from '@/domain/sampleProject';
 import { useAppTheme, type ThemeMode } from '@/theme/ThemeProvider';
-import { Body, Card, ListRow, Logo, Screen, ScreenTitle, SectionTitle, Segmented, Txt } from '@/ui';
+import { Body, Card, ListRow, Logo, Screen, ScreenTitle, SectionTitle, Segmented, Txt, useSnackbar } from '@/ui';
 
 export default function SettingsScreen() {
   const { mode, setMode } = useAppTheme();
+  const snack = useSnackbar();
   return (
     <Screen>
       <ScreenTitle title="Cài đặt" />
@@ -25,6 +28,16 @@ export default function SettingsScreen() {
               </Txt>
             </View>
           </View>
+        </Card>
+        <SectionTitle>Dữ liệu</SectionTitle>
+        <Card style={{ padding: 0, overflow: 'hidden' }}>
+          <ListRow
+            icon="trash"
+            title="Đã xóa gần đây"
+            subtitle="Khôi phục dự án, bộ cửa trong 30 ngày"
+            onPress={() => router.push('/da-xoa')}
+            testID="open-trash"
+          />
         </Card>
         <SectionTitle>Giao diện</SectionTitle>
         <Segmented<ThemeMode>
@@ -47,6 +60,17 @@ export default function SettingsScreen() {
                 subtitle="So với artboard Hệ thống thiết kế"
                 onPress={() => router.push('/dev-components')}
                 testID="open-dev-components"
+              />
+              <ListRow
+                icon="projects"
+                title="Tạo dự án mẫu"
+                subtitle="4 bộ cửa, gồm ca TC-07 của đặc tả"
+                testID="create-sample"
+                onPress={async () => {
+                  const p = await createSampleProject(await getDb());
+                  snack.show(`Đã tạo “${p.name}”`, { tone: 'success' });
+                  router.push(`/du-an/${p.id}`);
+                }}
               />
             </Card>
           </>

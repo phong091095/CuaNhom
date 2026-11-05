@@ -59,4 +59,5 @@ npm run lock -w @matadoor/data
 | 0–2 | Nền móng, engine, gói dữ liệu | Xong |
 | 3 | Khung app, token, component nền | Xong |
 | 4 | Lưu trữ SQLite, sao lưu/khôi phục, store | Xong |
-| 5–13 | Các nhóm màn, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |
+| 5 | Màn Dự án: danh sách, tạo/sửa, chi tiết, xóa + hoàn tác, đã xóa gần đây | Xong |
+| 6–13 | Bộ cửa, cắt nhôm, vật tư, báo giá, thư viện, cài đặt, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |

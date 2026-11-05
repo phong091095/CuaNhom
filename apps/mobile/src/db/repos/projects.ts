@@ -59,11 +59,17 @@ function cleanInput(input: ProjectInput): Required<ProjectInput> {
   };
 }
 
-/** Gợi ý (không chặn lưu): SĐT Việt Nam 10 số bắt đầu bằng 0, hoặc +84. */
+/** Gợi ý dưới ô SĐT khi ô trống hoặc hợp lệ (artboard B2). */
+export const PHONE_HELP = 'Không bắt buộc. Nhận 10–11 chữ số hoặc số bắt đầu bằng +84.';
+
+/**
+ * Nhắc (không chặn lưu – SĐT không bắt buộc): di động 10 số, cố định 11 số (bắt đầu bằng 0),
+ * hoặc +84 kèm 9–10 số.
+ */
 export function phoneHint(phone: string): string | null {
-  const digits = phone.replace(/[\s.-]/g, '');
+  const digits = phone.replace(/[\s.()-]/g, '');
   if (digits === '') return null;
-  return /^(0\d{9}|\+84\d{9})$/.test(digits) ? null : 'Số điện thoại thường có 10 số, bắt đầu bằng 0';
+  return /^(0\d{9,10}|\+84\d{9,10})$/.test(digits) ? null : 'Số điện thoại chưa đúng. Ví dụ 0923 456 789 hoặc 028 3822 1234.';
 }
 
 export async function createProject(db: SqlDb, input: ProjectInput, opts: { isSample?: boolean } = {}): Promise<Project> {

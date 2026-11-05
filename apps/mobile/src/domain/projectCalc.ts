@@ -57,11 +57,8 @@ export function computeDoorItem(door: DoorItem, template: DoorTemplate | null, b
   return computeDoor(template, { W: door.W, H: door.H, qty: door.qty, params: door.params, glass: door.glass }, book);
 }
 
-export async function computeProject(db: SqlDb, projectId: string): Promise<ComputedProject> {
-  const project = await getProject(db, projectId);
-  if (!project || project.deletedAt !== null) throw new NotFoundError('dự án');
-  const [items, snapshots, book] = await Promise.all([listDoors(db, projectId), loadTemplateSnapshots(db), loadPriceBook(db)]);
-  const doors: ComputedDoor[] = items.map((door) => {
+function computeDoors(items: readonly DoorItem[], snapshots: ReadonlyMap<string, DoorTemplate>, book: PriceBook): ComputedDoor[] {
+  return items.map((door) => {
     const template = snapshots.get(`${door.templateId}@${door.templateVersion}`) ?? null;
     const bundled = findTemplate(door.templateId);
     return {
@@ -71,9 +68,43 @@ export async function computeProject(db: SqlDb, projectId: string): Promise<Comp
       newerTemplateVersion: bundled && bundled.version > door.templateVersion ? bundled.version : null,
     };
   });
-  const summary = summarizeProject(
+}
+
+function summarize(doors: readonly ComputedDoor[], book: PriceBook): ProjectSummary {
+  return summarizeProject(
     doors.map((d) => ({ id: d.door.id, symbol: d.door.symbol, color: d.door.color, result: d.result })),
     book,
   );
-  return { project, doors, summary, book };
+}
+
+export async function computeProject(db: SqlDb, projectId: string): Promise<ComputedProject> {
+  const project = await getProject(db, projectId);
+  if (!project || project.deletedAt !== null) throw new NotFoundError('dự án');
+  const [items, snapshots, book] = await Promise.all([listDoors(db, projectId), loadTemplateSnapshots(db), loadPriceBook(db)]);
+  const doors = computeDoors(items, snapshots, book);
+  return { project, doors, summary: summarize(doors, book), book };
+}
+
+/** Tổng của một dự án cho thẻ ở danh sách (B1). */
+export interface ProjectTotals {
+  /** Báo giá OP1. */
+  op1: number;
+  /** Giá vốn. */
+  cost: number;
+  area: number;
+  sets: number;
+  /** Số bộ cửa có lỗi (không tính được hoặc có lỗi chặn lưu). */
+  invalidDoors: number;
+}
+
+/** Tính tổng nhiều dự án một lượt (đọc bảng giá và bản chụp mẫu một lần). */
+export async function computeProjectTotals(db: SqlDb, projectIds: readonly string[]): Promise<Map<string, ProjectTotals>> {
+  const out = new Map<string, ProjectTotals>();
+  if (projectIds.length === 0) return out;
+  const [snapshots, book] = await Promise.all([loadTemplateSnapshots(db), loadPriceBook(db)]);
+  for (const id of projectIds) {
+    const s = summarize(computeDoors(await listDoors(db, id), snapshots, book), book);
+    out.set(id, { op1: s.op1, cost: s.cost.total, area: s.area, sets: s.sets, invalidDoors: s.invalidDoors.length });
+  }
+  return out;
 }

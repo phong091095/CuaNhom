@@ -151,6 +151,17 @@ export function matchesSearch(query: string, ...fields: Array<string | null | un
   return fields.some((f) => f != null && normalizeSearch(f).includes(q));
 }
 
+/** Giữ cả cụm trên một dòng (SĐT "0923 456 789", mã…): đổi khoảng trắng thành khoảng trắng không ngắt. */
+export function keepTogether(s: string): string {
+  return s.replace(/ /g, NBSP);
+}
+
+/** Ngày kiểu Việt Nam theo giờ máy: 05/11/2026. */
+export function formatDate(at: Date | number): string {
+  const d = typeof at === 'number' ? new Date(at) : at;
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
 /** Chuỗi an toàn cho tên file: bỏ dấu, chữ thường, nối bằng "-". */
 export function slugify(s: string): string {
   return s

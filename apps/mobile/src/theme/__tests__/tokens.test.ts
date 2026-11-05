@@ -22,6 +22,8 @@ const TEXT_PAIRS: [keyof ColorTokens, keyof ColorTokens][] = [
   ['info', 'infoSoft'],
   ['onSnack', 'snack'],
   ['snackAction', 'snack'],
+  ['onHero', 'hero'],
+  ['onHero2', 'hero'],
 ];
 
 describe.each([

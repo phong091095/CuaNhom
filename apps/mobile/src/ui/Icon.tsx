@@ -2,6 +2,7 @@
  * Bộ icon nét 1,8 px trên lưới 24 (artboard Icon). Icon luôn đi kèm nhãn chữ (quy tắc thiết kế):
  * component này chỉ vẽ hình và ẩn khỏi trình đọc màn hình; nhãn do nút chứa nó cung cấp.
  */
+import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 const PATHS = {
@@ -61,16 +62,19 @@ export const ICON_NAMES = Object.keys(PATHS) as IconName[];
 
 export function Icon({ name, color, size = 24 }: { name: IconName; color: string; size?: number }) {
   const filled = name === 'more';
+  // aria-hidden: ẩn khỏi trình đọc màn hình trên cả Android, iOS và web.
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Path
+    <View aria-hidden style={{ width: size, height: size }}>
+      <Svg width={size} height={size} viewBox="0 0 24 24">
+        <Path
         d={PATHS[name]}
         fill={filled ? color : 'none'}
         stroke={color}
         strokeWidth={1.8}
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-    </Svg>
+        />
+      </Svg>
+    </View>
   );
 }

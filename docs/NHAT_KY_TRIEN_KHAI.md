@@ -17,29 +17,42 @@
 
 ## Phiên tới bắt đầu từ đây
 
-**GĐ 5 · Nhóm B – Dự án** (chi tiết ở `KE_HOACH_TRIEN_KHAI.md` mục 3; bố cục xem artboard `docs/thiet-ke/artboard/ProjectList`, `ProjectForm`, `ProjectDetail`, `ProjectSheets`):
-1. **B1** `src/app/(tabs)/index.tsx`:
-   - Dùng `useProjects` (`src/store/projects.ts`).
-   - Thẻ dự án gồm: tên, khách, địa chỉ, SĐT, huy hiệu trạng thái, số loại/số bộ, OP1. OP1 lấy từ `computeProject`; cân nhắc tính dần hoặc lưu đệm trong bộ nhớ nếu chậm.
-   - Ô tìm (tìm không dấu đã có ở repository).
-   - Trạng thái rỗng kèm "Tạo dự án đầu tiên"; nút nổi "Tạo dự án".
-   - Snackbar Hoàn tác 10 giây khi xóa (`remove` trả về hàm hoàn tác).
-2. **B2/B6** `src/app/du-an/moi.tsx` và `src/app/du-an/[id]/sua.tsx`:
-   - Ô tên công trình (bắt buộc), khách, SĐT (nhắc bằng `phoneHint`, không chặn), địa chỉ, ghi chú.
-   - Lỗi lấy từ `ValidationError.field` để hiện dưới đúng ô.
-   - Lưu nháp vào `drafts`; hỏi khi rời màn mà chưa lưu.
-3. **B3** `src/app/du-an/[id]/index.tsx`:
-   - Thẻ tóm tắt (`computeProject`): OP1, giá vốn, số bộ, m², đơn giá trung bình.
-   - Khối "Bóc tách & báo giá" (các ô dẫn tới E2/F1/F2/G1 – tạm chưa bấm được).
-   - Danh sách bộ cửa (thứ tự `sortOrder`).
-   - Huy hiệu trạng thái chạm để đổi; nút "Thêm bộ cửa" (D3 làm ở GĐ 6).
-4. **B4** sheet thao tác: Sửa · Nhân bản · Xuất (tạm ẩn tới GĐ 9) · Xóa.
-5. **B7** hộp xác nhận xóa, có gọi tên dự án.
-6. **C1b** "Đã xóa gần đây" `src/app/cai-dat/da-xoa.tsx`: `listTrash`, `daysLeft`, khôi phục, xóa hẳn.
-7. **Test:**
-   - Jest + `@testing-library/react-native`: cài bằng `npm install -w @matadoor/mobile -D` với bản tương thích React 19.3; kiểm phiên bản trước.
-   - Tối thiểu: tạo dự án → B3; xóa → Hoàn tác; tìm không dấu.
-   - Chụp bản web 390 × 844 và 360 × 800, sáng/tối, lưu vào `docs/anh-chup/gd5-*.png`.
+**GĐ 6a · Chọn mẫu (D3) và nhập cửa (D5) kèm bản vẽ.** Bố cục xem artboard `DoorForm`, `GalleryD*`, `canvas.json` (DoorsModel, DoorFormError, DoorFormNew). GĐ 6 nhiều việc nên tách: 6a là D3 + D5; 6b là D6 + D4 + D1.
+
+1. **Vào luồng:** B3 thêm nút "Thêm bộ cửa" (thanh đáy) → D3 `src/app/du-an/[id]/them-cua.tsx`.
+2. **D3 – chọn mẫu:**
+   - Lưới thẻ mẫu `visibleTemplates(__DEV__)`, có hình vẽ nhỏ.
+   - Chip lọc theo `group`, chỉ hiện nhóm đang có mẫu, kèm số mẫu, ví dụ "Cửa đi (1)".
+   - Nhãn "Lần trước": mẫu dùng gần nhất, lưu ở cài đặt `lastTemplateId`.
+3. **D5 – nhập cửa** `src/app/du-an/[id]/cua/moi.tsx` (thêm) và `.../cua/[doorId]/sua.tsx` (sửa):
+   - **Kích thước:** W, H (`parseDecimal`, 1 chữ số thập phân); số bộ (Stepper).
+   - **Ký hiệu:** gợi ý bằng `suggestSymbol`; lỗi trùng hiện dưới ô.
+   - **Tham số mẫu:** choice → Segmented hoặc Select; number → TextField có đơn vị.
+   - **Kính:** Select kính không ẩn, nhớ kính dùng lần trước.
+   - **Màu nhôm:** danh sách gợi ý + "Màu khác…".
+   - **Vị trí:** chip gợi ý từ các vị trí đã dùng trong dự án. Ghi chú.
+   - **Bản vẽ SVG theo tỉ lệ** (FR-DOR-06):
+     - cửa mở quay: bản lề, chiều mở theo `hingeParam` / `openInParam`;
+     - cửa lùa: số cánh, mũi tên lùa;
+     - có kích thước tổng; ô kính dùng token `glass`.
+   - **Giá và kiểm tra cập nhật ngay** (`computeDoor` bằng bản chụp mẫu mới nhất + `loadPriceBook`):
+     - lỗi hiện dưới đúng ô theo `check.field`;
+     - còn lỗi thì khóa nút Lưu; thanh đáy có "Còn N ô cần sửa · Xem".
+   - **Giá chỉ xem**, kèm nguồn ("Theo Thư viện") – một nguồn giá duy nhất.
+   - **Nháp và rời màn:** nháp `door:new:<projectId>` / `door:edit:<id>`; hỏi khi rời (mẫu `ProjectForm`: `usePreventRemove` + `repeat()`).
+   - **Nhật ký sử dụng:** `door_started` khi mở D3; `door_saved` kèm số giây từ D3 tới lúc lưu (SRS 10.3).
+4. **Hiệu năng:** đo thời gian `computeDoor` mỗi lần gõ (NFR-PER-01: ≤ 50 ms tính, ≤ 200 ms cập nhật). Cân nhắc debounce 100 ms.
+5. **Test:**
+   - Jest + `renderRouter` (mỗi nhóm màn một file, xem `src/app-tests/harness.tsx`):
+     - TC-05 qua giao diện: W 1500 → lỗi dưới ô W và khóa Lưu;
+     - TC-06: 900 × 2600 → thông báo 4 bản lề;
+     - ký hiệu trùng; nháp.
+   - Chụp web 390/360, sáng/tối.
+6. **Lưu ý test giao diện** (từ GĐ 5):
+   - RNTL 14 có `fireEvent`/`render` bất đồng bộ, luôn `await`.
+   - `renderRouter` bật đồng hồ giả.
+   - Store Zustand phải đặt lại trong `setupDb()`.
+   - Ca có chặn rời màn để cuối file.
 
 ## Việc tồn
 
@@ -50,6 +63,64 @@
 - [ ] **Mã ứng dụng** `vn.matadoor.app` (Android package, iOS bundle id) là tạm: chốt trước khi đưa lên cửa hàng.
 
 ## Các phiên
+
+### 2026-11-05 · Phiên 5 · GĐ 5 – Nhóm B: dự án
+
+- **Bối cảnh:** chủ dự án nhắn "làm tiếp đi". Đã đọc mục "Phiên tới" và làm GĐ 5 theo artboard `ProjectList`, `ProjectForm`, `ProjectDetail`, `ProjectSheets`.
+- **Đã làm:**
+  - **B1** `src/app/(tabs)/index.tsx`:
+    - Tiêu đề kèm số dự án; ô tìm `SearchField` (tìm không dấu).
+    - Thẻ dự án `features/projects/ProjectCard.tsx`: tên, trạng thái, khách, địa chỉ, SĐT, "N loại · M bộ" hoặc "Chưa có cửa", báo giá OP1.
+    - Skeleton khi tải; trạng thái rỗng kèm "Tạo dự án đầu tiên"; "Không tìm thấy dự án".
+    - Nút nổi "Tạo dự án", ẩn khi snackbar đang hiện.
+    - OP1 của mọi dự án tính một lượt: `computeProjectTotals` đọc bảng giá và bản chụp mẫu một lần.
+  - **B2/B6** `src/app/du-an/moi.tsx`, `[id]/sua.tsx` → `features/projects/ProjectForm.tsx`:
+    - Tên công trình (bắt buộc, lỗi dưới ô), khách, SĐT, địa chỉ.
+    - SĐT sai dạng chỉ nhắc bằng màu cảnh báo, không chặn lưu; nhận 10–11 số hoặc +84 theo artboard.
+    - Nháp tự lưu sau 500 ms; mở lại thì điền lại kèm thông báo.
+    - Rời màn khi chưa lưu thì hỏi "Bỏ thay đổi?" (`usePreventRemove` + `repeat()`).
+    - Tạo xong mở thẳng B3.
+  - **B3** `src/app/du-an/[id]/index.tsx`:
+    - Tên, khách · địa chỉ, SĐT bấm để gọi; huy hiệu trạng thái bấm để đổi (`StatusSheet`).
+    - Thẻ báo giá dùng token `hero`: OP1, giá vốn, số bộ, m², đơn giá trung bình, lãi dự kiến – mỗi số ghi căn cứ.
+    - Lưới 2 cột "Bóc tách & báo giá" (về 1 cột khi chữ hệ thống > 120%).
+    - Danh sách bộ cửa: ký hiệu, mẫu, màu, kích thước, m², kính, vị trí, "số bộ × đơn giá", thành tiền; huy hiệu lỗi và "Mẫu đã cập nhật".
+    - Báo bộ cửa lỗi chưa tính vào tổng.
+  - **B4 + B7** `features/projects/ProjectActions.tsx`:
+    - Sheet: Chỉnh sửa · Nhân bản (mở bản sao) · Xóa.
+    - Hộp xác nhận gọi tên dự án, nêu số loại cửa, số bộ, báo giá và "30 ngày".
+    - Snackbar Hoàn tác 10 giây. Hộp thoại mở sau khi sheet đóng (iOS chờ 350 ms).
+  - **C1b** `src/app/da-xoa.tsx` (vào từ Cài đặt → Dữ liệu):
+    - Danh sách dự án và bộ cửa đã xóa: ngày xóa, "Còn N ngày" (dưới 7 ngày dùng màu cảnh báo).
+    - Khôi phục; khôi phục bộ cửa trùng ký hiệu thì báo ký hiệu mới. Xóa hẳn có xác nhận.
+  - **Dùng chung:**
+    - `TextField` thêm icon đầu ô và `warning`; `Header` thêm `backLabel`/`onBack`.
+    - Thêm `Fab`, `SkeletonCard`, `SearchField`, `Button` kiểu `dangerGhost`; token `hero`/`onHero`/`onHero2` (test tương phản đạt).
+    - Hộp thoại có `testID`. Snackbar nổi trên thanh tab/thanh nút (84 pt) và có `useSnackbarVisible`.
+  - **Engine:** `formatDate` (dd/mm/yyyy), `keepTogether` (giữ SĐT trên một dòng).
+  - **Công cụ bản dev:** "Tạo dự án mẫu" (`domain/sampleProject.ts`: 4 bộ cửa, gồm ca TC-07) – dùng lại cho "Xem dự án mẫu" ở GĐ 12.
+- **Lỗi thật đã sửa nhờ test và ảnh chụp:**
+  1. Mở thẳng form (không có màn trước) thì nút "Hủy" không làm gì → nay về danh sách.
+  2. Chọn "Bỏ thay đổi" mà màn không đóng (lệnh rời bị chặn lần nữa) → dùng `repeat()` sau khi tắt chặn.
+  3. Prop trợ năng của icon gây lỗi trên web → đổi sang `aria-hidden`.
+  4. SĐT bị ngắt dòng trong sheet.
+  5. Viền focus mặc định của trình duyệt trong ô nhập.
+  6. Snackbar che thanh tab và nút nổi.
+- **Kiểm thử:**
+  - App 128/128 (14 bộ). Có 14 ca giao diện mới chạy trên router thật (`renderRouter`) với DB trong bộ nhớ:
+    - B1: rỗng; thẻ có OP1; tìm không dấu; xóa → Hoàn tác.
+    - B2: lỗi bắt buộc; SĐT chỉ nhắc; tạo → B3; nháp tự lưu; nháp còn lại thì điền lại; rời màn hỏi / tiếp tục / bỏ thay đổi xóa nháp.
+    - B6: sửa → về B3.
+    - B3: số liệu; đổi trạng thái; nhân bản; dự án không còn.
+    - C1b: khôi phục, xóa hẳn.
+  - Engine 87/87, data 25/25. Typecheck, lint sạch.
+  - Web (dev server, Chromium): chạy hết luồng B1 → B2 (lỗi) → B3 → dự án mẫu → B4 → B7 → Hoàn tác → tìm → C1b ở 390 × 844 sáng, 390 tối, 360 × 800. Không lỗi console, không tràn ngang.
+- **Lưu ý môi trường:**
+  - `expo export --dev` lỗi "unknown module" khi chia route; dùng `npx expo start --web` để kiểm.
+  - Dev server không gửi header COOP/COEP cho trang HTML, nhưng SQLite trên web vẫn chạy (bản export có header thì `crossOriginIsolated = true`).
+  - Metro đôi khi phát bundle cũ: khởi động lại với `--clear`.
+- **Commit:** "GĐ 5: nhóm màn Dự án (B1–B4, B6, B7, C1b)".
+- **Bước tiếp theo:** GĐ 6a (xem mục "Phiên tới bắt đầu từ đây").
 
 ### 2026-11-05 · Phiên 4 · GĐ 4 – Lưu trữ SQLite, sao lưu, store
 

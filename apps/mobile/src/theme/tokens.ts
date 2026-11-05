@@ -30,6 +30,10 @@ export interface ColorTokens {
   infoSoft: string;
   /** Ô kính trong bản vẽ cửa. */
   glass: string;
+  /** Thẻ tổng nổi bật (báo giá ở chi tiết dự án). */
+  hero: string;
+  onHero: string;
+  onHero2: string;
   /** Lớp mờ phía sau sheet, hộp thoại. */
   scrim: string;
   snack: string;
@@ -62,6 +66,9 @@ export const LIGHT: ColorTokens = {
   info: '#5B3E96',
   infoSoft: '#EEE8F8',
   glass: '#CFE7EF',
+  hero: '#0B5C75',
+  onHero: '#FFFFFF',
+  onHero2: '#CFE6EE',
   scrim: 'rgba(8,20,26,0.5)',
   snack: '#1B2B33',
   onSnack: '#FFFFFF',
@@ -93,6 +100,9 @@ export const DARK: ColorTokens = {
   info: '#CDB8F2',
   infoSoft: '#2A2140',
   glass: '#1E4656',
+  hero: '#12384A',
+  onHero: '#FFFFFF',
+  onHero2: '#BFE8F3',
   scrim: 'rgba(0,0,0,0.62)',
   snack: '#E6EDF0',
   onSnack: '#10212A',

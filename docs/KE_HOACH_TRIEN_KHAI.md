@@ -66,8 +66,9 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | 2 | Gói dữ liệu: 2 mẫu khớp TC, bảng vật tư, đáp án mẫu, khóa phiên bản | ✅ 2026-11-05 |
 | 3 | Khung app Expo, token, font, component nền, thanh tab | ✅ 2026-11-05 |
 | 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ✅ 2026-11-05 |
-| 5 | Nhóm B: dự án | ☐ |
-| 6 | Nhóm D: chọn mẫu, nhập cửa, chi tiết cửa | ☐ |
+| 5 | Nhóm B: dự án | ✅ 2026-11-05 |
+| 6a | Nhóm D: chọn mẫu (D3), nhập cửa (D5) kèm bản vẽ | ☐ |
+| 6b | Nhóm D: chi tiết cửa (D6), thông số hệ (D4), chọn nhiều/sắp xếp (D1) | ☐ |
 | 7 | Nhóm E: cắt nhôm, phiếu cắt | ☐ |
 | 8 | Nhóm F: tổng hợp kính, phụ kiện | ☐ |
 | 9 | Nhóm G: báo giá, PDF/ảnh, lịch sử | ☐ |
@@ -167,7 +168,19 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
   - Sao lưu: một file JSON có phiên bản lược đồ (SRS 5.2, FR-SET-03). Khôi phục: kiểm file, xem trước nội dung, tự sao lưu dữ liệu hiện tại trước khi ghi đè; từ chối file đến từ bản app mới hơn.
 - **Xóa mềm:** 30 ngày, tự xóa hẳn khi mở app.
 
-### GĐ 5 · Nhóm B – Dự án
+### GĐ 5 · Nhóm B – Dự án ✅
+> **Đã làm (2026-11-05):** xem nhật ký Phiên 5; ảnh chụp ở `docs/anh-chup/gd5-*.png`.
+>
+> **Lệch thiết kế và lý do:**
+> - Nút nổi luôn có chữ, không thu thành icon khi cuộn (quy tắc "icon luôn có nhãn").
+> - Thẻ dự án thêm huy hiệu trạng thái và tên khách (FR-PRJ-02, 04). Nhãn tiền là "Báo giá" (không ghi "+10%"), vì hệ số tính theo nhóm vật tư (Q1).
+> - B3:
+>   - "Biên thực tế sau hao hụt" tạm thay bằng "Lãi dự kiến (chưa tính hao hụt)" tới GĐ 7.
+>   - Ô "VTP" đổi thành "Nhân công" vì dữ liệu chưa có nhóm vật tư phụ.
+>   - Các ô bóc tách và dòng bộ cửa chưa bấm được (mở được ở GĐ 6–9).
+> - B4 có: Chỉnh sửa · Nhân bản · Xóa. "Hệ số lợi nhuận" (B5 → bảng giá theo nhóm, Q1) làm ở GĐ 10; "Xuất file" làm ở GĐ 9.
+> - Không có banner mạng, lỗi máy chủ hay quảng cáo (đã chốt Bỏ ở `KE_HOACH_GIAO_DIEN.md`).
+
 - B1 danh sách: tìm không dấu; xếp theo ngày sửa; trạng thái rỗng; snackbar Hoàn tác 10 giây.
 - B2/B6 tạo và sửa dự án: chỉ tên công trình là bắt buộc; SĐT sai dạng chỉ nhắc.
 - B3 chi tiết:
@@ -180,7 +193,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 - C1b "Đã xóa gần đây".
 - Nhân bản dự án: chép bộ cửa và tham số; không chép báo giá; trạng thái về "Báo giá".
 
-### GĐ 6 · Nhóm D – Bộ cửa
+### GĐ 6 · Nhóm D – Bộ cửa (tách 6a: D3 + D5 + bản vẽ; 6b: D6 + D4 + D1)
 - **D3 chọn mẫu:**
   - Chip lọc theo nhóm (cửa đi, cửa sổ, vách), chỉ hiện nhóm đang có mẫu.
   - Nhãn "Lần trước".
@@ -279,6 +292,9 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | Q2 (xóa mềm 30 ngày) | `src/db/repos/trash.ts` | `projects.test.ts`, `doors.test.ts` |
 | NFR-REL-01 (nháp) | `src/db/repos/drafts.ts` | `quotes-misc.test.ts` |
 | TC-04 qua lưu trữ | `src/domain/projectCalc.ts` | `projectCalc.test.ts` |
+| FR-PRJ-01…04 (giao diện B1, B2/B6, B3, B4, B7) | `src/app/(tabs)/index.tsx`, `src/app/du-an/*`, `src/features/projects/*` | `src/app-tests/projects-list.test.tsx`, `project-form.test.tsx`, `project-detail.test.tsx` |
+| Q2 (giao diện: Hoàn tác 10 giây, Đã xóa gần đây) | `ProjectActions.tsx`, `src/app/da-xoa.tsx` | `projects-list.test.tsx`, `trash.test.tsx` |
+| NFR-REL-01 (nháp form dự án, hỏi khi rời) | `src/features/projects/ProjectForm.tsx` | `project-form.test.tsx` |
 | TC-08 (giao diện), TC-09 | — | GĐ 9, GĐ 13 |
 
 ## 5. Quyết định đã chốt

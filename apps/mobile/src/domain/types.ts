@@ -17,6 +17,14 @@ export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
   da_lap: 'Đã lắp',
 };
 
+/** Huy hiệu trạng thái: luôn icon + chữ (không dùng màu cảnh báo cho trạng thái thường). */
+export const PROJECT_STATUS_BADGE: Record<ProjectStatus, { tone: 'primary' | 'info' | 'neutral' | 'success'; icon: 'quote' | 'tag' | 'cut' | 'checkCircle' }> = {
+  bao_gia: { tone: 'primary', icon: 'quote' },
+  dat_coc: { tone: 'info', icon: 'tag' },
+  gia_cong: { tone: 'neutral', icon: 'cut' },
+  da_lap: { tone: 'success', icon: 'checkCircle' },
+};
+
 export interface Workshop {
   name: string;
   phone: string;

@@ -5,10 +5,13 @@ import { create } from 'zustand';
 import { getDb } from '@/db/client';
 import { createProject, listProjects, restoreProject, softDeleteProject, duplicateProject } from '@/db/repos/projects';
 import { logEvent } from '@/db/repos/events';
+import { computeProjectTotals, type ProjectTotals } from '@/domain/projectCalc';
 import type { Project, ProjectInput, ProjectListItem } from '@/domain/types';
 
 interface ProjectsState {
   items: ProjectListItem[];
+  /** Tổng (OP1, giá vốn, m²) từng dự án – tính sau khi có danh sách. */
+  totals: Record<string, ProjectTotals>;
   query: string;
   loading: boolean;
   error: string | null;
@@ -22,6 +25,7 @@ interface ProjectsState {
 
 export const useProjects = create<ProjectsState>((set, get) => ({
   items: [],
+  totals: {},
   query: '',
   loading: false,
   error: null,
@@ -29,7 +33,10 @@ export const useProjects = create<ProjectsState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const db = await getDb();
-      set({ items: await listProjects(db, get().query), loading: false });
+      const items = await listProjects(db, get().query);
+      set({ items, loading: false });
+      const totals = await computeProjectTotals(db, items.map((p) => p.id));
+      set({ totals: { ...get().totals, ...Object.fromEntries(totals) } });
     } catch (e) {
       set({ loading: false, error: e instanceof Error ? e.message : String(e) });
     }

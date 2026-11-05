@@ -3,17 +3,31 @@
  * trạng thái rỗng / lỗi (mỗi màn danh sách đều có).
  */
 import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { useColors } from '@/theme/ThemeProvider';
-import { SIZE } from '@/theme/tokens';
+import { useAppTheme, useColors } from '@/theme/ThemeProvider';
+import { elevation, SIZE } from '@/theme/tokens';
 import { Button } from './Button';
 import { Icon, type IconName } from './Icon';
 import { Txt } from './Text';
 
 /** Thanh tiêu đề màn con: nút "Quay lại" có chữ, tiêu đề 17 Bold, hành động phải. */
-export function Header({ title, back = true, right }: { title: string; back?: boolean; right?: ReactNode }) {
+export function Header({
+  title,
+  back = true,
+  right,
+  backLabel = 'Quay lại',
+  onBack,
+}: {
+  title: string;
+  back?: boolean;
+  right?: ReactNode;
+  /** Ví dụ "Hủy" ở form tạo dự án. */
+  backLabel?: string;
+  /** Thay hành vi mặc định (lùi về màn trước). */
+  onBack?: () => void;
+}) {
   const c = useColors();
   const insets = useSafeAreaInsets();
   return (
@@ -22,9 +36,10 @@ export function Header({ title, back = true, right }: { title: string; back?: bo
         <Button
           kind="ghost"
           compact
-          label="Quay lại"
-          icon="chevL"
-          onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+          label={backLabel}
+          icon={backLabel === 'Quay lại' ? 'chevL' : undefined}
+          onPress={onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')))}
+          testID="header-back"
         />
       ) : (
         <View style={{ width: 8 }} />
@@ -142,8 +157,46 @@ export function SectionTitle({ children }: { children: string }) {
   );
 }
 
+/** Nút nổi (FAB) – luôn có chữ (quy tắc "icon luôn có nhãn"); nằm trên thanh tab. */
+export function Fab({ label, icon, onPress, testID }: { label: string; icon: IconName; onPress: () => void; testID?: string }) {
+  const { colors: c, dark } = useAppTheme();
+  return (
+    <View pointerEvents="box-none" style={styles.fabWrap}>
+      <Pressable
+        testID={testID}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        style={({ pressed }) => [styles.fab, { backgroundColor: c.accent, opacity: pressed ? 0.85 : 1 }, elevation(1, dark)]}
+      >
+        <Icon name={icon} color={c.onAccent} />
+        <Txt variant="bodyStrong" style={{ color: c.onAccent }}>
+          {label}
+        </Txt>
+      </Pressable>
+    </View>
+  );
+}
+
+/** Khối giữ chỗ khi đang tải (Handoff1: skeleton đúng khung thật, không dùng vòng xoay). */
+export function SkeletonCard({ lines = 3 }: { lines?: number }) {
+  const c = useColors();
+  return (
+    <View
+      accessibilityLabel="Đang tải"
+      style={{ padding: 16, borderRadius: 16, backgroundColor: c.surface, borderWidth: 1, borderColor: c.divider, gap: 10 }}
+    >
+      {Array.from({ length: lines }, (_, i) => (
+        <View key={i} style={{ width: `${[55, 85, 40, 70][i % 4]}%`, height: i === 0 ? 20 : 14, borderRadius: 6, backgroundColor: c.surface2 }} />
+      ))}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: { flex: 1 },
+  fabWrap: { position: 'absolute', right: 16, bottom: 16 },
+  fab: { minHeight: 56, paddingLeft: 16, paddingRight: 20, borderRadius: 16, flexDirection: 'row', alignItems: 'center', gap: 8 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

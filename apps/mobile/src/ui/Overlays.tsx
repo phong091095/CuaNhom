@@ -183,8 +183,8 @@ export function Dialog({
           </Txt>
           {message ? <Txt color="text2">{message}</Txt> : null}
           <View style={{ gap: 8, marginTop: 8 }}>
-            <Button label={confirmLabel} kind={destructive ? 'destructive' : 'primary'} onPress={onConfirm} />
-            {cancelLabel ? <Button label={cancelLabel} kind="secondary" onPress={onCancel} /> : null}
+            <Button label={confirmLabel} kind={destructive ? 'destructive' : 'primary'} onPress={onConfirm} testID="dialog-confirm" />
+            {cancelLabel ? <Button label={cancelLabel} kind="secondary" onPress={onCancel} testID="dialog-cancel" /> : null}
           </View>
         </View>
       </View>
@@ -208,6 +208,16 @@ interface SnackApi {
   setBottomOffset: (px: number) => void;
 }
 
+/** Snackbar nổi trên thanh tab / thanh nút đáy (cao 64–76): đặt cao hơn để không che. */
+export const SNACK_ABOVE_BARS = 84;
+
+const SnackVisibleContext = createContext(false);
+
+/** Snackbar đang hiện? (B1 ẩn nút nổi trong lúc này – artboard B1). */
+export function useSnackbarVisible(): boolean {
+  return useContext(SnackVisibleContext);
+}
+
 const SnackContext = createContext<SnackApi | null>(null);
 
 export const UNDO_MS = 10_000;
@@ -217,7 +227,7 @@ export function SnackbarProvider({ children }: { children: ReactNode }) {
   const { colors: c, dark } = useAppTheme();
   const insets = useSafeAreaInsets();
   const [msg, setMsg] = useState<SnackMessage | null>(null);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(SNACK_ABOVE_BARS);
   const seq = useRef(0);
 
   useEffect(() => {
@@ -234,7 +244,7 @@ export function SnackbarProvider({ children }: { children: ReactNode }) {
 
   return (
     <SnackContext.Provider value={api}>
-      {children}
+      <SnackVisibleContext.Provider value={msg !== null}>{children}</SnackVisibleContext.Provider>
       {msg ? (
         <View
           pointerEvents="box-none"

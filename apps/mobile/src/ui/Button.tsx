@@ -4,6 +4,7 @@
  * - secondary: viền 1 px, chữ màu text.
  * - destructive: nền đỏ (error) – luôn đi kèm hộp xác nhận.
  * - ghost: chỉ chữ màu primary (liên kết, "Sửa", "Hoàn tác").
+ * - dangerGhost: chỉ chữ màu error (ví dụ "Xóa hẳn"), luôn kèm hộp xác nhận.
  * Trạng thái: nhấn · vô hiệu (mờ .45 + accessibilityState.disabled) · đang xử lý.
  */
 import { ActivityIndicator, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
@@ -12,7 +13,7 @@ import { RADIUS, SIZE } from '@/theme/tokens';
 import { Icon, type IconName } from './Icon';
 import { Txt } from './Text';
 
-export type ButtonKind = 'primary' | 'secondary' | 'destructive' | 'ghost';
+export type ButtonKind = 'primary' | 'secondary' | 'destructive' | 'ghost' | 'dangerGhost';
 
 export interface ButtonProps {
   label: string;
@@ -47,6 +48,7 @@ export function Button({
     secondary: { bg: 'transparent', fg: c.text, border: c.border },
     destructive: { bg: c.error, fg: c.onError, border: c.error },
     ghost: { bg: 'transparent', fg: c.primary, border: 'transparent' },
+    dangerGhost: { bg: 'transparent', fg: c.error, border: 'transparent' },
   }[kind];
   const inactive = disabled || loading;
   return (
@@ -62,7 +64,7 @@ export function Button({
           minHeight: compact ? SIZE.touch : SIZE.control,
           backgroundColor: palette.bg,
           borderColor: palette.border,
-          paddingHorizontal: kind === 'ghost' ? 8 : 20,
+          paddingHorizontal: kind === 'ghost' || kind === 'dangerGhost' ? 8 : 20,
           opacity: disabled ? 0.45 : pressed ? 0.85 : 1,
         },
         style,

@@ -12,6 +12,8 @@ import {
   formatQty,
   formatSize,
   bindUnits,
+  formatDate,
+  keepTogether,
   matchesSearch,
   NBSP,
   normalizeSearch,
@@ -134,6 +136,15 @@ describe('tìm kiếm bỏ dấu', () => {
   it('mã nhôm có gạch nối', () => {
     assert.ok(matchesSearch('xf c3328', 'XF-C3328'));
     assert.ok(matchesSearch('c3328', 'XF-C3328'));
+  });
+
+  it('giữ SĐT trên một dòng', () => {
+    assert.equal(keepTogether('0923 456 789'), `0923${NBSP}456${NBSP}789`);
+  });
+
+  it('ngày dd/mm/yyyy', () => {
+    assert.equal(formatDate(new Date(2026, 10, 5, 23, 59)), '05/11/2026');
+    assert.equal(formatDate(new Date(2027, 0, 31).getTime()), '31/01/2027');
   });
 
   it('tên file an toàn', () => {
