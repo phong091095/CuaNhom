@@ -17,16 +17,29 @@
 
 ## Phiên tới bắt đầu từ đây
 
-**GĐ 4 · Lưu trữ** (chi tiết ở `KE_HOACH_TRIEN_KHAI.md` mục 3):
-1. Lấy phiên bản `expo-sqlite` từ `node_modules/expo/bundledNativeModules.json` (lúc lập là `~58.0.15`). Cài bằng `npm install -w @matadoor/mobile expo-sqlite@<bản đó>`, **không dùng `npx expo install`**: proxy chặn api.expo.dev. Đọc tài liệu `expo-sqlite` của SDK 58 trước khi dùng (AGENTS.md trong `apps/mobile`).
-2. Viết `apps/mobile/src/db/`:
-   - giao diện SQL nhỏ (`exec`, `run`, `getAll`, `getFirst`, `transaction`);
-   - adapter cho `expo-sqlite`;
-   - adapter `node:sqlite` cho test.
-3. Viết lược đồ v1 và migration (bảng như kế hoạch GĐ 4); repository cho workshop, materials, projects, door_items, quotes, template_snapshots, drafts, events.
-4. Sao lưu và khôi phục (`dumpAll`, `parseBackup`, `replaceAll`) có kiểm phiên bản lược đồ; file sao lưu chứa logo.
-5. Viết test bằng Jest, chạy trên `node:sqlite`: tạo/sửa/xóa mềm/khôi phục; tự xóa hẳn sau 30 ngày; sao lưu → khôi phục ra cùng dữ liệu; từ chối file từ bản app mới hơn.
-6. Store Zustand cho dự án và cài đặt (chưa cần màn hình).
+**GĐ 5 · Nhóm B – Dự án** (chi tiết ở `KE_HOACH_TRIEN_KHAI.md` mục 3; bố cục xem artboard `docs/thiet-ke/artboard/ProjectList`, `ProjectForm`, `ProjectDetail`, `ProjectSheets`):
+1. **B1** `src/app/(tabs)/index.tsx`:
+   - Dùng `useProjects` (`src/store/projects.ts`).
+   - Thẻ dự án gồm: tên, khách, địa chỉ, SĐT, huy hiệu trạng thái, số loại/số bộ, OP1. OP1 lấy từ `computeProject`; cân nhắc tính dần hoặc lưu đệm trong bộ nhớ nếu chậm.
+   - Ô tìm (tìm không dấu đã có ở repository).
+   - Trạng thái rỗng kèm "Tạo dự án đầu tiên"; nút nổi "Tạo dự án".
+   - Snackbar Hoàn tác 10 giây khi xóa (`remove` trả về hàm hoàn tác).
+2. **B2/B6** `src/app/du-an/moi.tsx` và `src/app/du-an/[id]/sua.tsx`:
+   - Ô tên công trình (bắt buộc), khách, SĐT (nhắc bằng `phoneHint`, không chặn), địa chỉ, ghi chú.
+   - Lỗi lấy từ `ValidationError.field` để hiện dưới đúng ô.
+   - Lưu nháp vào `drafts`; hỏi khi rời màn mà chưa lưu.
+3. **B3** `src/app/du-an/[id]/index.tsx`:
+   - Thẻ tóm tắt (`computeProject`): OP1, giá vốn, số bộ, m², đơn giá trung bình.
+   - Khối "Bóc tách & báo giá" (các ô dẫn tới E2/F1/F2/G1 – tạm chưa bấm được).
+   - Danh sách bộ cửa (thứ tự `sortOrder`).
+   - Huy hiệu trạng thái chạm để đổi; nút "Thêm bộ cửa" (D3 làm ở GĐ 6).
+4. **B4** sheet thao tác: Sửa · Nhân bản · Xuất (tạm ẩn tới GĐ 9) · Xóa.
+5. **B7** hộp xác nhận xóa, có gọi tên dự án.
+6. **C1b** "Đã xóa gần đây" `src/app/cai-dat/da-xoa.tsx`: `listTrash`, `daysLeft`, khôi phục, xóa hẳn.
+7. **Test:**
+   - Jest + `@testing-library/react-native`: cài bằng `npm install -w @matadoor/mobile -D` với bản tương thích React 19.3; kiểm phiên bản trước.
+   - Tối thiểu: tạo dự án → B3; xóa → Hoàn tác; tìm không dấu.
+   - Chụp bản web 390 × 844 và 360 × 800, sáng/tối, lưu vào `docs/anh-chup/gd5-*.png`.
 
 ## Việc tồn
 
@@ -37,6 +50,66 @@
 - [ ] **Mã ứng dụng** `vn.matadoor.app` (Android package, iOS bundle id) là tạm: chốt trước khi đưa lên cửa hàng.
 
 ## Các phiên
+
+### 2026-11-05 · Phiên 4 · GĐ 4 – Lưu trữ SQLite, sao lưu, store
+
+- **Bối cảnh:** chủ dự án nhắn "làm tiếp đi". Đã đọc mục "Phiên tới" và làm đúng GĐ 4.
+- **Đã làm:**
+  - **`expo-sqlite` ~58.0.15:** cài bằng `npm install -w` (không dùng `expo install` vì proxy). Đọc hướng dẫn kèm gói (`node_modules/expo-sqlite/skills`) thay cho trang tài liệu.
+  - **`src/db/sql.ts`:**
+    - Giao diện SQL nhỏ: `exec`, `run`, `getAll`, `getFirst`, `transaction`; giao dịch lồng nhau thì phần trong nhập vào giao dịch ngoài.
+    - Adapter `expoSqlite.ts` (bật WAL và khóa ngoại).
+    - Adapter `testing/nodeSqlite.ts` (`node:sqlite`, lấy qua `process.getBuiltinModule`, chạy trong Jest).
+  - **`src/db/schema.ts` – lược đồ v1:**
+    - Các bảng `workshop`, `settings`, `materials`, `projects`, `door_items` (màu, vị trí, ghi chú, `sort_order`, `template_version`, `deleted_at`), `quotes`, `template_snapshots`, `drafts`, `events`, `error_log`.
+    - Migration theo `PRAGMA user_version`: mỗi bước một giao dịch; DB của bản app mới hơn thì từ chối.
+  - **Repository** (`src/db/repos/`):
+    - `workshop`: thông tin xưởng, VAT, tham số cắt mặc định, hệ số nhóm, logo dạng data URI.
+    - `settings`: khóa `device.*` không vào sao lưu.
+    - `materials`: đồng bộ gói kèm mà không đè giá xưởng đã sửa; sửa giá, giá riêng, về giá gói; ẩn (chặn ẩn kính mặc định của mẫu); thêm kính KU-001…; xóa có điều kiện.
+    - `projects`: tạo, sửa, danh sách mới sửa trước kèm tìm không dấu, xóa mềm, khôi phục, nhân bản, xóa hẳn.
+    - `doors`: ký hiệu không trùng, gợi ý ký hiệu, xóa nhiều, khôi phục có đổi ký hiệu khi trùng, nhân bản ngay sau bộ gốc, sắp xếp, lên/xuống; mọi thay đổi đưa dự án lên đầu.
+    - `quotes`: số `BG-YYMM-NNN`, bản chụp, lịch sử, xóa ngay.
+    - `snapshots`: không bao giờ ghi đè; báo khi trùng version mà khác nội dung.
+    - `drafts`, `events`, `error_log` (giữ 200 dòng).
+    - `trash`: thùng rác, số ngày còn lại, tự xóa hẳn sau 30 ngày (nhật ký giữ 90 ngày).
+  - **`src/db/backup.ts`:**
+    - `dumpAll`, `serializeBackup`, `parseBackup`, `replaceAll`, `backupFileName`.
+    - `parseBackup` kiểm: phải là file MATADOOR, bản app không mới hơn, bảng và cột bắt buộc đủ, bộ cửa/báo giá phải có dự án. Có chỗ nâng file sao lưu của lược đồ cũ (`BACKUP_UPGRADES`).
+    - `replaceAll` chạy trong một giao dịch, chỉ chèn cột có thật trong bảng.
+  - **`src/db/init.ts` + `client.ts`:** khi mở app thì migrate → đồng bộ vật tư → lưu bản chụp mẫu → dọn thùng rác. `_layout.tsx` chờ DB xong mới tắt splash; lỗi thì hiện màn "Không mở được dữ liệu" có nút Thử lại.
+  - **Miền nghiệp vụ:**
+    - `src/domain/types.ts`, `errors.ts` (`ValidationError` có `field`).
+    - `symbols.ts` (ký hiệu bộ cửa).
+    - `pricing.ts`: bảng giá = vật tư DB × hệ số nhóm.
+    - `projectCalc.ts`: tính cả dự án theo bản chụp đúng phiên bản mẫu của từng bộ, đánh dấu "mẫu đã cập nhật".
+  - **Store Zustand:** `useProjects` (tải, tìm, tạo, xóa có hoàn tác, nhân bản), `useWorkshop`.
+  - **Giao diện:**
+    - Chọn sáng/tối nay được lưu vào cài đặt.
+    - Thư viện đọc số vật tư từ SQLite.
+  - **Web:** `metro.config.js` thêm `.wasm` và header COOP/COEP; `app.json` thêm header cho expo-router.
+  - **`packages/data`:** thêm `PriceStatus` "xuong" (giá xưởng tự sửa).
+- **Kiểm thử:**
+  - `npm run check`: xanh – engine 85/85, data 25/25, app 110/110 (10 bộ test).
+  - Độ phủ: engine dòng 99,58%; lớp DB, miền nghiệp vụ, store dòng 98,35%. Có ngưỡng 85% trong `jest.config.js`; lệnh `npm run coverage` chạy cả hai.
+  - Các test đáng chú ý:
+    - migration lỗi giữa chừng thì không nửa vời;
+    - sao lưu → khôi phục sang DB khác ra bảng giống hệt (kể cả logo);
+    - khôi phục lỗi giữa chừng không đổi dữ liệu;
+    - file sửa tay có cột lạ (kể cả tên cột chứa SQL) bị bỏ qua;
+    - TC-04 và TC-08 chạy qua lưu trữ;
+    - bộ cửa tính theo bản chụp mẫu chứ không theo mẫu gói kèm.
+  - **Bản web** (`expo export` rồi phục vụ kèm header COOP/COEP):
+    - `crossOriginIsolated = true`; SQLite (wa-sqlite) chạy được.
+    - Thư viện hiện số vật tư từ DB.
+    - Chọn "Tối" rồi tải lại trang vẫn tối.
+- **Lệch / lưu ý:**
+  - Giao dịch dùng BEGIN/COMMIT trên cùng kết nối, không dùng `withExclusiveTransactionAsync`. Lý do: API đó không chạy trên web; app có một chủ sở hữu kết nối duy nhất (`client.ts`).
+  - Tìm dự án lọc trong JS (LIKE của SQLite không bỏ dấu tiếng Việt). Đủ nhanh với vài trăm dự án; nếu chậm thì thêm cột tìm kiếm đã chuẩn hóa (cần migration).
+  - Tự sao lưu dữ liệu hiện tại trước khi khôi phục (ĐX-09) để GĐ 10, vì cần ghi file bằng `expo-file-system`.
+- **Chưa kiểm:** `expo-sqlite` trên Android/iOS thật (mới kiểm web và `node:sqlite`).
+- **Commit:** "GĐ 4: lưu trữ SQLite, sao lưu/khôi phục, store".
+- **Bước tiếp theo:** GĐ 5 (xem mục "Phiên tới bắt đầu từ đây").
 
 ### 2026-11-05 · Phiên 3 · GĐ 3 – Khung app Expo, token, component nền
 

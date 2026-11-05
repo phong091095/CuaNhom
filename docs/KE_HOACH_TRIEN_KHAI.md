@@ -65,7 +65,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | 1 | Engine | ✅ 2026-11-05 |
 | 2 | Gói dữ liệu: 2 mẫu khớp TC, bảng vật tư, đáp án mẫu, khóa phiên bản | ✅ 2026-11-05 |
 | 3 | Khung app Expo, token, font, component nền, thanh tab | ✅ 2026-11-05 |
-| 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ☐ |
+| 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ✅ 2026-11-05 |
 | 5 | Nhóm B: dự án | ☐ |
 | 6 | Nhóm D: chọn mẫu, nhập cửa, chi tiết cửa | ☐ |
 | 7 | Nhóm E: cắt nhôm, phiếu cắt | ☐ |
@@ -144,7 +144,13 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 - **ESLint:** dùng `eslint-config-expo`; thêm Jest cho app.
 - **Xong khi:** chạy được trên web (`npx expo start --web`) và Expo Go; đã chụp màn dev-components ở khổ 390 × 844.
 
-### GĐ 4 · Lưu trữ
+### GĐ 4 · Lưu trữ ✅
+> **Đã làm (2026-11-05):** xem nhật ký Phiên 4.
+> - Lược đồ v1 có đủ bảng ngay từ đầu.
+> - Repository, sao lưu và khôi phục, store, nối DB vào lúc mở app.
+> - SQLite chạy được trên web (WASM, header COOP/COEP).
+> - Thêm `domain/projectCalc.ts`: tính cả dự án theo bản chụp mẫu, dùng cho GĐ 5.
+
 - **Bảng** (lược đồ v1 đủ cho cả MVP):
   - `workshop` (một dòng): tên, SĐT, địa chỉ, logo base64, VAT bật/tắt và thuế suất, ghi chú báo giá mẫu, tham số cắt mặc định, hệ số theo nhóm.
   - `materials` (giá do người dùng sửa): giá gốc, giá bán riêng, ẩn, nguồn (`bundled` / `user`), `updated_at`.
@@ -263,7 +269,17 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | NFR-USE-02 (tương phản AA, chữ ≥ 14, vùng chạm ≥ 48) | `apps/mobile/src/theme/tokens.ts`, `src/ui/*` | `apps/mobile/src/theme/__tests__/tokens.test.ts` |
 | NFR-USE-03 (không ngắt số–đơn vị) | `format.ts` (`bindUnits`) | `format.test.ts` |
 | FR-MAT-02 (quy đổi giá) | `packages/data/src/pricing.ts` | `data.test.ts` |
-| TC-08, TC-09 | — | GĐ 9, GĐ 13 |
+| FR-PRJ-01…04 (lưu trữ) | `apps/mobile/src/db/repos/projects.ts` | `src/db/__tests__/projects.test.ts` |
+| FR-DOR-02, 05, 08, "thứ tự" (lưu trữ) | `src/db/repos/doors.ts`, `src/domain/symbols.ts` | `doors.test.ts`, `symbols.test.ts` |
+| FR-MAT-01, 02, SRS 5.2 (ẩn, không xóa vật tư mẫu) | `src/db/repos/materials.ts`, `src/domain/pricing.ts` | `materials.test.ts` |
+| FR-MAT-03 (bản chụp báo giá) | `src/db/repos/quotes.ts` | `quotes-misc.test.ts`, `projectCalc.test.ts` (TC-08 qua lưu trữ) |
+| FR-SET-01, 02 (lưu trữ) | `src/db/repos/workshop.ts` | `quotes-misc.test.ts` |
+| FR-SET-03 | `src/db/backup.ts` | `backup.test.ts` |
+| SRS 5.2 (phiên bản mẫu, tính lại khi mở) | `src/db/repos/snapshots.ts`, `src/domain/projectCalc.ts` | `projectCalc.test.ts`, `quotes-misc.test.ts` |
+| Q2 (xóa mềm 30 ngày) | `src/db/repos/trash.ts` | `projects.test.ts`, `doors.test.ts` |
+| NFR-REL-01 (nháp) | `src/db/repos/drafts.ts` | `quotes-misc.test.ts` |
+| TC-04 qua lưu trữ | `src/domain/projectCalc.ts` | `projectCalc.test.ts` |
+| TC-08 (giao diện), TC-09 | — | GĐ 9, GĐ 13 |
 
 ## 5. Quyết định đã chốt
 
@@ -283,6 +299,10 @@ Q1–Q6 ở `KE_HOACH_GIAO_DIEN.md`. Các câu dưới đây chốt theo đề x
 | Q16 | Giá nhôm | Lưu ₫/cây; engine quy ra ₫/m | Ghi chú thiết kế "nhôm tính theo cây"; BR-06 tính theo m. |
 | Q17 | Hệ số lợi nhuận mặc định | 1,1 cho mọi nhóm | Thiết kế B3 ghi "Báo giá (+10%)". Xưởng sửa ở B5 (Q1). |
 | Q18 | Mã nhôm cửa lùa | Mã tạm `XF-L-*`, tên có ghi "(mã chờ xác nhận)" | Thiết kế và SRS chưa có mã thật. |
+| Q19 | Ký hiệu bộ cửa khi xóa | Không đánh số lại. Bộ mới lấy số lớn nhất + 1 (tính cả bộ trong thùng rác). Khôi phục mà ký hiệu đã bị dùng thì đổi sang số kế tiếp | Ký hiệu đã ghi lên bản vẽ và phiếu cắt (câu 5 trong ghi chú canvas). |
+| Q20 | VAT mặc định | Tắt, thuế suất 8% khi bật, sửa được | Hồ sơ thiết kế: "mặc định tắt, đang để 8%". |
+| Q21 | Số báo giá | `BG-YYMM-NNN`, đánh lại từ 001 mỗi tháng, theo từng máy | Ngắn, đọc qua điện thoại được; MVP chỉ một máy (SRS 2.2). |
+| Q22 | Khôi phục sao lưu | Thay toàn bộ dữ liệu trong một giao dịch. Giữ nháp, nhật ký và cài đặt riêng của máy. Từ chối file từ bản app mới hơn | SRS 5.2; an toàn khi file hỏng hoặc khôi phục lỗi giữa chừng. Tự sao lưu trước khi khôi phục làm ở GĐ 10 (cần file hệ thống). |
 
 **Q14 – Tiêu chí chất lượng cắt (SRS 4.3).** Tiêu chí "≤ cận dưới + 1 cây" **không phải lúc nào cũng đạt được** về mặt toán học.
 - Phản ví dụ, có test: 49 cửa 1200 × 2800. Mỗi cây chỉ chứa được 2 thanh 2800 và không còn chỗ cho thanh 1200, nên tối ưu thật là 62 cây, trong khi cận dưới theo SRS là 58.

@@ -17,9 +17,11 @@
 - **Định dạng:** tiền `1.234.567 đ`, kích thước `2200 mm` (không ngăn nghìn), số thập phân dùng dấu phẩy, khoảng trắng không ngắt giữa số và đơn vị. Dùng các hàm trong `packages/engine/src/format.ts`.
 - **Mạng:** không thêm thư viện gửi dữ liệu ra ngoài (phân tích, báo lỗi, quảng cáo) – NFR-SEC-01.
 - **Giao diện:** toàn bộ tiếng Việt, không hiện mã màn (SCR-…) hay ghi chú dev.
+- **Dữ liệu:** mọi đọc/ghi DB đi qua repository trong `apps/mobile/src/db/repos` và `getDb()`; không gọi expo-sqlite trực tiếp từ màn hình. Đổi lược đồ: tăng `SCHEMA_VERSION`, thêm migration, thêm `BACKUP_UPGRADES`, viết test nâng cấp.
+- **Cài gói Expo:** proxy chặn `npx expo install`; lấy phiên bản trong `node_modules/expo/bundledNativeModules.json` rồi `npm install -w @matadoor/mobile <gói>@<bản>`.
 
 ## Lệnh
 - `npm test` – test mọi gói
 - `npm run typecheck`
-- `npm run coverage` – độ phủ engine (ngưỡng 85%)
+- `npm run coverage` – độ phủ engine và lớp lưu trữ của app (ngưỡng 85%)
 - `npm run lock -w @matadoor/data` – cập nhật khóa phiên bản mẫu

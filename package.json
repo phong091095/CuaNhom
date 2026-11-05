@@ -14,7 +14,7 @@
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "coverage": "npm run coverage --workspace @matadoor/engine",
+    "coverage": "npm run coverage --workspace @matadoor/engine && npm run coverage --workspace @matadoor/mobile",
     "check": "npm run typecheck && npm run lint && npm test"
   }
 }

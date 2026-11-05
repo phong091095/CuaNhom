@@ -8,7 +8,8 @@
 
 import type { MaterialGroup, PriceBook, PricedMaterial } from '@matadoor/engine';
 
-export type PriceStatus = 'that' | 'tam';
+/** that: số thật của gói; tam: giá tạm của gói; xuong: xưởng tự đặt/sửa. */
+export type PriceStatus = 'that' | 'tam' | 'xuong';
 
 /** Một dòng vật tư (gói kèm hoặc đã được người dùng sửa giá). */
 export interface MaterialRecord {

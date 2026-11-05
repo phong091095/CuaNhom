@@ -1,12 +1,15 @@
 /**
- * Chế độ sáng/tối: Theo hệ thống (mặc định) · Sáng · Tối.
- * Lựa chọn sẽ được lưu vào cài đặt ở GĐ 10; hiện giữ trong bộ nhớ.
+ * Chế độ sáng/tối: Theo máy (mặc định) · Sáng · Tối. Lựa chọn lưu ở cài đặt (khóa "themeMode").
  */
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { useColorScheme } from 'react-native';
 import { DARK, LIGHT, type ColorTokens } from './tokens';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
+
+export function isThemeMode(v: unknown): v is ThemeMode {
+  return v === 'system' || v === 'light' || v === 'dark';
+}
 
 interface ThemeValue {
   colors: ColorTokens;
@@ -17,11 +20,27 @@ interface ThemeValue {
 
 const ThemeContext = createContext<ThemeValue | null>(null);
 
-export function AppThemeProvider({ children, initialMode = 'system' }: { children: ReactNode; initialMode?: ThemeMode }) {
+export function AppThemeProvider({
+  children,
+  initialMode = 'system',
+  onModeChange,
+}: {
+  children: ReactNode;
+  initialMode?: ThemeMode;
+  /** Gọi khi người dùng đổi chế độ (để lưu). */
+  onModeChange?: (m: ThemeMode) => void;
+}) {
   const system = useColorScheme();
-  const [mode, setMode] = useState<ThemeMode>(initialMode);
+  const [mode, setModeState] = useState<ThemeMode>(initialMode);
+  const setMode = useCallback(
+    (m: ThemeMode) => {
+      setModeState(m);
+      onModeChange?.(m);
+    },
+    [onModeChange],
+  );
   const dark = mode === 'dark' || (mode === 'system' && system === 'dark');
-  const value = useMemo<ThemeValue>(() => ({ colors: dark ? DARK : LIGHT, dark, mode, setMode }), [dark, mode]);
+  const value = useMemo<ThemeValue>(() => ({ colors: dark ? DARK : LIGHT, dark, mode, setMode }), [dark, mode, setMode]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
