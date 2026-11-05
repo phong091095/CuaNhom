@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font-family: inherit; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; color: {{t.text}}; display: flex; flex-direction: column; justify-content: {{justify}};">
+  <button type="button" aria-label="Đóng" onClick="{{close}}" style="position: absolute; inset: 0; border: 0; background: {{t.scrim}}; cursor: pointer;"></button>
+
+  <sc-if value="{{isActions}}" hint-placeholder-val="{{ true }}">
+    <section role="dialog" aria-labelledby="ps-a" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 4px;">
+      <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}}; margin-bottom: 4px;"></div>
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid {{t.divider}};">
+        <div style="display: flex; flex-direction: column; padding-top: 6px;">
+          <h2 id="ps-a" style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Anh Đoài</h2>
+          <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">53 Bình Hạ, Đồng Nai · 0923 456 789</span>
+        </div>
+        <button type="button" onClick="{{close}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Đóng</button>
+      </div>
+      <button type="button" onClick="{{goProfit}}" style="min-height: 56px; border: 0; background: transparent; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.text}}; font-size: 16px; line-height: 24px; cursor: pointer;">
+        <dc-import name="Icon" icon="percent" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        <span style="flex-grow: 1; text-align: left;">Nhập hệ số lợi nhuận %</span>
+        <span class="num" style="height: 28px; padding: 0 10px; border-radius: 999px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; font-size: 14px; line-height: 20px; font-weight: 600; display: flex; align-items: center;">10%</span>
+      </button>
+      <a href="ProjectFormEdit.dc.html" style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.text}}; font-size: 16px; line-height: 24px;">
+        <dc-import name="Icon" icon="edit" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        <span style="flex-grow: 1;">Chỉnh sửa dự án</span>
+        <dc-import name="Icon" icon="chevR" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </a>
+      <button type="button" onClick="{{goExport}}" style="min-height: 56px; border: 0; background: transparent; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.text}}; font-size: 16px; line-height: 24px; cursor: pointer;">
+        <dc-import name="Icon" icon="export" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        <span style="flex-grow: 1; text-align: left;">Xuất file</span>
+        <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Excel · PDF</span>
+      </button>
+      <div style="height: 1px; background: {{t.divider}}; margin: 8px 0;"></div>
+      <button type="button" onClick="{{goDelete}}" style="min-height: 56px; border: 0; background: transparent; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.error}}; font-size: 16px; line-height: 24px; font-weight: 600; cursor: pointer;">
+        <dc-import name="Icon" icon="trash" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+        <span style="flex-grow: 1; text-align: left;">Xóa dự án</span>
+      </button>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{isProfit}}" hint-placeholder-val="{{ false }}">
+    <section role="dialog" aria-labelledby="ps-p" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px {{profitPadB}}; display: flex; flex-direction: column; gap: 16px;">
+      <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+      <div style="display: flex; flex-direction: column;">
+        <h2 id="ps-p" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Hệ số lợi nhuận</h2>
+        <span style="font-size: 14px; line-height: 20px; color: {{t.text2}};">Dự án Anh Đoài</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label for="ps-in" style="font-size: 14px; line-height: 20px; font-weight: 500; color: {{pLabel}};">Lợi nhuận</label>
+        <div style="height: 56px; box-sizing: border-box; padding: 0 {{pPad}}; border: {{pBorder}}; border-radius: 12px; background: {{t.surface}}; display: flex; align-items: stretch; gap: 8px;">
+          <input id="ps-in" value="{{pValue}}" inputmode="decimal" aria-invalid="{{pErr}}" aria-describedby="ps-err" class="num" style="flex-grow: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; font-size: 22px; line-height: 30px; font-weight: 600; color: {{t.text}};">
+          <span style="align-self: center; font-size: 18px; font-weight: 600; color: {{t.text2}};">%</span>
+        </div>
+        <sc-if value="{{pErr}}" hint-placeholder-val="{{ false }}">
+          <span id="ps-err" style="display: flex; gap: 4px; align-items: flex-start; font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.error}};">
+            <dc-import name="Icon" icon="alert" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+            <span style="padding-top: 3px;">Nhập số từ 0 đến 100, ví dụ 10.</span>
+          </span>
+        </sc-if>
+      </div>
+      <div style="border-radius: 12px; background: {{t.surface2}}; padding: 4px 14px; display: flex; flex-direction: column;">
+        <div style="min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid {{t.divider}};">
+          <span style="font-size: 14px; color: {{t.text2}};">Giá vốn</span>
+          <span class="num" style="font-size: 15px; font-weight: 500;">9.440.324&nbsp;₫</span>
+        </div>
+        <div style="min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span style="font-size: 14px; font-weight: 600;">{{pQuoteLabel}}</span>
+          <span class="num" style="font-size: 17px; font-weight: 700;">{{pQuote}}</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+        <button type="button" onClick="{{close}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+        <button type="button" onClick="{{saveProfit}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; cursor: pointer;">Lưu</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{isDelete}}" hint-placeholder-val="{{ false }}">
+    <section role="alertdialog" aria-labelledby="ps-d" aria-describedby="ps-dd" style="position: relative; margin: 0 24px; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="width: 48px; height: 48px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="trash" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+      </div>
+      <h2 id="ps-d" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xóa dự án “Anh Đoài”?</h2>
+      <p id="ps-dd" style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Dự án có 4&nbsp;loại cửa (7&nbsp;bộ), báo giá 10.384.357&nbsp;₫. Dự án sẽ được chuyển vào Đã xóa gần đây và tự xóa hẳn sau 30&nbsp;ngày.</p>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 8px;">
+        <button type="button" onClick="{{close}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+        <sc-if value="{{delLink}}" hint-placeholder-val="{{ false }}">
+          <a href="{{deleteHref}}" style="height: 52px; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center;">Xóa dự án</a>
+        </sc-if>
+        <sc-if value="{{delBtn}}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{confirmDelete}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 16px; font-weight: 600; cursor: pointer;">Xóa dự án</button>
+        </sc-if>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{isExport}}" hint-placeholder-val="{{ false }}">
+    <section role="dialog" aria-labelledby="ps-e" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+        <div style="display: flex; flex-direction: column;">
+          <h2 id="ps-e" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xuất file · {{docName}}</h2>
+          <span class="num" style="font-size: 14px; line-height: 20px; color: {{t.text2}};">{{docSub}}</span>
+        </div>
+        <button type="button" onClick="{{close}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+      </div>
+      <div role="radiogroup" aria-label="Định dạng file" style="display: flex; flex-direction: column; gap: 8px;">
+        <sc-for list="{{formats}}" as="f" hint-placeholder-count="2">
+          <button type="button" role="radio" aria-checked="{{f.on}}" onClick="{{f.pick}}" style="min-height: 72px; border: {{f.border}}; border-radius: 14px; background: {{f.bg}}; color: {{t.text}}; padding: 12px 14px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;">
+            <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center;">
+              <dc-import name="Icon" icon="{{f.icon}}" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+            </span>
+            <span style="flex-grow: 1; display: flex; flex-direction: column;">
+              <span style="font-size: 16px; line-height: 24px; font-weight: 600;">{{f.label}}</span>
+              <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{f.desc}}</span>
+            </span>
+            <span style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; border-radius: 999px; border: {{f.dotBorder}}; display: flex; align-items: center; justify-content: center;">
+              <span style="width: 10px; height: 10px; border-radius: 999px; background: {{f.dot}};"></span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+      <button type="button" onClick="{{startExport}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+        <dc-import name="Icon" icon="export" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+        {{exportLabel}}
+      </button>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{isExporting}}" hint-placeholder-val="{{ false }}">
+    <section role="dialog" aria-labelledby="ps-x" aria-busy="true" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+      <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
+        <span style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="{{fmtIcon}}" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+        </span>
+        <div style="display: flex; flex-direction: column;">
+          <h2 id="ps-x" style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Đang tạo file {{fmtName}}…</h2>
+          <span style="font-size: 14px; line-height: 20px; color: {{t.text2}};">Thường mất vài giây. Có thể để app chạy nền.</span>
+        </div>
+      </div>
+      <div role="progressbar" aria-label="Tiến độ xuất file" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60" style="height: 8px; border-radius: 999px; background: {{t.surface2}}; overflow: hidden;">
+        <div style="width: 60%; height: 100%; border-radius: 999px; background: {{t.primary}};"></div>
+      </div>
+      <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">60% · {{docProgress}}</span>
+      <button type="button" onClick="{{close}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy xuất file</button>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{isExported}}" hint-placeholder-val="{{ false }}">
+    <section role="dialog" aria-labelledby="ps-ok" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; padding-top: 6px;">
+          <dc-import name="Icon" icon="checkCircle" color="{{t.success}}" hint-size="24px,24px"></dc-import>
+          <h2 id="ps-ok" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Đã xuất file</h2>
+        </div>
+        <button type="button" onClick="{{close}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Xong</button>
+      </div>
+      <div style="padding: 12px; border-radius: 14px; border: 1px solid {{t.divider}}; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="{{fmtIcon}}" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        </span>
+        <div style="min-width: 0; display: flex; flex-direction: column;">
+          <span style="font-size: 15px; line-height: 22px; font-weight: 600; word-break: break-all;">{{fileName}}</span>
+          <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{fmtName}} · Đã lưu vào Tệp của máy</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+        <button type="button" style="height: 52px; border: 1px solid {{t.primary}}; border-radius: 14px; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Mở file</button>
+        <button type="button" style="height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+          <dc-import name="Icon" icon="share" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+          Chia sẻ
+        </button>
+      </div>
+    </section>
+  </sc-if>
+  <sc-if value="{{kbOn}}" hint-placeholder-val="{{ false }}">
+    <div style="position: relative; flex-shrink: 0;"><dc-import name="Keyboard" kind="decimal" theme="{{themeName}}" hint-size="390px,256px"></dc-import></div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"view":{"editor":"enum","default":"actions","options":["actions","profit","profitError","delete","export","exporting","exported"]},"deleteHref":{"editor":null},"keyboard":{"editor":"boolean","default":false},"docKind":{"editor":"enum","default":"quote","options":["quote","alu","cut","glass","acc","vtp"]},"onClose":{"editor":null},"onDeleted":{"editor":null},"onSaved":{"editor":null},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: props.view || 'actions', fmt: 'pdf' };
+  }
+  componentWillUnmount() { clearTimeout(this._tm); }
+  tokens(dark) {
+    const L = { surface:'#FFFFFF', surface2:'#E4EBEE', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', primarySoft:'#DDEFF4', onPrimarySoft:'#073F51', accent:'#C2410C', onAccent:'#FFFFFF', success:'#1A6E39', error:'#B42318', onError:'#FFFFFF', errorSoft:'#FDE5E3', scrim:'rgba(8,20,26,0.5)' };
+    const D = { surface:'#141F25', surface2:'#22323A', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', primarySoft:'#12384A', onPrimarySoft:'#BFE8F3', accent:'#FF8F5A', onAccent:'#2A0E00', success:'#62C98A', error:'#FF8C82', onError:'#2B0704', errorSoft:'#3D1512', scrim:'rgba(0,0,0,0.62)' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const t = this.tokens(this.props.theme === 'dark');
+    const v = this.state.view;
+    const fmt = this.state.fmt;
+    const close = () => { if (this.props.onClose) this.props.onClose(); else this.setState({ view: this.props.view || 'actions' }); };
+    const pErr = v === 'profitError';
+    const formats = [
+      ['xlsx', 'sheet', 'Excel (.xlsx)', 'Bảng chi tiết, sửa tiếp được'],
+      ['pdf', 'file', 'PDF', 'Gửi khách, giữ nguyên trình bày']
+    ].map(([id, icon, label, desc]) => {
+      const on = fmt === id;
+      return { id, icon, label, desc, on,
+        border: on ? '2px solid ' + t.primary : '1px solid ' + t.divider,
+        bg: on ? t.primarySoft : 'transparent',
+        dotBorder: '2px solid ' + (on ? t.primary : t.border),
+        dot: on ? t.primary : 'transparent',
+        pick: () => this.setState({ fmt: id }) };
+    });
+    const isPdf = fmt === 'pdf';
+    return {
+      t, formats,
+      kbOn: !!this.props.keyboard && (v === 'profit' || v === 'profitError'),
+      profitPadB: this.props.keyboard ? '16px' : '34px',
+      themeName: this.props.theme === 'dark' ? 'dark' : 'light',
+      delLink: !!this.props.deleteHref, delBtn: !this.props.deleteHref, deleteHref: this.props.deleteHref || '#',
+      justify: v === 'delete' ? 'center' : 'flex-end',
+      isActions: v === 'actions',
+      isProfit: v === 'profit' || pErr,
+      isDelete: v === 'delete',
+      isExport: v === 'export',
+      docName: { quote: 'Báo giá', alu: 'Danh sách nhôm cần mua', cut: 'Sơ đồ cắt', glass: 'Danh sách kính', acc: 'Danh sách phụ kiện', vtp: 'Danh sách vật tư phụ' }[this.props.docKind || 'quote'],
+      docSub: { quote: 'Anh Đoài · 10.384.357 ₫', alu: 'Anh Đoài · 13 cây · 4.480.000 ₫', cut: 'Anh Đoài · 13 cây · 64 đoạn cắt', glass: 'Anh Đoài · 9 tấm · 1.746.022 ₫', acc: 'Anh Đoài · 7 mã · 1.425.000 ₫', vtp: 'Anh Đoài · 3 mã · 423.000 ₫' }[this.props.docKind || 'quote'],
+      docProgress: { quote: 'Đang ghép 4 loại cửa vào bảng', alu: 'Đang gom 4 mã profile', cut: 'Đang vẽ 13 cây nhôm', glass: 'Đang gom 9 tấm kính', acc: 'Đang gom 7 mã phụ kiện', vtp: 'Đang gom 3 mã vật tư phụ' }[this.props.docKind || 'quote'],
+      isExporting: v === 'exporting',
+      isExported: v === 'exported',
+      pErr,
+      pValue: pErr ? '150' : '10',
+      pBorder: pErr ? '2px solid ' + t.error : '2px solid ' + t.primary,
+      pPad: '13px',
+      pLabel: pErr ? t.error : t.primary,
+      pQuoteLabel: pErr ? 'Báo giá' : 'Báo giá (+10%)',
+      pQuote: pErr ? '— ₫' : '10.384.357 ₫',
+      exportLabel: isPdf ? 'Xuất PDF' : 'Xuất Excel',
+      fmtName: isPdf ? 'PDF' : 'Excel',
+      fmtIcon: isPdf ? 'file' : 'sheet',
+      fileName: isPdf ? 'BaoGia_AnhDoai_17-09-2026.pdf' : 'BaoGia_AnhDoai_17-09-2026.xlsx',
+      close,
+      goProfit: () => this.setState({ view: 'profit' }),
+      goExport: () => this.setState({ view: 'export' }),
+      goDelete: () => this.setState({ view: 'delete' }),
+      saveProfit: () => { if (this.props.onSaved) this.props.onSaved('Đã lưu hệ số lợi nhuận 10%'); close(); },
+      confirmDelete: () => { if (this.props.onDeleted) this.props.onDeleted(); else close(); },
+      startExport: () => {
+        this.setState({ view: 'exporting' });
+        clearTimeout(this._tm);
+        this._tm = setTimeout(() => this.setState({ view: 'exported' }), 1800);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

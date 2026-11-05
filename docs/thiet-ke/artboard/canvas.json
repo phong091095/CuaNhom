@@ -1,0 +1,1108 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Account.dc.html": {
+      "h": 600,
+      "w": 800,
+      "x": 8600,
+      "y": 37
+    },
+    "AccountHome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C1 · Tài khoản · Light",
+      "w": 390,
+      "x": -150,
+      "y": 12669
+    },
+    "AccountShop.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C1a · Thông tin xưởng · Light",
+      "w": 390,
+      "x": 320,
+      "y": 12669
+    },
+    "AccountTrash.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C1b · Đã xóa gần đây · Light",
+      "w": 390,
+      "x": 790,
+      "y": 12669
+    },
+    "AluSetup.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E1 · Thiết lập cắt · Light",
+      "w": 390,
+      "x": -150,
+      "y": 20229
+    },
+    "AluSummary2.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E2 · Tổng hợp nhôm · trước khi cắt",
+      "w": 390,
+      "x": 320,
+      "y": 20229
+    },
+    "AluSummaryCut.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E2 · Tổng hợp nhôm · sau khi cắt",
+      "w": 390,
+      "x": 790,
+      "y": 20229
+    },
+    "AluSummaryLoading.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E2 · Đang tính phương án cắt",
+      "w": 390,
+      "x": 1260,
+      "y": 20229
+    },
+    "Auth.dc.html": {
+      "h": 854,
+      "w": 593,
+      "x": 5050,
+      "y": 37
+    },
+    "AuthForgot.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A4 · Quên mật khẩu · Light",
+      "w": 390,
+      "x": 1730,
+      "y": 6569
+    },
+    "AuthLogin.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A2 · Đăng nhập · Light",
+      "w": 390,
+      "x": 790,
+      "y": 6569
+    },
+    "AuthLoginChanged.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A2 · Sau khi đổi mật khẩu",
+      "w": 390,
+      "x": 3140,
+      "y": 6569
+    },
+    "AuthOtp.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A5 · Nhập mã OTP · Light",
+      "w": 390,
+      "x": 2200,
+      "y": 6569
+    },
+    "AuthRegister.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A3 · Đăng ký · Light",
+      "w": 390,
+      "x": 1260,
+      "y": 6569
+    },
+    "AuthReset.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A6 · Đặt mật khẩu mới · Light",
+      "w": 390,
+      "x": 2670,
+      "y": 6569
+    },
+    "AuthSplash.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A0 · Splash · Light",
+      "w": 390,
+      "x": -150,
+      "y": 6569
+    },
+    "AuthWelcome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-A1 · Chào mừng · Light",
+      "w": 390,
+      "x": 320,
+      "y": 6569
+    },
+    "B4Actions.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B4 · Thao tác dự án · Light",
+      "w": 390,
+      "x": 320,
+      "y": 8953
+    },
+    "B5Profit.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B5 · Hệ số lợi nhuận · Light",
+      "w": 390,
+      "x": 790,
+      "y": 8953
+    },
+    "B7Delete.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B7 · Xác nhận xóa · Light",
+      "w": 390,
+      "x": 1730,
+      "y": 8953
+    },
+    "B8Export.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B8 · Xuất file · Light",
+      "w": 390,
+      "x": 2200,
+      "y": 8953
+    },
+    "Components.dc.html": {
+      "h": 2160,
+      "title": "Hệ thống thiết kế – Component",
+      "w": 1360,
+      "x": 1440,
+      "y": 260
+    },
+    "CutPlan2.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Sơ đồ cắt · Light",
+      "w": 390,
+      "x": -150,
+      "y": 22473
+    },
+    "CutPlanDark.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Sơ đồ cắt · Dark",
+      "w": 390,
+      "x": 320,
+      "y": 22473
+    },
+    "CutPlanError.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Lỗi máy chủ",
+      "w": 390,
+      "x": 2200,
+      "y": 22473
+    },
+    "CutPlanExport.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Xuất file · Sơ đồ cắt",
+      "w": 390,
+      "x": 2670,
+      "y": 22473
+    },
+    "CutPlanLand.dc.html": {
+      "h": 390,
+      "is_interactive": true,
+      "title": "SCR-E3 · Xem ngang · Light",
+      "w": 844,
+      "x": -150,
+      "y": 23437
+    },
+    "CutPlanLandDark.dc.html": {
+      "h": 390,
+      "is_interactive": true,
+      "title": "SCR-E3 · Xem ngang · Dark",
+      "w": 844,
+      "x": 774,
+      "y": 23437
+    },
+    "CutPlanLoading.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Đang tính",
+      "w": 390,
+      "x": 1730,
+      "y": 22473
+    },
+    "CutPlanSeg.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Chi tiết một đoạn cắt",
+      "w": 390,
+      "x": 790,
+      "y": 22473
+    },
+    "CutPlanUnusable.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-E3 · Thanh dư không dùng được",
+      "w": 390,
+      "x": 1260,
+      "y": 22473
+    },
+    "DoorDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D6 · Chi tiết cửa D1 · tab Tổng quan",
+      "w": 390,
+      "x": 2700,
+      "y": 4260
+    },
+    "DoorDetailAlu.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D6 · Chi tiết cửa · tab Nhôm (bảng cắt)",
+      "w": 390,
+      "x": 3140,
+      "y": 16969
+    },
+    "DoorDetailDark.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D6 · Chi tiết cửa D1 · Dark",
+      "w": 390,
+      "x": 3360,
+      "y": 3020
+    },
+    "DoorDetailSaved.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D6 · Chi tiết cửa D1 · sau khi lưu · Light",
+      "w": 390,
+      "x": 1410,
+      "y": 3020
+    },
+    "DoorForm.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D5 · Form nhập cửa (sửa D1) · Light",
+      "w": 390,
+      "x": 940,
+      "y": 3020
+    },
+    "DoorFormDark.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D5 · Form nhập cửa · Dark",
+      "w": 390,
+      "x": 2890,
+      "y": 3020
+    },
+    "DoorFormError.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D5 · Lỗi nhập W/H",
+      "w": 390,
+      "x": 4610,
+      "y": 4260
+    },
+    "DoorFormFull.dc.html": {
+      "h": 1900,
+      "title": "SCR-D5 · Toàn trang",
+      "w": 390,
+      "x": 2230,
+      "y": 4260
+    },
+    "DoorFormNew.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D5 · Thêm cửa D5 · form trống",
+      "w": 390,
+      "x": 4140,
+      "y": 4260
+    },
+    "DoorsBrand.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D2 · Chọn hãng nhôm · Light",
+      "w": 390,
+      "x": 790,
+      "y": 16969
+    },
+    "DoorsList.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D1 · Danh sách bộ cửa · Light",
+      "w": 390,
+      "x": -150,
+      "y": 16969
+    },
+    "DoorsListSelect.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D1 · Chọn nhiều bộ cửa · Light",
+      "w": 390,
+      "x": 320,
+      "y": 16969
+    },
+    "DoorsModel.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D3 · Chọn mẫu cửa · Light",
+      "w": 390,
+      "x": 1260,
+      "y": 16969
+    },
+    "DoorsModelFiltered.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D3 · Đang lọc “Cửa đi 1 cánh”",
+      "w": 390,
+      "x": 1730,
+      "y": 16969
+    },
+    "DoorsSetup.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D4 · Thông số hệ · tab Khe hở",
+      "w": 390,
+      "x": 2200,
+      "y": 16969
+    },
+    "DoorsSetupProfile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-D4 · Thông số hệ · tab Profile nhôm",
+      "w": 390,
+      "x": 2670,
+      "y": 16969
+    },
+    "GalleryA.dc.html": {
+      "h": 900,
+      "title": "Nhóm A · Dark & trạng thái",
+      "w": 6410,
+      "x": -150,
+      "y": 7533
+    },
+    "GalleryB.dc.html": {
+      "h": 900,
+      "title": "Nhóm B · Dark & trạng thái",
+      "w": 5550,
+      "x": -150,
+      "y": 9917
+    },
+    "GalleryC1.dc.html": {
+      "h": 900,
+      "title": "Nhóm C · Tài khoản – Dark & trạng thái",
+      "w": 5120,
+      "x": -180,
+      "y": 13633
+    },
+    "GalleryC2.dc.html": {
+      "h": 900,
+      "title": "Nhóm C · Thư viện – Dark & trạng thái",
+      "w": 6840,
+      "x": -150,
+      "y": 14653
+    },
+    "GalleryD.dc.html": {
+      "h": 900,
+      "title": "SCR-D5, D6 · lớp phủ mới",
+      "w": 1680,
+      "x": -150,
+      "y": 11337
+    },
+    "GalleryD1.dc.html": {
+      "h": 900,
+      "title": "Nhóm D · SCR-D1 – Dark & trạng thái",
+      "w": 2970,
+      "x": -150,
+      "y": 17933
+    },
+    "GalleryD2.dc.html": {
+      "h": 900,
+      "title": "Nhóm D · SCR-D2, D3, D4 – Dark & lớp phủ",
+      "w": 4260,
+      "x": -150,
+      "y": 18953
+    },
+    "GalleryE.dc.html": {
+      "h": 900,
+      "title": "Nhóm E · Dark, lớp phủ & trạng thái",
+      "w": 3400,
+      "x": -150,
+      "y": 21193
+    },
+    "GalleryLarge.dc.html": {
+      "h": 900,
+      "title": "Chữ hệ thống 180% · SCR-B3 và SCR-C5",
+      "w": 820,
+      "x": -150,
+      "y": 15673
+    },
+    "Handoff1.dc.html": {
+      "h": 2840,
+      "title": "Bàn giao 1 / 4 · Token thiết kế và component",
+      "w": 1840,
+      "x": -150,
+      "y": 27489
+    },
+    "Handoff2.dc.html": {
+      "h": 1560,
+      "title": "Bàn giao 2 / 4 · Bản đồ màn hình và luồng đi",
+      "w": 2000,
+      "x": 1810,
+      "y": 27489
+    },
+    "Handoff3.dc.html": {
+      "h": 1400,
+      "title": "Bàn giao 3 / 4 · Quy tắc đã chốt và ghi chú kỹ thuật",
+      "w": 1960,
+      "x": 3930,
+      "y": 27489
+    },
+    "Handoff4.dc.html": {
+      "h": 2360,
+      "title": "Bàn giao 4 / 4 · Công thức, câu hỏi treo, kiểm thử",
+      "w": 2040,
+      "x": 6010,
+      "y": 27489
+    },
+    "Icon.dc.html": {
+      "h": 600,
+      "w": 800,
+      "x": 2890,
+      "y": 260
+    },
+    "LibAcc.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C5 · Thư viện phụ kiện · Light",
+      "w": 390,
+      "x": 2670,
+      "y": 12669
+    },
+    "LibAccBrand.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C4 · Hãng phụ kiện · Light",
+      "w": 390,
+      "x": 2200,
+      "y": 12669
+    },
+    "LibAlu.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C8 · Bảng giá nhôm · Light",
+      "w": 390,
+      "x": 4080,
+      "y": 12669
+    },
+    "LibAluBrand.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C3 · Hãng nhôm · Light",
+      "w": 390,
+      "x": 1730,
+      "y": 12669
+    },
+    "LibDoc.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C3 · Trình xem tài liệu · Light",
+      "w": 390,
+      "x": 5020,
+      "y": 12669
+    },
+    "LibGlass.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C7 · Thư viện kính · Light",
+      "w": 390,
+      "x": 3610,
+      "y": 12669
+    },
+    "LibHome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C2 · Thư viện · Light",
+      "w": 390,
+      "x": 1260,
+      "y": 12669
+    },
+    "LibPrice.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C9 · Sheet sửa đơn giá · Light",
+      "w": 390,
+      "x": 4550,
+      "y": 12669
+    },
+    "LibVtp.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-C6 · Thư viện vật tư phụ · Light",
+      "w": 390,
+      "x": 3140,
+      "y": 12669
+    },
+    "ListStates.dc.html": {
+      "h": 900,
+      "title": "SCR-B1 · Các trạng thái",
+      "w": 1680,
+      "x": 0,
+      "y": 4260
+    },
+    "LogoDirections.dc.html": {
+      "h": 1320,
+      "title": "Logo – 3 hướng (đã chọn A)",
+      "w": 1440,
+      "x": 2890,
+      "y": 1291
+    },
+    "LogoFinal.dc.html": {
+      "h": 1100,
+      "title": "Logo hướng A – hoàn thiện (icon iOS, Android)",
+      "w": 1600,
+      "x": 5490,
+      "y": 1291
+    },
+    "LogoMark.dc.html": {
+      "h": 545,
+      "w": 736,
+      "x": 5738,
+      "y": 37
+    },
+    "Main.dc.html": {
+      "h": 2574,
+      "title": "Hệ thống thiết kế – Nền tảng",
+      "w": 1442,
+      "x": -271,
+      "y": 37
+    },
+    "MatAcc.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-F2 · Tổng hợp phụ kiện · Light",
+      "w": 390,
+      "x": 320,
+      "y": 24287
+    },
+    "MatGlass.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-F1 · Tổng hợp kính · Light",
+      "w": 390,
+      "x": -150,
+      "y": 24287
+    },
+    "MatVtp.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-F3 · Tổng hợp vật tư phụ · Light",
+      "w": 390,
+      "x": 790,
+      "y": 24287
+    },
+    "ProjectDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B3 · Chi tiết dự án · Light",
+      "w": 390,
+      "x": 470,
+      "y": 3020
+    },
+    "ProjectDetailDark.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B3 · Chi tiết dự án · Dark",
+      "w": 390,
+      "x": 2420,
+      "y": 3020
+    },
+    "ProjectDetailFull.dc.html": {
+      "h": 1880,
+      "title": "SCR-B3 · Toàn trang",
+      "w": 390,
+      "x": 1760,
+      "y": 4260
+    },
+    "ProjectForm.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B2 · Tạo dự án · Light",
+      "w": 390,
+      "x": -150,
+      "y": 8953
+    },
+    "ProjectFormEdit.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B6 · Chỉnh sửa dự án · Light",
+      "w": 390,
+      "x": 1260,
+      "y": 8953
+    },
+    "ProjectFormError.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B2 · Lỗi nhập · Light",
+      "w": 390,
+      "x": 3140,
+      "y": 8953
+    },
+    "ProjectList.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B1 · Danh sách dự án · Light",
+      "w": 390,
+      "x": 0,
+      "y": 3020
+    },
+    "ProjectListDark.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B1 · Danh sách dự án · Dark",
+      "w": 390,
+      "x": 1950,
+      "y": 3020
+    },
+    "ProjectListDeleted.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B1 · Sau khi xóa (Hoàn tác) · Light",
+      "w": 390,
+      "x": 2670,
+      "y": 8953
+    },
+    "ProjectListEnd.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-B1 · Cuộn đến cuối · nút thu gọn",
+      "w": 390,
+      "x": 3670,
+      "y": 4260
+    },
+    "ProjectSheets.dc.html": {
+      "h": 600,
+      "w": 800,
+      "x": 6840,
+      "y": 37
+    },
+    "QaDiacritics.dc.html": {
+      "h": 640,
+      "title": "Kiểm tra dấu tiếng Việt",
+      "w": 1000,
+      "x": 4410,
+      "y": 1291
+    },
+    "QuoteCost.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G1 · Mở khối giá vốn",
+      "w": 390,
+      "x": 3140,
+      "y": 24287
+    },
+    "QuoteOp1.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G1 · Báo giá OP1 · theo từng bộ",
+      "w": 390,
+      "x": 1260,
+      "y": 24287
+    },
+    "QuoteOp2.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G1 · Báo giá OP2 · đơn giá TB",
+      "w": 390,
+      "x": 1730,
+      "y": 24287
+    },
+    "QuotePaperBoard.dc.html": {
+      "h": 842,
+      "title": "SCR-G2 · Trang A4 gửi khách (cỡ thật)",
+      "w": 595,
+      "x": -150,
+      "y": 25251
+    },
+    "QuotePaperVat.dc.html": {
+      "h": 842,
+      "title": "SCR-G2 · Trang A4 có thuế (cỡ thật)",
+      "w": 595,
+      "x": 565,
+      "y": 25251
+    },
+    "QuotePreview2.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G2 · Xem trước báo giá",
+      "w": 390,
+      "x": 2200,
+      "y": 24287
+    },
+    "QuotePreviewVat.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G2 · Có thuế GTGT",
+      "w": 390,
+      "x": 3610,
+      "y": 24287
+    },
+    "QuotePreviewZoom.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "SCR-G2 · Phóng to cỡ thật",
+      "w": 390,
+      "x": 2670,
+      "y": 24287
+    },
+    "StatusBar.dc.html": {
+      "h": 600,
+      "w": 800,
+      "x": 7720,
+      "y": 37
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-17T08:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "n-alu": {
+      "color": "orange",
+      "maxH": 900,
+      "text": "Nhôm — đã chốt & còn hỏi\n\nĐÃ CHỐT: nhôm tính theo CÂY, quy đổi ra kg. Giá gốc là ₫/cây; ₫/kg = giá cây ÷ (dài cây × tỉ trọng), luôn là dòng phụ.\n\nCòn hỏi:\n1. Giá vốn một bộ cửa nên tính theo chiều dài dùng (đang làm), tính tròn theo số cây, hay cộng sẵn một hệ số hao hụt?\n2. Hao hụt nhôm có cộng vào báo giá gửi khách không, hay chỉ hiện nội bộ cho chủ xưởng?\n3. Cần bảng thật: tỉ trọng, chiều dài cây và đơn giá cây của từng mã theo từng hãng. Số đang dùng: C3328 520.000 ₫/cây · 1,95 kg/m (thật); C3303 345.000 ₫/cây · 1,30 kg/m; C3313 295.000 ₫/cây · 1,12 kg/m và C3300 250.000 ₫/cây · 0,95 kg/m là số tạm.\n4. Giá nhôm thuộc về mã profile hay thuộc về hệ của từng hãng?\n5. Thông số hệ (khe hở, giá) áp dụng riêng từng hãng hay dùng chung?",
+      "w": 600,
+      "x": 1950,
+      "y": 20229
+    },
+    "n-brand": {
+      "color": "purple",
+      "maxH": 480,
+      "text": "Quy tắc logo (Apple HIG, Material)\n\nKHÔNG đặt logo trên màn hình làm việc (B, D…).\nLogo chỉ có ở: icon app · SCR-A0 Splash · SCR-A1–A4 · SCR-C1 Tài khoản · SCR-G2 báo giá xuất file.\n\nSCR-G2 (đề xuất ngoài wireframe, cần nghiệp vụ xác nhận): đầu trang dùng logo xưởng của người dùng, chân trang ghi “Tạo bằng MATADOOR”.",
+      "w": 560,
+      "x": 4270,
+      "y": 5200
+    },
+    "n-date": {
+      "color": "blue",
+      "maxH": 300,
+      "text": "Cách tính “còn N ngày”\n\nN = số ngày lịch từ 00:00 hôm nay đến 00:00 ngày hết hạn, theo múi giờ máy (Asia/Ho_Chi_Minh). Hết hạn hôm nay → “Hết hạn hôm nay”. Đã qua → “Đã hết hạn DD/MM/YYYY”.\n\nMàu cảnh báo (cam) chỉ dùng khi N < 7. Từ 7 ngày trở lên dùng chữ thường.",
+      "w": 600,
+      "x": 4310,
+      "y": 18149
+    },
+    "n-dev": {
+      "color": "blue",
+      "maxH": 620,
+      "text": "Ghi chú cho lập trình\n\nBàn phím: ô SĐT dùng bàn phím số điện thoại (iOS keyboardType .phonePad, Android inputType phone). Ô % và kích thước dùng bàn phím số có dấu phẩy thập phân. Mã OTP dùng bàn phím số.\n\nTự điền: iOS textContentType — username, password, newPassword, oneTimeCode, telephoneNumber, organizationName. Android autofillHints — username, password, newPassword, smsOTPCode, phone.\n\nMật khẩu: cho phép dán, không chặn trình quản lý mật khẩu; nút Hiện/Ẩn là nút thật có nhãn chữ.\n\nOTP: 6 ô, tự nhảy ô, dán cả mã được; hết 60 giây mới cho gửi lại; mã sống 5 phút.",
+      "w": 600,
+      "x": 5550,
+      "y": 12669
+    },
+    "n-dev2": {
+      "color": "blue",
+      "maxH": 420,
+      "text": "Ghi chú cho lập trình — tìm kiếm tiếng Việt\n\nÔ tìm hãng nhôm (SCR-D2) và tìm trong Thư viện phải so khớp sau khi bỏ dấu và bỏ khoảng trắng: chuẩn hóa NFD, xóa dải U+0300–U+036F, đổi đ/Đ thành d, hạ chữ thường, bỏ khoảng trắng. Nhờ vậy “xing fa”, “xingfa”, “Xingfa”, “XINGFA” đều ra Xingfa.\n\nÁp dụng cùng quy tắc cho tên dự án, tên khách và mã nhôm.",
+      "w": 600,
+      "x": 2165,
+      "y": 20929
+    },
+    "n-e3": {
+      "color": "blue",
+      "maxH": 760,
+      "text": "SCR-E3 — ghi chú thiết kế\n\nMỗi cây vẽ đúng tỉ lệ so với cây 5.800 mm: thanh dư 2.400 mm chỉ dài 41% chiều ngang, nhìn là biết ngắn hơn.\n\nĐoạn cắt là nút bấm cao 44 pt nhưng bề ngang theo tỉ lệ thật (hẹp nhất 33 pt). Đây là ngoại lệ “Essential” của WCAG 2.5.8: vẽ sai tỉ lệ thì mất thông tin. Mọi đoạn đều có một dòng tương ứng trong danh sách ngay dưới, cao 44 pt, mở cùng hộp chi tiết — nên vẫn có đích chạm đủ lớn.\n\nPhần dư dùng vân sọc chéo, không dùng màu, và không bấm được.\n\nMạch cưa là vạch 2 pt giữa các đoạn — vẽ dày hơn thật (5 mm ≈ 0,3 pt) để nhìn thấy được; con số đúng nằm ở dòng kiểm tra dưới mỗi cây.\n\nXem ngang (844 × 390) bỏ danh sách chú thích, chỉ giữ thanh vẽ và dòng kiểm tra.",
+      "w": 600,
+      "x": 3250,
+      "y": 22473
+    },
+    "n-flow": {
+      "color": "blue",
+      "maxH": 560,
+      "text": "Luồng Play\n\nA0 → A1 → A2 → B1. A1 → A3 → B1.\nA2 → Quên mật khẩu → A4 → Gửi mã → A5 (OTP) → Xác nhận → A6 → Đổi mật khẩu → A2 kèm “Đã đổi mật khẩu”.\n\nB1 → Tạo dự án → B2 → Tạo → B3. B1 hoặc B3 → ⋯ → B4 → B5 / B6 / B7 / B8. Xóa ở B3 → về B1 kèm Hoàn tác.\n\nB3 → dòng D1 → D6 → Sửa → D5 → Lưu cửa → D6 + “Đã lưu cửa D1”. D6 → Thêm cửa tiếp → sheet (nhớ lựa chọn) → D5.\n\nThanh tab: Dự án → B1, Thư viện → C2, Tài khoản → C1. C2 → C3…C8 → sheet C9 sửa giá. C1 → C1a, C1b.",
+      "w": 420,
+      "x": 3170,
+      "y": 4620
+    },
+    "n-g": {
+      "color": "blue",
+      "maxH": 700,
+      "text": "SCR-G2 — vì sao bản gửi khách luôn nền trắng\n\nĐây là bản in ra giấy và xuất PDF, không phải giao diện app. Nền trắng mực đen là thứ máy in và người nhận mong đợi; đảo màu sẽ tốn mực và khó đọc khi in.\n\nVì vậy G1 có bản light và dark như mọi màn khác, còn khung giấy A4 trong G2 giữ nguyên nền trắng ở cả hai chế độ. Chỉ phần khung app quanh tờ giấy (thanh tiêu đề, nền sau tờ giấy, thanh nút) đổi theo chế độ tối.\n\nKhổ giấy 595 × 842 pt (A4 dọc). Ở chế độ vừa màn hình, tờ giấy thu còn 60%; nút Phóng to đưa về cỡ thật 100% và cuộn hai chiều.",
+      "w": 600,
+      "x": 1280,
+      "y": 25251
+    },
+    "n-glass": {
+      "color": "orange",
+      "maxH": 300,
+      "text": "Cần xác nhận với bên nghiệp vụ — Loại kính\n\nForm chỉ còn MỘT trường “Loại kính”. Wireframe có thêm “Loại kính: Trắng 5mm”. Nếu đó là kính riêng cho ô fix, trường “Kính ô fix” sẽ chỉ hiện khi mẫu cửa đã chọn có ô fix. Cửa đi 1 cánh (D1) không có ô fix nên không hiện.\n\nD3, D4 cũng dùng Kính trắng 8mm, đơn giá 230.000 ₫/m².",
+      "w": 420,
+      "x": 3170,
+      "y": 4260
+    },
+    "n-libq": {
+      "color": "orange",
+      "maxH": 420,
+      "text": "Thư viện — cần xác nhận\n\nĐổi giá trong thư viện có cập nhật dự án cũ không? Đề xuất: KHÔNG tự đổi dự án đã tạo; trong dự án hiện gợi ý “Có giá mới, cập nhật báo giá?” để người dùng tự chọn.\n\nSCR-C1a Thông tin xưởng là đề xuất ngoài wireframe (dùng cho đầu trang báo giá SCR-G2).\n\nSố lượng mục trong thư viện (48 phụ kiện, 32 VTP, 64 mã nhôm) là số mẫu, chờ dữ liệu thật.",
+      "w": 600,
+      "x": 5550,
+      "y": 13369
+    },
+    "n-map": {
+      "color": "teal",
+      "maxH": 640,
+      "text": "Mã màn hình (SCR-…) — đã xác nhận\n\nA0 Splash · A1 Chào mừng · A2 Đăng nhập · A3 Đăng ký · A4 Quên mật khẩu\nB1 Danh sách dự án · B2 Tạo dự án · B3 Chi tiết dự án · B4 Sheet thao tác · B5 Hệ số lợi nhuận · B6 Chỉnh sửa dự án · B7 Xác nhận xóa · B8 Sheet xuất file (dùng chung)\nC1 Tài khoản\nD1 Danh sách cửa · D2 Chọn hệ nhôm · D3 Chọn mẫu cửa · D4 Thông số · D5 Form nhập cửa · D6 Chi tiết cửa\nG2 Báo giá xuất file\n\nTên cửa D1, D2… là dữ liệu, không phải mã màn hình.",
+      "w": 560,
+      "x": 3670,
+      "y": 5200
+    },
+    "n-margin": {
+      "color": "orange",
+      "maxH": 360,
+      "text": "Hao hụt & báo giá — cần xác nhận\n\nĐÃ CHỐT: giá vốn một bộ cửa tính theo chiều dài dùng; hao hụt KHÔNG cộng vào báo giá mặc định.\n\nVì vậy biên thật của xưởng nhỏ hơn 10%: báo giá 10.384.356 − chi thật 9.678.822 = 705.534 ₫, tức 7,29%. Dòng này đã hiện ở SCR-B3.\n\nCần chốt: có làm một tùy chọn “cộng hao hụt vào báo giá” (bật/tắt theo dự án) không, và nếu có thì mặc định tắt hay bật?",
+      "w": 600,
+      "x": 3250,
+      "y": 23273
+    },
+    "n-q": {
+      "color": "orange",
+      "maxH": 1100,
+      "text": "Câu hỏi nghiệp vụ cần xác nhận\n\n1. Giới hạn kích thước cửa: mockup tạm dùng H tối đa 3.000 mm; thực tế lấy theo hệ nhôm / phân hệ nào?\n2. Lợi nhuận là CỘNG THÊM trên giá vốn (11.564.084 × 1,1 = 12.720.492 ₫ — đang dùng) hay BIÊN trên giá bán (11.564.084 ÷ 0,9 = 12.848.982 ₫)? Giới hạn % phụ thuộc câu trả lời này.\n3. Báo giá có làm tròn đến nghìn đồng không?\n4. Áp dụng lợi nhuận cho OP1 (theo từng bộ) và OP2 (đồng giá trung bình) thế nào?\n5. Xóa một bộ cửa thì các cửa còn lại có đánh số lại không (ảnh hưởng nhãn trên sơ đồ cắt)?\n6. Xuất file (SCR-B8): có cần chọn OP1/OP2 và chọn nội dung (báo giá hay bóc tách vật tư) không? Quyết định khi làm nhóm G.\n7. Kính ô fix: có cần trường riêng không, hiện theo mẫu cửa nào?\n8. Nhân bản bộ cửa: tên mới đặt tự động (D5) hay cho người dùng nhập?\n9. SCR-G2: dùng logo xưởng của người dùng + chân trang “Tạo bằng MATADOOR”.\n\nĐÃ CHỐT trong lượt này (mặc định):\n· Quên mật khẩu bằng OTP 6 số trong app, mã sống 5 phút, chờ 60 giây mới gửi lại.\n· Mật khẩu theo NIST SP 800-63B: tối thiểu 8 ký tự, không bắt buộc trộn chữ–số, cho dán, cảnh báo mật khẩu phổ biến.\n· Thông báo lỗi đăng nhập không tiết lộ tài khoản có tồn tại hay không.\n· B2/B6: chỉ Tên dự án bắt buộc; SĐT nhận 10–11 chữ số hoặc +84.\n· Xóa dự án / bộ cửa: vào Đã xóa gần đây, giữ 30 ngày; snackbar Hoàn tác 10 giây.",
+      "w": 620,
+      "x": 3650,
+      "y": 6569
+    },
+    "n-q2": {
+      "color": "orange",
+      "maxH": 420,
+      "text": "Báo giá & kho thanh dư — cần xác nhận\n\n1. Kho thanh dư dùng chung toàn app hay riêng từng dự án? Dùng chung thì tiết kiệm hơn nhưng phải có màn quản lý kho riêng.\n2. Báo giá có cần số báo giá, ngày phát hành và thời hạn hiệu lực không? Mockup đang dùng BG-2026-0042, ngày 18/09/2026, hiệu lực 15 ngày.\n3. Ghi chú chân trang (thanh toán, bảo hành) do xưởng tự nhập một lần trong Thông tin xưởng, hay app gợi ý sẵn mẫu rồi sửa?\n4. OP2 đang làm tròn đơn giá tới hàng đơn vị (1.100.038 ₫/m²), phần lệch +2 ₫ được nêu ngay trên màn. Có muốn làm tròn tới nghìn và dồn phần lệch vào dòng cuối không?",
+      "w": 600,
+      "x": 1290,
+      "y": 25561
+    },
+    "n-sub": {
+      "color": "orange",
+      "maxH": 420,
+      "text": "Gói dịch vụ & thanh toán — cần xác nhận\n\nApp bán theo gói thời hạn (hiện hiển thị “còn 25 ngày” + “Liên hệ gia hạn”). Nếu bán trực tiếp trong app thì Apple bắt buộc dùng In-App Purchase và ăn hoa hồng; Android cũng vậy với Google Play Billing.\n\nĐề xuất: gia hạn qua Zalo/điện thoại, trong app chỉ hiển thị hạn dùng và số liên hệ — không có nút mua. Cần xác nhận hướng kinh doanh trước khi làm màn hình thanh toán.",
+      "w": 600,
+      "x": 4310,
+      "y": 17669
+    },
+    "note-90o5bb": {
+      "bold": false,
+      "kind": "title1",
+      "text": "Nháp",
+      "w": 240,
+      "x": 5050,
+      "y": -186
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 2800,
+      "text": "1 · Hệ thống thiết kế",
+      "w": 240,
+      "x": -180,
+      "y": -325
+    },
+    "t10": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "10 · Nhóm E – Tổng hợp nhôm (theo cây)",
+      "w": 240,
+      "x": -150,
+      "y": 19969
+    },
+    "t11": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "11 · SCR-E3 – Sơ đồ cắt",
+      "w": 240,
+      "x": -150,
+      "y": 22213
+    },
+    "t12": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "12 · Nhóm F – Tổng hợp vật tư & Nhóm G – Báo giá",
+      "w": 240,
+      "x": -150,
+      "y": 24027
+    },
+    "t13": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "13 · Hồ sơ bàn giao",
+      "w": 240,
+      "x": -150,
+      "y": 27229
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 3750,
+      "text": "2 · Màn hình mẫu — Light & Dark",
+      "w": 240,
+      "x": 0,
+      "y": 2760
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 5000,
+      "text": "3 · Trạng thái & nội dung cuộn đầy đủ",
+      "w": 240,
+      "x": 0,
+      "y": 4000
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 2520,
+      "text": "4 · Thương hiệu & kiểm tra chữ",
+      "w": 240,
+      "x": 2890,
+      "y": 1031
+    },
+    "t5": {
+      "kind": "title1",
+      "maxW": 2740,
+      "text": "5 · Nhóm A – Xác thực",
+      "w": 240,
+      "x": -150,
+      "y": 6309
+    },
+    "t6": {
+      "kind": "title1",
+      "maxW": 3700,
+      "text": "6 · Nhóm B – Dự án",
+      "w": 240,
+      "x": -150,
+      "y": 8693
+    },
+    "t7": {
+      "kind": "title1",
+      "maxW": 1680,
+      "text": "7 · Sửa lượt này: SCR-D5, SCR-D6",
+      "w": 240,
+      "x": -150,
+      "y": 11077
+    },
+    "t8": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "8 · Nhóm C – Tài khoản & Thư viện",
+      "w": 240,
+      "x": -150,
+      "y": 12409
+    },
+    "t9": {
+      "kind": "title1",
+      "maxW": 5640,
+      "text": "9 · Nhóm D – Bộ cửa (D1–D4)",
+      "w": 240,
+      "x": -150,
+      "y": 16709
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Components.dc.html",
+    "ProjectList.dc.html",
+    "ProjectDetail.dc.html",
+    "DoorForm.dc.html",
+    "ProjectListDark.dc.html",
+    "ProjectDetailDark.dc.html",
+    "DoorFormDark.dc.html",
+    "ListStates.dc.html",
+    "ProjectDetailFull.dc.html",
+    "DoorFormFull.dc.html",
+    "Icon.dc.html",
+    "DoorDetailSaved.dc.html",
+    "DoorDetailDark.dc.html",
+    "DoorDetail.dc.html",
+    "ProjectListEnd.dc.html",
+    "DoorFormNew.dc.html",
+    "DoorFormError.dc.html",
+    "LogoDirections.dc.html",
+    "QaDiacritics.dc.html",
+    "LogoFinal.dc.html",
+    "AuthSplash.dc.html",
+    "AuthWelcome.dc.html",
+    "AuthLogin.dc.html",
+    "AuthRegister.dc.html",
+    "AuthForgot.dc.html",
+    "GalleryA.dc.html",
+    "ProjectForm.dc.html",
+    "B4Actions.dc.html",
+    "B5Profit.dc.html",
+    "ProjectFormEdit.dc.html",
+    "B7Delete.dc.html",
+    "B8Export.dc.html",
+    "ProjectListDeleted.dc.html",
+    "ProjectFormError.dc.html",
+    "GalleryB.dc.html",
+    "GalleryD.dc.html",
+    "Auth.dc.html",
+    "LogoMark.dc.html",
+    "ProjectSheets.dc.html",
+    "StatusBar.dc.html",
+    "AuthOtp.dc.html",
+    "AuthReset.dc.html",
+    "AuthLoginChanged.dc.html",
+    "AccountHome.dc.html",
+    "AccountShop.dc.html",
+    "AccountTrash.dc.html",
+    "LibHome.dc.html",
+    "LibAluBrand.dc.html",
+    "LibAccBrand.dc.html",
+    "LibAcc.dc.html",
+    "LibVtp.dc.html",
+    "LibGlass.dc.html",
+    "LibAlu.dc.html",
+    "LibPrice.dc.html",
+    "LibDoc.dc.html",
+    "GalleryC1.dc.html",
+    "GalleryC2.dc.html",
+    "GalleryLarge.dc.html",
+    "Account.dc.html",
+    "DoorsList.dc.html",
+    "DoorsListSelect.dc.html",
+    "DoorsBrand.dc.html",
+    "DoorsModel.dc.html",
+    "DoorsModelFiltered.dc.html",
+    "DoorsSetup.dc.html",
+    "DoorsSetupProfile.dc.html",
+    "DoorDetailAlu.dc.html",
+    "GalleryD1.dc.html",
+    "GalleryD2.dc.html",
+    "AluSetup.dc.html",
+    "AluSummary2.dc.html",
+    "AluSummaryCut.dc.html",
+    "AluSummaryLoading.dc.html",
+    "GalleryE.dc.html",
+    "CutPlan2.dc.html",
+    "CutPlanDark.dc.html",
+    "CutPlanSeg.dc.html",
+    "CutPlanUnusable.dc.html",
+    "CutPlanLoading.dc.html",
+    "CutPlanError.dc.html",
+    "CutPlanExport.dc.html",
+    "CutPlanLand.dc.html",
+    "CutPlanLandDark.dc.html",
+    "MatGlass.dc.html",
+    "MatAcc.dc.html",
+    "MatVtp.dc.html",
+    "QuoteOp1.dc.html",
+    "QuoteOp2.dc.html",
+    "QuotePreview2.dc.html",
+    "QuotePreviewZoom.dc.html",
+    "QuotePaperBoard.dc.html",
+    "Handoff1.dc.html",
+    "Handoff2.dc.html",
+    "Handoff3.dc.html",
+    "Handoff4.dc.html",
+    "QuoteCost.dc.html",
+    "QuotePreviewVat.dc.html",
+    "QuotePaperVat.dc.html"
+  ],
+  "pages": [],
+  "title": "MATADOOR – Thiết kế app"
+}

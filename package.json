@@ -1,0 +1,20 @@
+{
+  "name": "matadoor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MATADOOR – app thiết kế, bóc tách và báo giá cửa nhôm (React Native + Expo, chạy offline).",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "coverage": "npm run coverage --workspace @matadoor/engine",
+    "check": "npm run typecheck && npm run lint && npm test"
+  }
+}

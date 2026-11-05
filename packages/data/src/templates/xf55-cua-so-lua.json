@@ -1,0 +1,60 @@
+{
+  "id": "xf55-cua-so-lua",
+  "version": 1,
+  "status": "verified",
+  "name": "Cửa sổ lùa 2 / 4 cánh",
+  "system": "xingfa55",
+  "group": "cua-so",
+  "symbolPrefix": "S",
+  "order": 2,
+  "source": "Dựng lại để khớp TC-02, TC-04, TC-07 của SRS v1.0 (sheet gốc G-AW1, G-AW2 trong cửa_mẫu.xlsx chưa có trong kho mã). Kích thước cắt và kính khớp 100% TC-02; mã nhôm cửa lùa và phụ kiện là số tạm – cần chuyên gia đối chiếu.",
+  "drawing": { "kind": "sliding", "leaves": "soCanh" },
+  "defaults": { "W": 1400, "H": 1350 },
+  "params": [
+    { "key": "soCanh", "label": "Số cánh", "type": "choice", "default": 2, "options": [ { "value": 2, "label": "2 cánh" }, { "value": 4, "label": "4 cánh" } ] }
+  ],
+  "constants": {
+    "khungLuaDung": { "value": 39, "note": "Khung lùa chiếm mỗi đầu theo chiều đứng (mm) – dựng lại từ TC-02" },
+    "khungLuaNgang": { "value": 39, "note": "Khung lùa chiếm mỗi bên theo chiều ngang (mm) – dựng lại từ TC-02" },
+    "chongLap": { "value": 39, "note": "Phần chồng lên nhau ở mỗi cặp cánh gặp nhau (mm) – dựng lại từ TC-02" },
+    "truKinh": { "value": 50, "note": "Kính nhỏ hơn cánh mỗi bên (mm) – ví dụ SRS 4.1" },
+    "siliconeChaiMoiM": { "value": 0.48, "note": "Silicone 4 cạnh khung, 2 mặt: chai cho mỗi m chu vi cửa" },
+    "nemMoiM": { "value": 1, "note": "Nêm kính: cái cho mỗi m chu vi kính (TC-04)" },
+    "gioangMat": { "value": 2, "note": "Gioăng kính chạy 2 mặt" },
+    "vitKhoangCach": { "value": 520, "note": "Khoảng cách vít lắp đặt trên khung (mm) – số tạm" },
+    "canhRongCanhBao": { "value": 1000, "note": "Ngưỡng cảnh báo cánh rộng (mm) – ví dụ SRS 4.1" }
+  },
+  "derived": [
+    { "key": "soCapCanh", "expr": "soCanh / 2", "label": "Số cặp cánh gặp nhau" }
+  ],
+  "profiles": [
+    { "role": "khung_ngang", "label": "Khung ngang", "code": "XF-L-KHUNG", "length": "W", "qty": 2, "angle": "45/45", "position": "Trên, dưới" },
+    { "role": "khung_dung", "label": "Khung đứng", "code": "XF-L-KHUNG", "length": "H", "qty": 2, "angle": "45/45", "position": "Trái, phải" },
+    { "role": "canh_dung", "label": "Cánh đứng", "code": "XF-L-CANH", "length": "H - khungLuaDung * 2", "qty": "soCanh * 2", "angle": "90/90" },
+    { "role": "canh_ngang", "label": "Cánh ngang", "code": "XF-L-CANH", "length": "(W - khungLuaNgang * 2 + chongLap * soCapCanh) / soCanh", "qty": "soCanh * 2", "angle": "90/90" },
+    { "role": "trung_gian", "label": "Thanh trung gian", "code": "XF-L-GIUA", "length": "canh_dung", "qty": "soCanh == 4 ? 1 : 0", "angle": "90/90", "position": "Giữa hai cặp cánh" }
+  ],
+  "glass": [
+    { "key": "kinh", "label": "Kính cánh", "width": "canh_ngang - truKinh * 2", "height": "canh_dung - truKinh * 2", "qty": "soCanh", "defaultCode": "KINH-TRANG-5" }
+  ],
+  "accessories": [
+    { "code": "PK-BANHXE", "qty": "soCanh * 2" },
+    { "code": "PK-KHOA-BN", "qty": "soCapCanh" },
+    { "code": "PK-KE-GOC", "qty": "4 + soCanh * 4", "note": "4 góc khung + 4 góc mỗi cánh" },
+    { "code": "PK-CHOI-QUET", "qty": "canh_dung * soCanh * 2 / 1000" },
+    { "code": "PK-GIOANG", "qty": "glass_perimeter_total / 1000 * gioangMat" },
+    { "code": "PK-SILICONE", "qty": "2 * (W + H) / 1000 * siliconeChaiMoiM" },
+    { "code": "PK-NEM-5", "qty": "glass_perimeter_total / 1000 * nemMoiM" },
+    { "code": "PK-VIT", "qty": "round(2 * (W + H) / vitKhoangCach)" }
+  ],
+  "labor": [
+    { "code": "NC-SX", "qty": "area" },
+    { "code": "NC-LD", "qty": "area" }
+  ],
+  "checks": [
+    { "id": "rong2", "level": "error", "when": "soCanh == 2 and (W < 800 or W > 2400)", "message": "Rộng cửa sổ lùa 2 cánh nên trong khoảng 800–2400 mm", "field": "W" },
+    { "id": "rong4", "level": "error", "when": "soCanh == 4 and (W < 1600 or W > 4000)", "message": "Rộng cửa sổ lùa 4 cánh nên trong khoảng 1600–4000 mm", "field": "W" },
+    { "id": "cao", "level": "error", "when": "H < 500 or H > 2000", "message": "Cao cửa sổ lùa nên trong khoảng 500–2000 mm", "field": "H" },
+    { "id": "canhRong", "level": "warning", "when": "canh_ngang > canhRongCanhBao", "message": "Cánh rộng {canh_ngang} mm (trên 1000 mm): cánh nặng, khó kéo – cân nhắc tăng số cánh" }
+  ]
+}

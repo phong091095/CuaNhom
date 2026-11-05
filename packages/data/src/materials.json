@@ -1,0 +1,34 @@
+{
+  "note": "Bảng vật tư mặc định. priceStatus 'that' = số thật lấy từ hồ sơ thiết kế (C3328, C3303, kính trắng 8 ly, tay nắm, lõi khóa, miệng khóa, ke góc, vít, nhân công); 'tam' = giá tạm, phải thay bằng bảng VAT_TU gốc của chuyên gia (giả định A1). Nhôm: costPrice là giá một cây dài barLengthMm.",
+  "materials": [
+    { "code": "XF-C3328", "name": "Khung bao cửa đi C3328 (1,4 mm)", "group": "nhom", "unit": "m", "kgPerM": 1.95, "barLengthMm": 5800, "costPrice": 520000, "priceStatus": "that" },
+    { "code": "XF-C3303", "name": "Cánh cửa đi mở quay C3303", "group": "nhom", "unit": "m", "kgPerM": 1.3, "barLengthMm": 5800, "costPrice": 345000, "priceStatus": "that" },
+    { "code": "XF-NEP-55", "name": "Nẹp kính hệ 55 (mã chờ xác nhận)", "group": "nhom", "unit": "m", "kgPerM": 0.25, "barLengthMm": 5800, "costPrice": 90000, "priceStatus": "tam" },
+    { "code": "XF-L-KHUNG", "name": "Khung cửa sổ lùa (mã chờ xác nhận)", "group": "nhom", "unit": "m", "kgPerM": 1.2, "barLengthMm": 5800, "costPrice": 320000, "priceStatus": "tam" },
+    { "code": "XF-L-CANH", "name": "Cánh cửa sổ lùa (mã chờ xác nhận)", "group": "nhom", "unit": "m", "kgPerM": 0.95, "barLengthMm": 5800, "costPrice": 250000, "priceStatus": "tam" },
+    { "code": "XF-L-GIUA", "name": "Thanh trung gian cửa lùa (mã chờ xác nhận)", "group": "nhom", "unit": "m", "kgPerM": 0.8, "barLengthMm": 5800, "costPrice": 210000, "priceStatus": "tam" },
+
+    { "code": "KINH-TRANG-5", "name": "Kính trắng 5 ly", "group": "kinh", "unit": "m²", "thicknessMm": 5, "costPrice": 160000, "priceStatus": "tam" },
+    { "code": "KINH-TRANG-8", "name": "Kính trắng 8 ly", "group": "kinh", "unit": "m²", "thicknessMm": 8, "costPrice": 230000, "priceStatus": "that" },
+    { "code": "KINH-CL-8", "name": "Kính cường lực 8 ly", "group": "kinh", "unit": "m²", "thicknessMm": 8, "costPrice": 380000, "priceStatus": "tam" },
+    { "code": "KINH-CL-10", "name": "Kính cường lực 10 ly", "group": "kinh", "unit": "m²", "thicknessMm": 10, "costPrice": 450000, "priceStatus": "tam" },
+    { "code": "KINH-DAN-638", "name": "Kính dán an toàn 6,38 ly", "group": "kinh", "unit": "m²", "thicknessMm": 6, "costPrice": 330000, "priceStatus": "tam", "note": "Độ dày tính khối lượng = 2 lớp kính 3 ly, không tính phim" },
+    { "code": "KINH-HOP-5-9-5", "name": "Kính hộp 5-9A-5", "group": "kinh", "unit": "m²", "thicknessMm": 10, "costPrice": 550000, "priceStatus": "tam", "note": "Độ dày tính khối lượng = 5 + 5 ly, không tính khe khí (BR-07)" },
+
+    { "code": "PK-BANLE-3D", "name": "Bản lề 3D cửa đi", "group": "phukien", "unit": "cái", "costPrice": 65000, "priceStatus": "tam" },
+    { "code": "PK-TAYNAM-CD", "name": "Tay nắm cửa đi", "group": "phukien", "unit": "cặp", "costPrice": 120000, "priceStatus": "that" },
+    { "code": "PK-LOIKHOA", "name": "Lõi khóa 1 đầu chìa", "group": "phukien", "unit": "cái", "costPrice": 109000, "priceStatus": "that" },
+    { "code": "PK-MIENGKHOA", "name": "Miệng khóa", "group": "phukien", "unit": "cái", "costPrice": 12000, "priceStatus": "that" },
+    { "code": "PK-KE-GOC", "name": "Ke góc", "group": "phukien", "unit": "cái", "costPrice": 8000, "priceStatus": "that" },
+    { "code": "PK-VIT", "name": "Vít lắp đặt", "group": "phukien", "unit": "con", "costPrice": 500, "priceStatus": "that" },
+    { "code": "PK-SILICONE", "name": "Keo silicone", "group": "phukien", "unit": "chai", "costPrice": 75000, "priceStatus": "tam" },
+    { "code": "PK-NEM-5", "name": "Nêm kính 5 mm", "group": "phukien", "unit": "cái", "costPrice": 500, "priceStatus": "tam" },
+    { "code": "PK-GIOANG", "name": "Gioăng kính", "group": "phukien", "unit": "m", "costPrice": 6000, "priceStatus": "tam" },
+    { "code": "PK-BANHXE", "name": "Bánh xe cửa lùa", "group": "phukien", "unit": "cái", "costPrice": 35000, "priceStatus": "tam" },
+    { "code": "PK-KHOA-BN", "name": "Khóa bán nguyệt cửa lùa", "group": "phukien", "unit": "cái", "costPrice": 45000, "priceStatus": "tam" },
+    { "code": "PK-CHOI-QUET", "name": "Chổi quét chống bụi", "group": "phukien", "unit": "m", "costPrice": 4000, "priceStatus": "tam" },
+
+    { "code": "NC-SX", "name": "Nhân công sản xuất", "group": "nhancong", "unit": "m²", "costPrice": 70000, "priceStatus": "that" },
+    { "code": "NC-LD", "name": "Nhân công lắp đặt", "group": "nhancong", "unit": "m²", "costPrice": 100000, "priceStatus": "that" }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "id": "xf55-cua-di-1-canh",
+  "version": 1,
+  "status": "verified",
+  "name": "Cửa đi mở quay 1 cánh",
+  "system": "xingfa55",
+  "group": "cua-di",
+  "symbolPrefix": "D",
+  "order": 1,
+  "source": "Dựng lại để khớp TC-01, TC-03, TC-04, TC-05, TC-06 của SRS v1.0 (sheet gốc G-AD2 trong cửa_mẫu.xlsx chưa có trong kho mã). Kích thước cắt nhôm và kính khớp 100% TC-01; phụ kiện ngoài silicone, nêm kính, bản lề là số tạm – cần chuyên gia đối chiếu.",
+  "drawing": { "kind": "swing", "leaves": 1, "hingeParam": "benBanLe", "openInParam": "huongMo" },
+  "defaults": { "W": 800, "H": 2200 },
+  "params": [
+    { "key": "kheHoChan", "label": "Khe hở chân", "type": "number", "unit": "mm", "default": 10, "min": 0, "max": 30, "step": 1, "hint": "Khoảng hở giữa cánh và sàn" },
+    { "key": "huongMo", "label": "Hướng mở", "type": "choice", "default": 0, "options": [ { "value": 0, "label": "Mở ra ngoài" }, { "value": 1, "label": "Mở vào trong" } ] },
+    { "key": "benBanLe", "label": "Bên bản lề (nhìn từ ngoài)", "type": "choice", "default": 0, "options": [ { "value": 0, "label": "Bản lề trái" }, { "value": 1, "label": "Bản lề phải" } ] }
+  ],
+  "constants": {
+    "khungChiem": { "value": 36, "note": "Khung bao chiếm mỗi cạnh (mm)" },
+    "kheCanh": { "value": 5, "note": "Khe hở giữa cánh và khung ở mỗi cạnh có khung (mm)" },
+    "canhLotNgang": { "value": 87, "note": "Phần cánh tính tới mép nẹp, mỗi bên theo chiều ngang (mm) – dựng lại từ TC-01" },
+    "canhLotDung": { "value": 68.2, "note": "Phần cánh tính tới mép nẹp, mỗi đầu theo chiều đứng (mm) – dựng lại từ TC-01" },
+    "kinhAnNgang": { "value": 15, "note": "Kính ăn vào rãnh mỗi bên theo chiều ngang (mm): rộng kính = nẹp ngang + 30" },
+    "kinhHutDung": { "value": 5, "note": "Chiều cao kính ngắn hơn nẹp đứng (mm) – dựng lại từ TC-01" },
+    "siliconeChaiMoiM": { "value": 0.48, "note": "Silicone 4 cạnh khung, 2 mặt: chai cho mỗi m chu vi cửa (TC-03)" },
+    "nemMoiM": { "value": 1, "note": "Nêm kính: cái cho mỗi m chu vi kính (TC-04)" },
+    "gioangMat": { "value": 2, "note": "Gioăng kính chạy 2 mặt" },
+    "vitKhoangCach": { "value": 520, "note": "Khoảng cách vít lắp đặt trên khung (mm) – số tạm" },
+    "kinhNangCanhBao": { "value": 50, "note": "Ngưỡng cảnh báo tấm kính nặng (kg) – giá trị tham khảo (A5)" }
+  },
+  "derived": [
+    { "key": "soBanLe", "expr": "H > 2400 ? 4 : 3", "label": "Số bản lề" }
+  ],
+  "profiles": [
+    { "role": "khung_dung", "label": "Khung đứng", "code": "XF-C3328", "length": "H", "qty": 2, "angle": "45/45", "position": "Trái, phải" },
+    { "role": "khung_ngang", "label": "Khung ngang trên", "code": "XF-C3328", "length": "W", "qty": 1, "angle": "45/45", "position": "Trên" },
+    { "role": "canh_dung", "label": "Cánh đứng", "code": "XF-C3303", "length": "H - khungChiem - kheCanh - kheHoChan", "qty": 2, "angle": "45/45", "position": "Trái, phải" },
+    { "role": "canh_ngang", "label": "Cánh ngang", "code": "XF-C3303", "length": "W - khungChiem * 2 - kheCanh * 2", "qty": 2, "angle": "45/45", "position": "Trên, dưới" },
+    { "role": "nep_dung", "label": "Nẹp kính đứng", "code": "XF-NEP-55", "length": "canh_dung - canhLotDung * 2", "qty": 2, "angle": "90/90", "position": "Trái, phải" },
+    { "role": "nep_ngang", "label": "Nẹp kính ngang", "code": "XF-NEP-55", "length": "canh_ngang - canhLotNgang * 2", "qty": 2, "angle": "90/90", "position": "Trên, dưới" }
+  ],
+  "glass": [
+    { "key": "kinh", "label": "Kính cánh", "width": "nep_ngang + kinhAnNgang * 2", "height": "nep_dung - kinhHutDung", "qty": 1, "defaultCode": "KINH-TRANG-8" }
+  ],
+  "accessories": [
+    { "code": "PK-BANLE-3D", "qty": "soBanLe" },
+    { "code": "PK-TAYNAM-CD", "qty": 1 },
+    { "code": "PK-LOIKHOA", "qty": 1 },
+    { "code": "PK-MIENGKHOA", "qty": 1 },
+    { "code": "PK-KE-GOC", "qty": 6, "note": "2 góc khung + 4 góc cánh" },
+    { "code": "PK-GIOANG", "qty": "glass_perimeter_total / 1000 * gioangMat" },
+    { "code": "PK-SILICONE", "qty": "2 * (W + H) / 1000 * siliconeChaiMoiM" },
+    { "code": "PK-NEM-5", "qty": "glass_perimeter_total / 1000 * nemMoiM" },
+    { "code": "PK-VIT", "qty": "round((2 * H + W) / vitKhoangCach)" }
+  ],
+  "labor": [
+    { "code": "NC-SX", "qty": "area" },
+    { "code": "NC-LD", "qty": "area" }
+  ],
+  "checks": [
+    { "id": "rong", "level": "error", "when": "W < 600 or W > 1200", "message": "Rộng cửa đi 1 cánh nên trong khoảng 600–1200 mm", "field": "W" },
+    { "id": "cao", "level": "error", "when": "H < 1800 or H > 3000", "message": "Cao cửa đi 1 cánh nên trong khoảng 1800–3000 mm", "field": "H" },
+    { "id": "banLe4", "level": "info", "when": "soBanLe == 4", "message": "Cửa cao trên 2400 mm nên dùng 4 bản lề (đã tính 4 bản lề)" },
+    { "id": "kinhNang", "level": "warning", "when": "kinh_weight > kinhNangCanhBao", "message": "Tấm kính nặng khoảng {kinh_weight} kg – cần 2 người lắp và bản lề chịu tải phù hợp" }
+  ]
+}

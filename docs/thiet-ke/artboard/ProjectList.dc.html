@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; } a:hover { text-decoration: none; }
+    button, input { font-family: inherit; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .num { font-variant-numeric: tabular-nums; }
+    .noscroll { scrollbar-width: none; -ms-overflow-style: none; }
+    .noscroll::-webkit-scrollbar { display: none; }
+    main > * { flex-shrink: 0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; display: flex; flex-direction: column;">
+
+  <div style="height: 47px; flex-shrink: 0;"><dc-import name="StatusBar" fg="{{t.text}}" hint-size="390px,47px"></dc-import></div>
+
+  <header style="position: relative; padding: 8px 16px 12px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+      <h1 style="margin: 0; font-size: 28px; line-height: 38px; font-weight: 700; letter-spacing: -0.2px;">Dự án</h1>
+      <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{countLabel}}</span>
+    </div>
+    <label for="q" class="sr">Tìm dự án</label>
+    <div style="height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid {{t.border}}; border-radius: 12px; background: {{t.surface}};">
+      <dc-import name="Icon" icon="search" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      <input id="q" type="search" placeholder="Tìm tên khách, SĐT, địa chỉ" style="flex-grow: 1; align-self: stretch; min-width: 0; padding: 0; border: 0; outline: none; background: transparent; font-size: 16px; line-height: 24px; color: {{t.text}};">
+    </div>
+    <sc-if value="{{isOffline}}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: {{t.warningSoft}}; color: {{t.warning}};">
+        <dc-import name="Icon" icon="wifiOff" color="{{t.warning}}" hint-size="24px,24px"></dc-import>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <strong style="font-size: 15px; line-height: 22px; font-weight: 600;">Không có mạng</strong>
+          <span style="font-size: 13px; line-height: 18px;">Đang xem dữ liệu đã lưu trên máy. Thay đổi sẽ tự đồng bộ khi có mạng.</span>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <main class="noscroll" ref="{{mainRef}}" onScroll="{{onScroll}}" style="flex-grow: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 4px 16px 96px; display: flex; flex-direction: column; gap: 12px;">
+
+    <sc-if value="{{showList}}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{projects}}" as="p" hint-placeholder-count="3">
+        <article style="display: flex; align-items: stretch; background: {{t.surface}}; border: 1px solid {{t.divider}}; border-radius: 16px; box-shadow: {{t.shadow}};">
+          <a href="ProjectDetail.dc.html" style="flex-grow: 1; min-width: 0; padding: 16px 0 16px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">{{p.name}}</h2>
+              <div style="display: flex; gap: 8px; align-items: center; font-size: 14px; line-height: 20px; color: {{t.text2}};">
+                <dc-import name="Icon" icon="pin" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{p.address}}</span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center; font-size: 14px; line-height: 20px; color: {{t.text2}};">
+                <dc-import name="Icon" icon="phone" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+                <span class="num">{{p.phone}}</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid {{t.divider}};">
+              <span style="display: flex; align-items: center; gap: 4px; height: 32px; box-sizing: border-box; padding: 0 12px 0 {{p.badgePadL}}; border-radius: 999px; font-size: 13px; line-height: 20px; font-weight: 600; white-space: nowrap; background: {{p.badgeBg}}; color: {{p.badgeFg}};">
+                <sc-if value="{{p.empty}}" hint-placeholder-val="{{ false }}">
+                  <dc-import name="Icon" icon="door" color="{{p.badgeFg}}" hint-size="24px,24px"></dc-import>
+                </sc-if>
+                {{p.doors}}
+              </span>
+              <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{p.moneyLabel}}</span>
+                <span class="num" style="font-size: 18px; line-height: 26px; font-weight: 700;">{{p.total}}</span>
+              </div>
+            </div>
+          </a>
+          <div style="display: flex; flex-direction: column; padding: 6px 4px;">
+            <button type="button" aria-label="{{p.moreLabel}}" onClick="{{p.openSheet}}" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <dc-import name="Icon" icon="more" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+            </button>
+          </div>
+        </article>
+      </sc-for>
+    </sc-if>
+
+    <sc-if value="{{isLoading}}" hint-placeholder-val="{{ false }}">
+      <div aria-busy="true" aria-label="Đang tải danh sách dự án" style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{skeletons}}" as="s" hint-placeholder-count="3">
+          <div style="padding: 16px; border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column; gap: 10px;">
+            <div style="width: 55%; height: 20px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 85%; height: 14px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 40%; height: 14px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="display: flex; justify-content: space-between; padding-top: 12px;">
+              <div style="width: 84px; height: 28px; border-radius: 999px; background: {{t.surface2}};"></div>
+              <div style="width: 112px; height: 24px; border-radius: 6px; background: {{t.surface2}};"></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isEmpty}}" hint-placeholder-val="{{ false }}">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 24px 16px;">
+        <div style="width: 88px; height: 88px; border-radius: 999px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="projects" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+        </div>
+        <h2 style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;">Chưa có dự án nào</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}}; max-width: 300px;">Tạo dự án cho khách hàng đầu tiên để bắt đầu bóc tách vật tư và làm báo giá.</p>
+        <a href="ProjectForm.dc.html" style="height: 52px; padding: 0 24px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+          <dc-import name="Icon" icon="plus" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+          Tạo dự án đầu tiên
+        </a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isError}}" hint-placeholder-val="{{ false }}">
+      <div role="alert" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 24px 16px;">
+        <div style="width: 88px; height: 88px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="alert" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+        </div>
+        <h2 style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;">Không tải được danh sách dự án</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}}; max-width: 300px;">Máy chủ đang không phản hồi. Dữ liệu của bạn vẫn an toàn — hãy thử lại sau ít phút.</p>
+        <button type="button" style="height: 52px; padding: 0 24px; border: 0; border-radius: 14px; background: {{t.primary}}; color: {{t.onPrimary}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <dc-import name="Icon" icon="refresh" color="{{t.onPrimary}}" hint-size="24px,24px"></dc-import>
+          Thử lại
+        </button>
+      </div>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{showFab}}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{fabWide}}" hint-placeholder-val="{{ true }}">
+      <a href="ProjectForm.dc.html" style="position: absolute; right: 16px; bottom: 186px; box-sizing: border-box; height: 56px; padding: 0 20px 0 16px; border: 0; border-radius: 16px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; line-height: 24px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,33,42,0.22); cursor: pointer;">
+        <dc-import name="Icon" icon="plus" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+        Tạo dự án
+      </a>
+    </sc-if>
+    <sc-if value="{{fabSmall}}" hint-placeholder-val="{{ false }}">
+      <a href="ProjectForm.dc.html" aria-label="Tạo dự án" title="Tạo dự án" style="position: absolute; right: 16px; bottom: 186px; width: 56px; height: 56px; border: 0; border-radius: 16px; background: {{t.accent}}; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(16,33,42,0.22); cursor: pointer;">
+        <dc-import name="Icon" icon="plus" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+      </a>
+    </sc-if>
+  </sc-if>
+
+  <aside aria-label="Quảng cáo" style="flex-shrink: 0; height: 64px; box-sizing: border-box; padding: 8px 16px; position: relative; background: {{t.bg}}; border-top: 1px solid {{t.divider}}; display: flex; align-items: center;">
+    <div style="flex-grow: 1; height: 48px; border-radius: 10px; background: {{t.ad}}; border: 1px dashed {{t.border}}; display: flex; align-items: center; gap: 10px; padding: 0 12px;">
+      <span style="font-size: 11px; line-height: 16px; font-weight: 700; letter-spacing: 0.4px; padding: 2px 6px; border-radius: 4px; border: 1px solid {{t.text2}}; color: {{t.text2}};">QUẢNG CÁO</span>
+      <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Ưu đãi phụ kiện cửa tháng 10 · Xem ngay</span>
+    </div>
+  </aside>
+
+  <nav aria-label="Điều hướng chính" style="flex-shrink: 0; height: 98px; box-sizing: border-box; padding: 6px 8px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}}; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+    <a href="ProjectList.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; border-radius: 999px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="projects" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 700; color: {{t.onPrimarySoft}};">Dự án</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="library" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Thư viện</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="user" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Tài khoản</span>
+    </a>
+  </nav>
+
+  <sc-if value="{{snack}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 186px; min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 16px; border-radius: 12px; background: {{t.snack}}; color: {{t.onSnack}}; display: flex; align-items: center; justify-content: space-between; gap: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
+      <span style="font-size: 15px; line-height: 22px; padding: 11px 0;">{{snackText}}</span>
+      <sc-if value="{{snackUndo}}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{undo}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: {{t.snackAction}}; font-size: 16px; font-weight: 700; cursor: pointer;">Hoàn tác</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{overlayOn}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0;">
+      <dc-import name="ProjectSheets" theme="{{themeName}}" view="{{overlayView}}" keyboard="{{kb}}" on-close="{{close}}" on-deleted="{{confirmDelete}}" on-saved="{{onSaved}}" hint-size="390px,844px"></dc-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"screenState":{"editor":"enum","default":"normal","options":["normal","loading","empty","error","offline"]},"scrolledToEnd":{"editor":"boolean","default":false},"startDeleted":{"editor":"boolean","default":false},"keyboard":{"editor":"boolean","default":false},"overlay":{"editor":"enum","default":"none","options":["none","actions","profit","profitError","delete","export","exporting","exported"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { overlay: (props.overlay && props.overlay !== 'none') ? props.overlay : null, deleted: !!props.startDeleted, snack: props.startDeleted ? 'deleted' : null, collapsed: false };
+    this._lastY = 0;
+  }
+  componentDidMount() {
+    if (this.props.scrolledToEnd && this._main) {
+      const m = this._main;
+      setTimeout(() => { m.scrollTop = m.scrollHeight; this._lastY = m.scrollTop; this.setState({ collapsed: true }); }, 300);
+    }
+  }
+  tokens(dark) {
+    const L = { bg:'#F3F6F7', surface:'#FFFFFF', surface2:'#E4EBEE', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', onPrimary:'#FFFFFF', primarySoft:'#DDEFF4', onPrimarySoft:'#073F51', accent:'#C2410C', onAccent:'#FFFFFF', success:'#1A6E39', successSoft:'#DDF3E4', warning:'#8F5500', warningSoft:'#FCEFD6', error:'#B42318', onError:'#FFFFFF', errorSoft:'#FDE5E3', ad:'#E9EEF0', scrim:'rgba(8,20,26,0.5)', shadow:'0 1px 2px rgba(16,33,42,0.05)', snack:'#1B2B33', onSnack:'#FFFFFF', snackAction:'#8FD6E8' };
+    const D = { bg:'#0B1317', surface:'#141F25', surface2:'#22323A', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', onPrimary:'#032733', primarySoft:'#12384A', onPrimarySoft:'#BFE8F3', accent:'#FF8F5A', onAccent:'#2A0E00', success:'#62C98A', successSoft:'#123524', warning:'#F0B54A', warningSoft:'#3A2A0B', error:'#FF8C82', onError:'#2B0704', errorSoft:'#3D1512', ad:'#18242A', scrim:'rgba(0,0,0,0.62)', shadow:'none', snack:'#E6EDF0', onSnack:'#10212A', snackAction:'#0B5C75' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const t = this.tokens(this.props.theme === 'dark');
+    const mode = this.props.screenState ?? 'normal';
+    const s = this.state;
+    const open = () => this.setState({ overlay: 'actions' });
+    const all = [
+      { id: 1, name: 'Anh Đoài', address: '53 Bình Hạ, Đồng Nai', phone: '0923 456 789', doors: '4 loại · 7 bộ', total: '10.384.357 ₫', ready: true },
+      { id: 2, name: 'Chị Hạnh – Nhà phố', address: '18 Võ Thị Sáu, Biên Hòa, Đồng Nai', phone: '0908 112 233', doors: '2 loại · 4 bộ', total: '12.480.000 ₫', ready: true },
+      { id: 3, name: 'Anh Tuấn – Văn phòng', address: '7 KP3 Tân Phong, Biên Hòa', phone: '0977 654 321', doors: 'Chưa có cửa', total: '0 ₫', ready: false }
+    ];
+    const projects = all
+      .filter((p) => !(s.deleted && p.id === 1))
+      .map((p) => ({
+        ...p,
+        moreLabel: 'Thao tác dự án ' + p.name,
+        badgeBg: p.ready ? t.primarySoft : t.warningSoft,
+        badgeFg: p.ready ? t.onPrimarySoft : t.warning,
+        empty: !p.ready,
+        badgePadL: p.ready ? '12px' : '6px',
+        moneyLabel: p.ready ? 'Báo giá (+10%)' : 'Báo giá',
+        openSheet: open
+      }));
+    return {
+      t,
+      projects,
+      countLabel: (mode === 'normal' || mode === 'offline') ? projects.length + ' dự án' : '',
+      skeletons: [1, 2, 3],
+      showList: mode === 'normal' || mode === 'offline',
+      isLoading: mode === 'loading',
+      isEmpty: mode === 'empty',
+      isError: mode === 'error',
+      isOffline: mode === 'offline',
+      showFab: (mode === 'normal' || mode === 'offline') && !s.snack,
+      fabWide: !s.collapsed,
+      fabSmall: s.collapsed,
+      mainRef: (el) => { this._main = el; },
+      onScroll: (e) => {
+        const y = e.currentTarget.scrollTop;
+        const dy = y - this._lastY;
+        this._lastY = y;
+        if (dy > 4 && !this.state.collapsed) this.setState({ collapsed: true });
+        else if (dy < -4 && this.state.collapsed) this.setState({ collapsed: false });
+      },
+      themeName: this.props.theme === 'dark' ? 'dark' : 'light',
+      overlayOn: !!s.overlay,
+      kb: !!this.props.keyboard,
+      overlayView: s.overlay || 'actions',
+      snack: !!s.snack,
+      snackText: s.snack === 'deleted' ? 'Đã xóa dự án “Anh Đoài”' : (s.snack || ''),
+      snackUndo: s.snack === 'deleted',
+      close: () => this.setState({ overlay: null }),
+      confirmDelete: () => this.setState({ overlay: null, deleted: true, snack: 'deleted' }),
+      onSaved: (msg) => this.setState({ overlay: null, snack: msg }),
+      undo: () => this.setState({ deleted: false, snack: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #10212A; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+<div style="width: 2970px; height: 900px; box-sizing: border-box; background: #FFFFFF; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 40px;">
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Dark</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" theme="dark" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Chọn nhiều</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" select-mode="{{ true }}" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Chọn nhiều · Dark</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" select-mode="{{ true }}" theme="dark" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Xác nhận xóa</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" select-mode="{{ true }}" overlay="delete" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Đang tải</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" screen-state="loading" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Chưa có cửa</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" screen-state="empty" hint-size="390px,844px"></dc-import></div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 18px; line-height: 26px; font-weight: 600; color: #10212A; white-space: nowrap;">D1 · Lỗi tải</span>
+    <div style="width: 390px; height: 844px; position: relative; overflow: hidden;"><dc-import name="Doors" screen="list" screen-state="error" hint-size="390px,844px"></dc-import></div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":2970,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

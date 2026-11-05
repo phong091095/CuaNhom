@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #10212A; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+<div style="width: 1440px; height: 1320px; box-sizing: border-box; padding: 48px; background: #FFFFFF; display: flex; flex-direction: column; gap: 28px;">
+  <div style="display: flex; flex-direction: column; gap: 6px;">
+    <span style="font-size: 14px; font-weight: 700; letter-spacing: 1.6px; color: #0B5C75;">LOGO TẠM · CHƯA ÁP DỤNG VÀO MÀN HÌNH</span>
+    <h1 style="margin: 0; font-size: 40px; line-height: 50px; font-weight: 700;">3 hướng logo MATADOOR</h1>
+    <span style="font-size: 16px; line-height: 24px; color: #4B5D66;">Màu chính #0B5C75. Mỗi hướng: biểu tượng · chữ · bản nền tối · thử làm icon app ở 180 / 60 / 40 / 29 pt.</span>
+  </div>
+  <sc-for list="{{dirs}}" as="d" hint-placeholder-count="3">
+    <section style="display: grid; grid-template-columns: 400px 400px minmax(0, 1fr); gap: 24px; padding-top: 24px; border-top: 1px solid #D8E0E4;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <h2 style="margin: 0; font-size: 22px; line-height: 30px; font-weight: 700;">{{d.name}}</h2>
+        <div style="height: 150px; border-radius: 16px; background: #F3F6F7; display: flex; align-items: center; gap: 16px; padding: 0 20px;">
+          <svg width="56" height="56" viewBox="0 0 48 48" aria-hidden="true" style="display: block; flex-shrink: 0;"><rect x="0" y="0" width="48" height="48" rx="10.75" style="fill: #0B5C75;"></rect><path d="{{d.mid.fill}}" style="fill: {{d.mid.fillC}}; stroke: none;"></path><path d="{{d.mid.stroke}}" style="fill: none; stroke: #FFFFFF; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;"></path><path d="{{d.mid.acc}}" style="fill: none; stroke: {{d.mid.accC}}; stroke-width: 2.5; stroke-linecap: round;"></path></svg>
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 30px; line-height: 38px; font-weight: 800; letter-spacing: 2px; color: #0B5C75; white-space: nowrap;">{{d.word1}}<span style="font-weight: 400;">{{d.word2}}</span></span>
+            <span style="font-size: 13px; line-height: 18px; color: #4B5D66;">Báo giá cửa nhôm kính</span>
+          </div>
+        </div>
+        <p style="margin: 0; font-size: 14px; line-height: 21px; color: #4B5D66;">{{d.why}}</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <span style="font-size: 14px; line-height: 30px; font-weight: 600; color: #4B5D66;">Trên nền tối</span>
+        <div style="height: 150px; border-radius: 16px; background: #0B1317; display: flex; align-items: center; gap: 16px; padding: 0 20px;">
+          <span style="border-radius: 14px; box-shadow: 0 0 0 1px #27363E;"><svg width="56" height="56" viewBox="0 0 48 48" aria-hidden="true" style="display: block; flex-shrink: 0;"><rect x="0" y="0" width="48" height="48" rx="10.75" style="fill: #0B5C75;"></rect><path d="{{d.mid.fill}}" style="fill: {{d.mid.fillC}}; stroke: none;"></path><path d="{{d.mid.stroke}}" style="fill: none; stroke: #FFFFFF; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;"></path><path d="{{d.mid.acc}}" style="fill: none; stroke: {{d.mid.accC}}; stroke-width: 2.5; stroke-linecap: round;"></path></svg></span>
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 30px; line-height: 38px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF; white-space: nowrap;">{{d.word1}}<span style="font-weight: 400; color: #6CC7DE;">{{d.word2}}</span></span>
+            <span style="font-size: 13px; line-height: 18px; color: #A3B3BB;">Báo giá cửa nhôm kính</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <span style="font-size: 14px; line-height: 30px; font-weight: 600; color: #4B5D66;">Icon app</span>
+        <div style="min-height: 196px; box-sizing: border-box; border-radius: 16px; background: #E4EBEE; display: flex; align-items: flex-end; gap: 28px; padding: 8px 20px;">
+          <sc-for list="{{d.icons}}" as="ic" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+              <svg width="{{ic.sz}}" height="{{ic.sz}}" viewBox="0 0 48 48" aria-hidden="true" style="display: block; flex-shrink: 0;"><rect x="0" y="0" width="48" height="48" rx="10.75" style="fill: #0B5C75;"></rect><path d="{{ic.fill}}" style="fill: {{ic.fillC}}; stroke: none;"></path><path d="{{ic.stroke}}" style="fill: none; stroke: #FFFFFF; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;"></path><path d="{{ic.acc}}" style="fill: none; stroke: {{ic.accC}}; stroke-width: 2.5; stroke-linecap: round;"></path></svg>
+              <span class="num" style="font-size: 13px; line-height: 18px; color: #4B5D66;">{{ic.label}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = '#0B5C75';
+    const dirs = [
+      { name: 'Hướng A · Khung chữ M', why: 'Chữ M đặt trong khung cửa: đọc ra cả tên và nghề. Nét đều 3,5 nên vẫn rõ ở 29 pt.',
+        fill: 'M0 0', fillC: 'none', stroke: 'M9 37h30 M13 37V11h22v26 M19 31V18l5 6 5-6v13', acc: 'M0 0', accC: 'none', word1: 'MATADOOR', word2: '' },
+      { name: 'Hướng B · Ô kính', why: 'Khung nhôm dày ôm tấm kính có vệt phản chiếu. Gọn, dễ nhận ra, hợp làm biểu tượng nhỏ.',
+        fill: 'M16 13h16v22H16z', fillC: '#6CC7DE', stroke: 'M13 10h22v28H13z', acc: 'M19.5 26.5l6.5-6.5 M22 32l7.5-7.5', accC: '#FFFFFF', word1: 'MATA', word2: 'DOOR' },
+      { name: 'Hướng C · Cánh mở', why: 'Cánh cửa hé mở trong khung: gợi “mở ra một báo giá”. Mảng trắng lớn nên đậm nhất ở cỡ nhỏ.',
+        fill: 'M15 10L27 14V42L15 38z', fillC: '#FFFFFF', stroke: 'M9 38h30 M15 38V10h18v28', acc: 'M23.5 25v5', accC: T, word1: 'MATA', word2: 'DOOR' }
+    ];
+    const sizes = [180, 60, 40, 29];
+    return {
+      dirs: dirs.map((d) => ({ ...d,
+        big: { ...d, sz: 120, r: 26.9 },
+        mid: { ...d, sz: 56 },
+        icons: sizes.map((sz) => ({ ...d, sz, label: sz + ' pt' }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

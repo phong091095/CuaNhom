@@ -1,0 +1,11 @@
+{
+  "systems": [
+    {
+      "id": "xingfa55",
+      "brand": "Xingfa",
+      "name": "Xingfa hệ 55",
+      "barLengthMm": 5800,
+      "note": "MVP chỉ có một hệ nhôm (SRS 1.2). Thêm hệ nhôm ở giai đoạn 2 chỉ cần thêm dữ liệu."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .num { font-variant-numeric: tabular-nums; }
+    table { border-collapse: collapse; width: 100%; }
+    th { text-align: left; font-weight: 700; font-size: 14px; padding: 9px 10px; background: #DDEFF4; color: #073F51; border: 1px solid #A9CEDB; }
+    td { font-size: 14px; line-height: 20px; padding: 9px 10px; border: 1px solid #D8E0E4; vertical-align: top; }
+    h2 { margin: 0 0 4px; font-size: 26px; line-height: 34px; font-weight: 700; }
+    h3 { margin: 0 0 4px; font-size: 18px; line-height: 26px; font-weight: 600; }
+    p { margin: 0; font-size: 15px; line-height: 23px; color: #4B5D66; }
+    section { display: flex; flex-direction: column; gap: 12px; }
+  </style>
+</helmet>
+<div style="width: 1960px; height: 1400px; box-sizing: border-box; padding: 56px 56px 64px; background: #FFFFFF; color: #10212A; display: flex; flex-direction: column; gap: 34px;">
+  <header style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 20px; border-bottom: 2px solid #0B5C75;">
+    <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.6px; color: #0B5C75;">MATADOOR · HỒ SƠ BÀN GIAO · TRANG 3 / 4</span>
+    <h1 style="margin: 0; font-size: 40px; line-height: 50px; font-weight: 700; letter-spacing: -0.6px;">Quy tắc đã chốt và ghi chú kỹ thuật</h1>
+    <p style="max-width: 900px;">Gom mọi quy tắc rải rác qua các lượt duyệt vào một chỗ, kèm phần ghi chú dành riêng cho lập trình viên.</p>
+  </header>
+<section><h2>4 · Quy tắc đã chốt</h2><p>Mười quy tắc dưới đây được chốt dần qua các lượt duyệt và đã áp cho toàn bộ canvas.</p><table><thead><tr><th>Quy tắc</th><th>Nội dung</th></tr></thead><tbody><tr><td>Một nút cam mỗi lớp</td><td>Mỗi lớp (màn, sheet, hộp thoại) có đúng một nút màu nhấn. Lớp bị làm mờ phía sau không tính. Hộp thoại phá hủy dùng nút đỏ thay cho cam.</td></tr><tr><td>Icon luôn có nhãn</td><td>Không nút nào chỉ có hình. Nếu chật chỗ thì nhãn nằm trong aria-label và có nhãn chữ ở nơi khác trên màn.</td></tr><tr><td>Khoảng đệm cuối danh sách</td><td>Vùng cuộn của màn có thanh nút cố định phải có padding-bottom = chiều cao thanh nút + 16 pt. Một nút: 68. Hai nút xếp dọc: 84.</td></tr><tr><td>Không ngắt giữa số và đơn vị</td><td>2.400 mm, 92,83 kg, 10.384.357 ₫, 800 × 2.200 mm đều dùng khoảng trắng không ngắt. Mã định danh (BG-2026-0042, C3328) dùng white-space: nowrap.</td></tr><tr><td>Màu cảnh báo có điều kiện</td><td>Chỉ dùng khi hạn dùng còn dưới 7 ngày, hoặc hao hụt từ 10% trở lên. Các mức khác dùng chữ thường.</td></tr><tr><td>Một nguồn giá duy nhất</td><td>Thư viện là gốc → Thông số hệ (D4) ghi đè cho một hệ nhôm → form nhập cửa chỉ hiển thị kết quả kèm nguồn và liên kết Sửa, không cho gõ.</td></tr><tr><td>Xóa là hoãn, không phải mất</td><td>Mọi thao tác xóa chuyển vào Đã xóa gần đây 30 ngày, kèm snackbar Hoàn tác 10 giây. Hộp xác nhận luôn gọi tên đối tượng.</td></tr><tr><td>Số dẫn xuất phải nêu căn cứ</td><td>Đơn giá TB (theo báo giá), Tiền nhôm ước tính (theo chiều dài dùng), Thực mua 13 cây. Đổi căn cứ là đổi con số, phải nêu khi báo cáo.</td></tr><tr><td>Không mã màn, không ghi chú dev trong UI</td><td>SCR-… và ghi chú kỹ thuật chỉ nằm trên canvas, không bao giờ hiển thị trong app.</td></tr><tr><td>Logo và quảng cáo</td><td>Logo chỉ ở icon app, A0–A4, C1 và đầu trang báo giá G2. Banner quảng cáo chỉ ở B1 và C2, có nhãn “Quảng cáo”, không che nút, không có ở màn nhập liệu, E3 và G.</td></tr></tbody></table></section><section><h2>5 · Ghi chú kỹ thuật cho lập trình</h2><p>Những điểm dễ làm sai nếu chỉ nhìn ảnh thiết kế.</p><table><thead><tr><th>Chủ đề</th><th>Yêu cầu</th></tr></thead><tbody><tr><td>Bàn phím</td><td>SĐT: phonePad / inputType=phone. Kích thước, %, đơn giá: bàn phím số có dấu phẩy thập phân. OTP: bàn phím số.</td></tr><tr><td>Tự điền</td><td>iOS textContentType: username, password, newPassword, oneTimeCode, telephoneNumber, organizationName. Android autofillHints: username, password, newPassword, smsOTPCode, phone.</td></tr><tr><td>Mật khẩu</td><td>Theo NIST SP 800-63B: tối thiểu 8 ký tự, không ép thành phần, cho dán, cảnh báo mật khẩu phổ biến. Nút Hiện/Ẩn là nút thật có nhãn chữ.</td></tr><tr><td>OTP</td><td>6 ô, tự nhảy ô, dán cả mã được. Mã sống 5 phút, 60 giây mới cho gửi lại. Lỗi đăng nhập dùng thông báo chung theo OWASP, không nói sai tài khoản hay sai mật khẩu.</td></tr><tr><td>Tìm kiếm bỏ dấu</td><td>Chuẩn hóa NFD, xóa dải U+0300–U+036F, đổi đ/Đ thành d, hạ chữ thường, bỏ khoảng trắng trước khi so khớp. “xing fa”, “xingfa”, “Xingfa”, “XINGFA” đều ra Xingfa.</td></tr><tr><td>Tính số ngày còn lại</td><td>Đếm ngày lịch từ 00:00 hôm nay đến 00:00 ngày hết hạn theo múi giờ máy (Asia/Ho_Chi_Minh). Hết hạn hôm nay → “Hết hạn hôm nay”. Đã qua → “Đã hết hạn DD/MM/YYYY”.</td></tr><tr><td>Chống bấm nhầm quảng cáo</td><td>Banner cách nút thao tác gần nhất ≥ 8 pt, không dính đáy màn, không hiện trong 1 giây đầu sau khi danh sách vừa cuộn xong.</td></tr><tr><td>Xóa tài khoản 2 bước</td><td>Bước 1 cảnh báo mất dữ liệu, bước 2 gõ lại số điện thoại để xác nhận. Không dùng nút cam.</td></tr><tr><td>Thanh toán trên iOS</td><td>Bán quyền sử dụng trong app bắt buộc qua In-App Purchase (App Store Guideline 3.1.1), không được dẫn ra ngoài. Hiện tại app chỉ hiển thị hạn dùng và số liên hệ, không có nút mua.</td></tr><tr><td>Chữ hệ thống</td><td>Mọi màn phải chịu được cỡ chữ hệ thống 310%. Lưới 2 cột tự chuyển 1 cột khi tỉ lệ vượt 1,2.</td></tr></tbody></table></section></div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1960,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

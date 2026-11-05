@@ -1,0 +1,17 @@
+{
+  "name": "@matadoor/data",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gói dữ liệu kèm app: mẫu cửa, hệ nhôm, bảng vật tư mặc định, đáp án mẫu. Đổi công thức phải tăng version mẫu và cập nhật templates.lock.json.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json",
+    "lock": "node --import tsx scripts/update-lock.ts"
+  },
+  "dependencies": {
+    "@matadoor/engine": "0.1.0"
+  }
+}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font-family: inherit; }
+    .num { font-variant-numeric: tabular-nums; }
+    .noscroll { scrollbar-width: none; }
+    .noscroll::-webkit-scrollbar { display: none; }
+    main > * { flex-shrink: 0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; display: flex; flex-direction: column;">
+  <div style="height: 47px; flex-shrink: 0; background: {{t.surface}};"><dc-import name="StatusBar" fg="{{t.text}}" hint-size="390px,47px"></dc-import></div>
+
+  <div style="height: 56px; flex-shrink: 0; padding: 0 8px; background: {{t.surface}}; border-bottom: 1px solid {{t.divider}}; display: grid; grid-template-columns: 88px minmax(0, 1fr) 88px; align-items: center; gap: 4px;">
+    <sc-if value="{{clean}}" hint-placeholder-val="{{ true }}">
+      <a href="{{cancelHref}}" style="height: 44px; padding: 0 8px; display: flex; align-items: center; color: {{t.primary}}; font-size: 16px; font-weight: 600;">Hủy</a>
+    </sc-if>
+    <sc-if value="{{dirty}}" hint-placeholder-val="{{ false }}">
+      <button type="button" onClick="{{askDiscard}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; display: flex; align-items: center; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+    </sc-if>
+    <h1 style="margin: 0; text-align: center; font-size: 17px; line-height: 24px; font-weight: 700;">{{title}}</h1>
+    <span></span>
+  </div>
+
+  <main class="noscroll" onInput="{{markDirty}}" style="flex-grow: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 20px 16px 68px; display: flex; flex-direction: column; gap: 20px;">
+    <sc-if value="{{isCreate}}" hint-placeholder-val="{{ true }}">
+      <p style="margin: 0; font-size: 15px; line-height: 22px; color: {{t.text2}};">Mỗi dự án là một khách hàng hoặc công trình. Tạo xong bạn thêm các bộ cửa vào dự án.</p>
+    </sc-if>
+    <sc-for list="{{fields}}" as="f" hint-placeholder-count="3">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label for="{{f.id}}" style="font-size: 14px; line-height: 20px; font-weight: 500; color: {{f.labelC}};">{{f.label}}<sc-if value="{{f.req}}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color: {{t.error}}; font-weight: 700;"> *</span></sc-if></label>
+        <div style="height: 52px; box-sizing: border-box; padding: 0 {{f.pad}}; border: {{f.bd}}; border-radius: 12px; background: {{t.surface}}; display: flex; align-items: stretch; gap: 8px;">
+          <span style="align-self: center; display: flex;"><dc-import name="Icon" icon="{{f.icon}}" color="{{t.text2}}" hint-size="24px,24px"></dc-import></span>
+          <input id="{{f.id}}" type="{{f.type}}" inputmode="{{f.mode}}" autocomplete="{{f.ac}}" value="{{f.value}}" placeholder="{{f.ph}}" aria-required="{{f.req}}" aria-invalid="{{f.invalid}}" aria-describedby="{{f.msgId}}" class="num" style="flex-grow: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; font-size: 17px; line-height: 24px; color: {{t.text}};">
+        </div>
+        <sc-if value="{{f.invalid}}" hint-placeholder-val="{{ false }}">
+          <span id="{{f.msgId}}" style="display: flex; gap: 4px; align-items: flex-start; font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.error}};">
+            <dc-import name="Icon" icon="alert" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+            <span style="padding-top: 3px;">{{f.err}}</span>
+          </span>
+        </sc-if>
+        <sc-if value="{{f.hasHint}}" hint-placeholder-val="{{ false }}">
+          <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{f.hint}}</span>
+        </sc-if>
+      </div>
+    </sc-for>
+    <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};"><span style="color: {{t.error}}; font-weight: 700;">*</span> là ô bắt buộc.</span>
+  </main>
+
+  <div style="flex-shrink: 0; padding: 12px 16px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}};">
+    <a href="{{submitHref}}" style="height: 52px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <dc-import name="Icon" icon="{{submitIcon}}" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+      {{submitLabel}}
+    </a>
+  </div>
+  <sc-if value="{{discardOpen}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0;">
+      <dc-import name="DiscardDialog" theme="{{themeName}}" body="Thông tin dự án vừa sửa sẽ không được lưu." leave-href="{{cancelHref}}" on-keep="{{keep}}" hint-size="390px,844px"></dc-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"mode":{"editor":"enum","default":"create","options":["create","edit"]},"formState":{"editor":"enum","default":null,"options":["empty","filled","error"]},"dirty":{"editor":"boolean","default":false},"showDiscard":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { dirty: !!props.dirty, discard: !!props.showDiscard };
+  }
+  tokens(dark) {
+    const L = { bg:'#F3F6F7', surface:'#FFFFFF', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', accent:'#C2410C', onAccent:'#FFFFFF', error:'#B42318' };
+    const D = { bg:'#0B1317', surface:'#141F25', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', accent:'#FF8F5A', onAccent:'#2A0E00', error:'#FF8C82' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const t = this.tokens(this.props.theme === 'dark');
+    const edit = this.props.mode === 'edit';
+    const fs = this.props.formState || 'filled';
+    const empty = fs === 'empty', err = fs === 'error';
+    const mk = (id, label, icon, type, mode, ac, value, ph, req, errMsg, hint) => {
+      const bad = err && !!errMsg;
+      return { id, label, icon, type, mode, ac, value: empty ? '' : value, ph, req, err: errMsg || '', invalid: bad, msgId: id + '-msg',
+        hint: hint || '', hasHint: !!hint && !bad,
+        bd: bad ? '2px solid ' + t.error : '1px solid ' + t.border, pad: bad ? '11px' : '12px',
+        labelC: bad ? t.error : t.text2 };
+    };
+    const fields = [
+      mk('pf-name', 'Tên dự án', 'projects', 'text', 'text', 'off', err ? '' : 'Anh Đoài', 'Ví dụ: Anh Đoài', true, 'Nhập tên dự án, ví dụ: Anh Đoài.'),
+      mk('pf-addr', 'Địa chỉ', 'pin', 'text', 'text', 'street-address', '53 Bình Hạ, Đồng Nai', 'Số nhà, đường, tỉnh/thành', false, ''),
+      mk('pf-phone', 'Số điện thoại khách', 'phone', 'tel', 'tel', 'tel', err ? '0923 45' : '0923 456 789', 'Ví dụ: 0923 456 789', false, 'Số điện thoại chưa đúng. Ví dụ 0923 456 789 hoặc 028 3822 1234.', 'Không bắt buộc. Nhận 10–11 chữ số hoặc số bắt đầu bằng +84.')
+    ];
+    return {
+      t, fields,
+      isCreate: !edit,
+      title: edit ? 'Chỉnh sửa dự án' : 'Tạo dự án',
+      cancelHref: edit ? 'ProjectDetail.dc.html' : 'ProjectList.dc.html',
+      submitHref: err ? '#' : (empty ? 'ProjectFormError.dc.html' : 'ProjectDetail.dc.html'),
+      submitLabel: edit ? 'Lưu' : 'Tạo',
+      submitIcon: edit ? 'check' : 'plus',
+      themeName: this.props.theme === 'dark' ? 'dark' : 'light',
+      dirty: this.state.dirty, clean: !this.state.dirty,
+      discardOpen: this.state.discard,
+      askDiscard: () => this.setState({ discard: true }),
+      keep: () => this.setState({ discard: false }),
+      markDirty: () => { if (!this.state.dirty) this.setState({ dirty: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

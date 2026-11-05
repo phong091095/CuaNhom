@@ -1,0 +1,35 @@
+# Phụ thuộc
+node_modules/
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+apps/*/android/
+apps/*/ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Build, coverage, log
+coverage/
+*.tsbuildinfo
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# Hệ điều hành, IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Biến môi trường
+.env
+.env*.local

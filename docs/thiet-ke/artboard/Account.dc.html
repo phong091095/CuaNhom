@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font-family: inherit; }
+    .num { font-variant-numeric: tabular-nums; }
+    .noscroll { scrollbar-width: none; }
+    .noscroll::-webkit-scrollbar { display: none; }
+    main > * { flex-shrink: 0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; display: flex; flex-direction: column;">
+  <div style="height: 47px; flex-shrink: 0; background: {{barBg}};"><dc-import name="StatusBar" fg="{{t.text}}" hint-size="390px,47px"></dc-import></div>
+
+  <sc-if value="{{isAccount}}" hint-placeholder-val="{{ true }}">
+    <header style="flex-shrink: 0; padding: 4px 16px 8px;">
+      <h1 style="margin: 0; font-size: 28px; line-height: 38px; font-weight: 700;">Tài khoản</h1>
+    </header>
+  </sc-if>
+  <sc-if value="{{hasTopBar}}" hint-placeholder-val="{{ false }}">
+    <div style="height: 56px; flex-shrink: 0; padding: 0 8px; background: {{t.surface}}; border-bottom: 1px solid {{t.divider}}; display: grid; grid-template-columns: 88px minmax(0, 1fr) 88px; align-items: center; gap: 4px;">
+      <sc-if value="{{isTrash}}" hint-placeholder-val="{{ false }}">
+        <a href="AccountHome.dc.html" aria-label="Quay lại Tài khoản" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {{t.primary}};">
+          <dc-import name="Icon" icon="chevL" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+        </a>
+      </sc-if>
+      <sc-if value="{{shopClean}}" hint-placeholder-val="{{ false }}">
+        <a href="AccountHome.dc.html" style="height: 44px; padding: 0 8px; display: flex; align-items: center; color: {{t.primary}}; font-size: 16px; font-weight: 600;">Hủy</a>
+      </sc-if>
+      <sc-if value="{{shopDirty}}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{askDiscard}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; display: flex; align-items: center; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+      </sc-if>
+      <h1 style="margin: 0; text-align: center; font-size: 17px; line-height: 24px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{topTitle}}</h1>
+      <span></span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isOffline}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="flex-shrink: 0; margin: 8px 16px 0; padding: 12px; border-radius: 12px; background: {{t.warningSoft}}; color: {{t.warning}}; display: flex; gap: 10px; align-items: flex-start;">
+      <dc-import name="Icon" icon="wifiOff" color="{{t.warning}}" hint-size="24px,24px"></dc-import>
+      <span style="font-size: 14px; line-height: 20px;"><strong style="font-weight: 600;">Không có mạng.</strong> {{offlineText}}</span>
+    </div>
+  </sc-if>
+
+  <main class="noscroll" ref="{{mainRef}}" onInput="{{markDirty}}" style="flex-grow: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 12px 16px 68px; display: flex; flex-direction: column; gap: 20px;">
+
+    <sc-if value="{{isLoading}}" hint-placeholder-val="{{ false }}">
+      <div aria-busy="true" aria-label="Đang tải" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="height: 132px; border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; align-items: center; gap: 14px; padding: 16px; box-sizing: border-box;">
+          <div style="width: 64px; height: 64px; border-radius: 999px; background: {{t.surface2}};"></div>
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px;">
+            <div style="width: 60%; height: 18px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 40%; height: 14px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 70%; height: 24px; border-radius: 999px; background: {{t.surface2}};"></div>
+          </div>
+        </div>
+        <sc-for list="{{skel}}" as="k" hint-placeholder-count="3">
+          <div style="height: 112px; border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px;">
+            <div style="width: 45%; height: 16px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 85%; height: 14px; border-radius: 6px; background: {{t.surface2}};"></div>
+            <div style="width: 70%; height: 14px; border-radius: 6px; background: {{t.surface2}};"></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isError}}" hint-placeholder-val="{{ false }}">
+      <div role="alert" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 24px 8px;">
+        <span style="width: 80px; height: 80px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="alert" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+        </span>
+        <h2 style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;">{{errorTitle}}</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Máy chủ chưa phản hồi. Dữ liệu của bạn vẫn an toàn.</p>
+        <button type="button" style="height: 52px; padding: 0 24px; border: 0; border-radius: 14px; background: {{t.primary}}; color: {{t.onPrimary}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <dc-import name="Icon" icon="refresh" color="{{t.onPrimary}}" hint-size="24px,24px"></dc-import>
+          Thử lại
+        </button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showAccount}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Hồ sơ" style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 64px; height: 64px; flex-shrink: 0; border-radius: 999px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; display: flex; align-items: center; justify-content: center; font-size: 26px; line-height: 34px; font-weight: 700;">H</span>
+          <div style="min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 20px; line-height: 28px; font-weight: 700;">Hungthanh</span>
+            <span class="num" style="font-size: 14px; line-height: 20px; color: {{t.text2}};">0912 345 678</span>
+          </div>
+        </div>
+        <span style="align-self: flex-start; min-height: 32px; box-sizing: border-box; padding: 4px 12px 4px 6px; border-radius: 999px; background: {{expBg}}; color: {{expFg}}; font-size: 14px; line-height: 20px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+          <dc-import name="Icon" icon="{{expIcon}}" color="{{expFg}}" hint-size="24px,24px"></dc-import>
+          <span class="num">{{expText}}</span>
+        </span>
+        <sc-if value="{{expSoon}}" hint-placeholder-val="{{ true }}">
+          <div style="border-top: 1px solid {{t.divider}}; padding-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <p style="margin: 0; font-size: 15px; line-height: 22px;">Gói sắp hết hạn. Liên hệ MATADOOR để gia hạn, tránh gián đoạn khi làm báo giá.</p>
+            <a href="tel:0908046929" style="height: 48px; box-sizing: border-box; border-radius: 14px; border: 1px solid {{t.primary}}; color: {{t.primary}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <dc-import name="Icon" icon="phone" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+              Liên hệ gia hạn · 0908 046 929
+            </a>
+          </div>
+        </sc-if>
+      </section>
+
+      <sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+        <section style="display: flex; flex-direction: column; gap: 8px;">
+          <h2 style="margin: 0; padding: 0 4px; font-size: 14px; line-height: 20px; font-weight: 600; color: {{t.text2}};">{{g.title}}</h2>
+          <div style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column; overflow: hidden;">
+            <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="3">
+              <a href="{{r.href}}" onClick="{{r.tap}}" aria-label="{{r.aria}}" style="min-height: 60px; padding: 10px 12px 10px 14px; border-top: {{r.line}}; display: flex; align-items: center; gap: 12px; color: {{r.color}};">
+                <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; background: {{r.iconBg}}; display: flex; align-items: center; justify-content: center;">
+                  <dc-import name="Icon" icon="{{r.icon}}" color="{{r.iconFg}}" hint-size="24px,24px"></dc-import>
+                </span>
+                <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column;">
+                  <span style="font-size: 16px; line-height: 24px; font-weight: {{r.weight}};">{{r.label}}</span>
+                  <sc-if value="{{r.hasSub}}" hint-placeholder-val="{{ false }}">
+                    <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{r.sub}}</span>
+                  </sc-if>
+                </span>
+                <sc-if value="{{r.hasCount}}" hint-placeholder-val="{{ false }}">
+                  <span class="num" style="min-width: 28px; height: 28px; box-sizing: border-box; padding: 0 8px; border-radius: 999px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; font-size: 14px; line-height: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center;">{{r.count}}</span>
+                </sc-if>
+                <dc-import name="Icon" icon="{{r.trail}}" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+              </a>
+            </sc-for>
+          </div>
+        </section>
+      </sc-for>
+
+      <button type="button" onClick="{{askLogout}}" style="min-height: 56px; border-radius: 16px; border: 1px solid {{t.divider}}; background: {{t.surface}}; color: {{t.text}}; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+        <dc-import name="Icon" icon="logout" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        Đăng xuất
+      </button>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 0 0;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <dc-import name="LogoMark" size="{{ 32 }}" kind="app" hint-size="32px,32px"></dc-import>
+          <span style="font-size: 18px; line-height: 24px; font-weight: 800; letter-spacing: 1.5px; color: {{t.brandText}};">MATADOOR</span>
+        </div>
+        <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Phiên bản 1.0.0</span>
+      </div>
+
+      <button type="button" onClick="{{askDelete}}" style="min-height: 48px; border: 0; background: transparent; color: {{t.error}}; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+        <dc-import name="Icon" icon="userX" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+        Xóa tài khoản
+      </button>
+    </sc-if>
+
+    <sc-if value="{{showShop}}" hint-placeholder-val="{{ false }}">
+      <p style="margin: 0; font-size: 15px; line-height: 22px; color: {{t.text2}};">Thông tin này hiện ở đầu trang báo giá bạn gửi cho khách.</p>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span role="img" aria-label="Logo xưởng hiện tại" style="width: 88px; height: 88px; flex-shrink: 0; border-radius: 16px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; border: 1px dashed {{t.border}}; display: flex; align-items: center; justify-content: center; font-size: 30px; line-height: 38px; font-weight: 800;">HT</span>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <button type="button" style="height: 44px; padding: 0 12px; border: 1px solid {{t.primary}}; border-radius: 12px; background: transparent; color: {{t.primary}}; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <dc-import name="Icon" icon="camera" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+            Đổi logo
+          </button>
+          <button type="button" onClick="{{askRemoveLogo}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {{t.text2}}; font-size: 15px; font-weight: 600; text-align: left; cursor: pointer;">Gỡ logo</button>
+        </div>
+      </div>
+      <span style="margin-top: -12px; font-size: 13px; line-height: 18px; color: {{t.text2}};">PNG hoặc JPG, tối đa 5 MB, nền trong suốt càng tốt.</span>
+      <sc-if value="{{logoErr}}" hint-placeholder-val="{{ false }}">
+        <div role="alert" style="margin-top: -8px; padding: 12px; border-radius: 12px; background: {{t.errorSoft}}; color: {{t.error}}; display: flex; gap: 10px; align-items: flex-start;">
+          <dc-import name="Icon" icon="alert" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-size: 15px; line-height: 22px; font-weight: 600;">{{logoErrTitle}}</span>
+            <span style="font-size: 13px; line-height: 18px;">{{logoErrBody}}</span>
+            <button type="button" style="align-self: flex-start; min-height: 44px; padding: 0 12px; border: 1px solid {{t.error}}; border-radius: 12px; background: transparent; color: {{t.error}}; font-size: 15px; font-weight: 600; cursor: pointer;">Chọn ảnh khác</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-for list="{{shopFields}}" as="f" hint-placeholder-count="3">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label for="{{f.id}}" style="font-size: 14px; line-height: 20px; font-weight: 500; color: {{t.text2}};">{{f.label}}<sc-if value="{{f.req}}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color: {{t.error}}; font-weight: 700;"> *</span></sc-if></label>
+          <div style="height: 52px; box-sizing: border-box; padding: 0 12px; border: 1px solid {{t.border}}; border-radius: 12px; background: {{t.surface}}; display: flex; align-items: stretch; gap: 8px;">
+            <span style="align-self: center; display: flex;"><dc-import name="Icon" icon="{{f.icon}}" color="{{t.text2}}" hint-size="24px,24px"></dc-import></span>
+            <input id="{{f.id}}" type="{{f.type}}" inputmode="{{f.mode}}" autocomplete="{{f.ac}}" value="{{f.value}}" aria-required="{{f.req}}" class="num" style="flex-grow: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; font-size: 17px; line-height: 24px; color: {{t.text}};">
+          </div>
+        </div>
+      </sc-for>
+      <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};"><span style="color: {{t.error}}; font-weight: 700;">*</span> là ô bắt buộc.</span>
+      <section aria-label="Xem trước đầu trang báo giá" style="display: flex; flex-direction: column; gap: 8px;">
+        <h2 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: {{t.text2}};">Xem trước đầu trang báo giá</h2>
+        <div style="border-radius: 12px; background: #FFFFFF; color: #10212A; border: 1px solid {{t.divider}}; padding: 14px; display: flex; gap: 12px; align-items: center;">
+          <span aria-hidden="true" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; background: #DDEFF4; color: #073F51; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800;">HT</span>
+          <div style="min-width: 0; display: flex; flex-direction: column;">
+            <span style="font-size: 15px; line-height: 22px; font-weight: 700;">Nhôm kính Tân Phong</span>
+            <span class="num" style="font-size: 13px; line-height: 18px; color: #4B5D66;">0908 123 456 · 12 Phan Trung, Tân Mai, Biên Hòa</span>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{showTrash}}" hint-placeholder-val="{{ false }}">
+      <div role="note" style="padding: 12px; border-radius: 12px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; display: flex; gap: 10px; align-items: flex-start;">
+        <dc-import name="Icon" icon="clock" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+        <span style="font-size: 14px; line-height: 20px;">Mục đã xóa được giữ 30&nbsp;ngày, sau đó tự xóa hẳn.</span>
+      </div>
+      <div role="group" aria-label="Lọc theo loại" style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <sc-for list="{{chips}}" as="c" hint-placeholder-count="3">
+          <button type="button" aria-pressed="{{c.on}}" style="height: 44px; box-sizing: border-box; padding: 0 14px; border-radius: 999px; border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 14px; line-height: 20px; font-weight: 600; display: flex; align-items: center; gap: 4px; cursor: pointer;">{{c.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{trash}}" as="x" hint-placeholder-count="2">
+          <article style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center;">
+                <dc-import name="Icon" icon="{{x.icon}}" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+              </span>
+              <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 16px; line-height: 24px; font-weight: 600;">{{x.title}}</span>
+                <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{x.sub}}</span>
+                <span style="align-self: flex-start; margin-top: 4px; min-height: 28px; box-sizing: border-box; padding: 2px 10px 2px 4px; border-radius: 999px; background: {{x.badgeBg}}; color: {{x.badgeFg}}; font-size: 13px; line-height: 20px; font-weight: 600; display: flex; align-items: center; gap: 2px;">
+                  <dc-import name="Icon" icon="clock" color="{{x.badgeFg}}" hint-size="24px,24px"></dc-import>
+                  <span class="num">{{x.left}}</span>
+                </span>
+              </div>
+              <button type="button" aria-label="{{x.moreLabel}}" onClick="{{x.more}}" style="width: 44px; height: 44px; flex-shrink: 0; border: 0; border-radius: 12px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <dc-import name="Icon" icon="more" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+              </button>
+            </div>
+            <button type="button" onClick="{{x.restore}}" style="height: 44px; border: 1px solid {{t.primary}}; border-radius: 12px; background: transparent; color: {{t.primary}}; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+              <dc-import name="Icon" icon="restore" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+              Khôi phục
+            </button>
+          </article>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isEmpty}}" hint-placeholder-val="{{ false }}">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 24px 8px;">
+        <span style="width: 80px; height: 80px; border-radius: 999px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="restore" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+        </span>
+        <h2 style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;">Không có mục nào đã xóa</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Dự án và bộ cửa bạn xóa sẽ nằm ở đây 30&nbsp;ngày trước khi bị xóa hẳn.</p>
+        <a href="ProjectList.dc.html" style="height: 52px; padding: 0 24px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center;">Về danh sách dự án</a>
+      </div>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{showShopBar}}" hint-placeholder-val="{{ false }}">
+    <div style="flex-shrink: 0; padding: 12px 16px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}};">
+      <a href="AccountHome.dc.html" style="height: 52px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <dc-import name="Icon" icon="check" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+        Lưu
+      </a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{showTabs}}" hint-placeholder-val="{{ true }}">
+    <nav aria-label="Điều hướng chính" style="flex-shrink: 0; height: 98px; box-sizing: border-box; padding: 6px 8px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}}; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+        <a href="{{tb.href}}" aria-current="{{tb.cur}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+          <span style="width: 56px; height: 30px; border-radius: 999px; background: {{tb.pill}}; display: flex; align-items: center; justify-content: center;">
+            <dc-import name="Icon" icon="{{tb.icon}}" color="{{tb.fg}}" hint-size="24px,24px"></dc-import>
+          </span>
+          <span style="font-size: 13px; line-height: 18px; font-weight: {{tb.w}}; color: {{tb.fg}};">{{tb.label}}</span>
+        </a>
+      </sc-for>
+    </nav>
+  </sc-if>
+
+  <sc-if value="{{snackOn}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 114px; min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 16px; border-radius: 12px; background: {{t.snack}}; color: {{t.onSnack}}; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
+      <span style="flex-grow: 1; font-size: 15px; line-height: 22px; padding: 11px 0;">{{snackText}}</span>
+      <a href="ProjectList.dc.html" style="height: 44px; padding: 0 12px; display: flex; align-items: center; color: {{t.snackAction}}; font-size: 16px; font-weight: 700;">Xem</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{dlgOn}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: {{t.scrim}}; display: flex; flex-direction: column; justify-content: {{dlgJustify}}; padding: {{dlgPad}};">
+      <button type="button" aria-label="Đóng" onClick="{{closeDlg}}" style="position: absolute; inset: 0; border: 0; background: transparent; cursor: pointer;"></button>
+
+      <sc-if value="{{isLogout}}" hint-placeholder-val="{{ false }}">
+        <section role="alertdialog" aria-labelledby="ac-lo" style="position: relative; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 id="ac-lo" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Đăng xuất khỏi MATADOOR?</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Dự án và báo giá vẫn được lưu trên tài khoản. Lần sau đăng nhập lại để tiếp tục.</p>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 8px;">
+            <button type="button" onClick="{{closeDlg}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+            <a href="AuthLogin.dc.html" style="height: 52px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center;">Đăng xuất</a>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{isDel1}}" hint-placeholder-val="{{ false }}">
+        <section role="alertdialog" aria-labelledby="ac-d1" style="position: relative; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <span style="width: 48px; height: 48px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+            <dc-import name="Icon" icon="userX" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+          </span>
+          <span style="font-size: 13px; line-height: 18px; font-weight: 700; color: {{t.text2}};">BƯỚC 1/2</span>
+          <h2 id="ac-d1" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xóa tài khoản Hungthanh?</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Toàn bộ dự án, báo giá, giá riêng trong thư viện và thông tin xưởng sẽ bị xóa vĩnh viễn, không khôi phục được. Thời hạn sử dụng còn lại không được hoàn lại.</p>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px;">
+            <button type="button" onClick="{{closeDlg}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; cursor: pointer;">Giữ tài khoản</button>
+            <button type="button" onClick="{{goDel2}}" style="height: 48px; border: 0; border-radius: 14px; background: transparent; color: {{t.error}}; font-size: 16px; font-weight: 600; cursor: pointer;">Tiếp tục xóa</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{isDel2}}" hint-placeholder-val="{{ false }}">
+        <section role="dialog" aria-labelledby="ac-d2" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+          <span style="font-size: 13px; line-height: 18px; font-weight: 700; color: {{t.text2}};">BƯỚC 2/2</span>
+          <h2 id="ac-d2" style="margin: -8px 0 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xác nhận xóa tài khoản</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Nhập mật khẩu để xác nhận. Sau khi xóa, bạn sẽ được đăng xuất và không thể hoàn tác.</p>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label for="ac-pw" style="font-size: 14px; line-height: 20px; font-weight: 500; color: {{t.text2}};">Mật khẩu</label>
+            <div style="height: 52px; box-sizing: border-box; padding: 0 12px; border: 1px solid {{t.border}}; border-radius: 12px; display: flex; align-items: stretch; gap: 8px;">
+              <span style="align-self: center; display: flex;"><dc-import name="Icon" icon="lock" color="{{t.text2}}" hint-size="24px,24px"></dc-import></span>
+              <input id="ac-pw" type="password" autocomplete="current-password" value="cuaNhomKinh2026" style="flex-grow: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; font-size: 17px; color: {{t.text}};">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+            <button type="button" onClick="{{closeDlg}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+            <a href="AuthWelcome.dc.html" style="height: 52px; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-align: center;">Xóa vĩnh viễn</a>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{isRemoveLogo}}" hint-placeholder-val="{{ false }}">
+        <section role="alertdialog" aria-labelledby="ac-rl" style="position: relative; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <h2 id="ac-rl" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Gỡ logo xưởng?</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Đầu trang báo giá sẽ chỉ còn tên xưởng, không có logo. Bạn có thể tải logo khác bất cứ lúc nào.</p>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 8px;">
+            <button type="button" onClick="{{closeDlg}}" style="min-height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+            <button type="button" onClick="{{closeDlg}}" style="min-height: 52px; border: 0; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 16px; font-weight: 600; cursor: pointer;">Gỡ logo</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{isCrop}}" hint-placeholder-val="{{ false }}">
+        <section role="dialog" aria-labelledby="ac-cr" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <h2 id="ac-cr" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Cắt logo hình vuông</h2>
+            <button type="button" onClick="{{closeDlg}}" style="min-height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+          </div>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: {{t.text2}};">Kéo để chọn phần hiện trên báo giá. Khung vuông giúp logo không bị méo.</p>
+          <div style="height: 240px; border-radius: 12px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+            <span role="img" aria-label="Ảnh logo đang cắt" style="width: 280px; height: 180px; border-radius: 6px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">TP</span>
+            <span aria-hidden="true" style="position: absolute; width: 176px; height: 176px; border: 2px solid #FFFFFF; box-shadow: 0 0 0 9999px rgba(8,20,26,0.45);"></span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+            <button type="button" onClick="{{closeDlg}}" style="min-height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Chọn ảnh khác</button>
+            <button type="button" onClick="{{closeDlg}}" style="min-height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; cursor: pointer;">Dùng ảnh này</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{isPurge}}" hint-placeholder-val="{{ false }}">
+        <section role="alertdialog" aria-labelledby="ac-pg" style="position: relative; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <span style="width: 48px; height: 48px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+            <dc-import name="Icon" icon="trash" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+          </span>
+          <h2 id="ac-pg" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xóa vĩnh viễn “Chị Mai – Căn hộ”?</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Dự án và 3&nbsp;bộ cửa bên trong sẽ bị xóa hẳn, không khôi phục được.</p>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 8px;">
+            <button type="button" onClick="{{closeDlg}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+            <button type="button" onClick="{{closeDlg}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 15px; font-weight: 600; cursor: pointer;">Xóa vĩnh viễn</button>
+          </div>
+        </section>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{discardOn}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0;">
+      <dc-import name="DiscardDialog" theme="{{themeName}}" body="Thông tin xưởng vừa sửa sẽ không được lưu." leave-href="AccountHome.dc.html" on-keep="{{keep}}" hint-size="390px,844px"></dc-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"screen":{"editor":"enum","default":"account","options":["account","shop","trash"]},"screenState":{"editor":"enum","default":"normal","options":["normal","loading","error","offline","empty"]},"expiry":{"editor":"enum","default":"soon","options":["soon","urgent","ok"]},"overlay":{"editor":"enum","default":"none","options":["none","logout","delete1","delete2","purge","removeLogo","crop"]},"logoError":{"editor":"enum","default":"none","options":["none","size","format"]},"dirty":{"editor":"boolean","default":false},"showDiscard":{"editor":"boolean","default":false},"restored":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { dlg: props.overlay && props.overlay !== 'none' ? props.overlay : null, dirty: !!props.dirty, discard: !!props.showDiscard, restored: !!props.restored };
+  }
+  tokens(dark) {
+    const L = { bg:'#F3F6F7', surface:'#FFFFFF', surface2:'#E4EBEE', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', onPrimary:'#FFFFFF', primarySoft:'#DDEFF4', onPrimarySoft:'#073F51', accent:'#C2410C', onAccent:'#FFFFFF', success:'#1A6E39', successSoft:'#DDF3E4', warning:'#8F5500', warningSoft:'#FCEFD6', error:'#B42318', onError:'#FFFFFF', errorSoft:'#FDE5E3', brandText:'#0B5C75', scrim:'rgba(8,20,26,0.5)', snack:'#1B2B33', onSnack:'#FFFFFF', snackAction:'#8FD6E8' };
+    const D = { bg:'#0B1317', surface:'#141F25', surface2:'#22323A', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', onPrimary:'#032733', primarySoft:'#12384A', onPrimarySoft:'#BFE8F3', accent:'#FF8F5A', onAccent:'#2A0E00', success:'#62C98A', successSoft:'#123524', warning:'#F0B54A', warningSoft:'#3A2A0B', error:'#FF8C82', onError:'#2B0704', errorSoft:'#3D1512', brandText:'#FFFFFF', scrim:'rgba(0,0,0,0.62)', snack:'#E6EDF0', onSnack:'#10212A', snackAction:'#0B5C75' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const dark = this.props.theme === 'dark';
+    const t = this.tokens(dark);
+    const sc = this.props.screen || 'account';
+    const ss = this.props.screenState || 'normal';
+    const exp = this.props.expiry || 'soon';
+    const soon = exp === 'soon' || exp === 'urgent';
+    const urgent = exp === 'urgent';
+    const s = this.state;
+    const ok = ss === 'normal' || ss === 'offline';
+    const row = (icon, label, sub, href, opts) => {
+      const o = opts || {};
+      return { icon, label, sub: sub || '', hasSub: !!sub, href: href || '#', tap: o.tap || null,
+        trail: o.ext ? 'external' : 'chevR', aria: o.aria || null,
+        count: o.count || '', hasCount: !!o.count,
+        iconBg: t.primarySoft, iconFg: t.onPrimarySoft, color: t.text, weight: '500', line: '0' };
+    };
+    const groups = [
+      { title: 'Xưởng của bạn', rows: [ row('building', 'Nhôm kính Tân Phong', 'Hiện ở đầu trang báo giá gửi khách', 'AccountShop.dc.html') ] },
+      { title: 'Dữ liệu', rows: [ row('restore', 'Đã xóa gần đây', 'Khôi phục trong 30 ngày', 'AccountTrash.dc.html', { count: '3' }) ] },
+      { title: 'Hỗ trợ', rows: [
+        row('play', 'Kênh YouTube Matadoor', 'Video hướng dẫn', '#', { ext: true, aria: 'Kênh YouTube Matadoor, mở ứng dụng YouTube' }),
+        row('folder', 'Tài liệu hướng dẫn', 'Google Drive', '#', { ext: true, aria: 'Tài liệu hướng dẫn, mở Google Drive' }),
+        row('chat', 'Nhắn Zalo', 'Hỏi đáp với đội hỗ trợ', '#', { ext: true, aria: 'Nhắn Zalo cho đội hỗ trợ' }),
+        row('phone', 'Hotline 0908 046 929', 'Bấm để gọi', 'tel:0908046929', { ext: false, aria: 'Gọi hotline 0908 046 929' })
+      ] },
+      { title: 'Pháp lý', rows: [ row('file', 'Điều khoản sử dụng', '', '#'), row('shield', 'Chính sách bảo mật', '', '#') ] }
+    ].map((g) => ({ ...g, rows: g.rows.map((r, i) => ({ ...r, line: i ? '1px solid ' + t.divider : '0' })) }));
+    const tabDefs = [['projects', 'Dự án', 'ProjectList.dc.html'], ['library', 'Thư viện', 'LibHome.dc.html'], ['user', 'Tài khoản', 'AccountHome.dc.html']];
+    const tabs = tabDefs.map(([icon, label, href], i) => {
+      const on = i === 2;
+      return { icon, label, href, cur: on ? 'page' : 'false', pill: on ? t.primarySoft : 'transparent', fg: on ? t.onPrimarySoft : t.text2, w: on ? '700' : '500' };
+    });
+    const chipDefs = [['Tất cả · 3', true], ['Dự án · 1', false], ['Bộ cửa · 2', false]];
+    const chips = chipDefs.map(([label, on]) => ({ label, on: on ? 'true' : 'false', bg: on ? t.primarySoft : 'transparent', fg: on ? t.onPrimarySoft : t.text, bd: on ? t.primarySoft : t.border }));
+    const trashItems = [
+      { icon: 'projects', title: 'Chị Mai – Căn hộ', sub: 'Dự án · 3 bộ cửa · xóa ngày 12/09/2026', left: 'Còn 24 ngày', urgent: false },
+      { icon: 'door', title: 'D2 · Cửa sổ 1 cánh', sub: 'Bộ cửa · dự án Chị Hạnh – Nhà phố · xóa ngày 15/09/2026', left: 'Còn 27 ngày', urgent: false },
+      { icon: 'door', title: 'D4 · Cửa sổ mở hất', sub: 'Bộ cửa · dự án Anh Tuấn – Văn phòng · xóa ngày 24/08/2026', left: 'Còn 5 ngày', urgent: true }
+    ];
+    const trash = trashItems
+      .filter((x, i) => !(s.restored && i === 0))
+      .map((x) => ({ ...x, badgeBg: x.urgent ? t.warningSoft : t.surface2, badgeFg: x.urgent ? t.warning : t.text2, moreLabel: 'Thêm thao tác cho ' + x.title, more: () => this.setState({ dlg: 'purge' }), restore: () => this.setState({ restored: true }) }));
+    const d = s.dlg;
+    return {
+      t, groups, tabs, chips, trash,
+      skel: [1, 2, 3],
+      themeName: dark ? 'dark' : 'light',
+      isAccount: sc === 'account',
+      hasTopBar: sc !== 'account',
+      isTrash: sc === 'trash',
+      shopClean: sc === 'shop' && !s.dirty,
+      shopDirty: sc === 'shop' && s.dirty,
+      topTitle: sc === 'shop' ? 'Thông tin xưởng' : 'Đã xóa gần đây',
+      barBg: sc === 'account' ? t.bg : t.surface,
+      isOffline: ss === 'offline',
+      offlineText: sc === 'trash' ? 'Cần mạng để khôi phục hoặc xóa vĩnh viễn.' : 'Đang hiện dữ liệu đã lưu trên máy.',
+      isLoading: ss === 'loading',
+      isError: ss === 'error',
+      errorTitle: sc === 'trash' ? 'Không tải được mục đã xóa' : 'Không tải được thông tin tài khoản',
+      isEmpty: sc === 'trash' && ss === 'empty',
+      showAccount: sc === 'account' && ok,
+      showShop: sc === 'shop' && ok,
+      showTrash: sc === 'trash' && ok,
+      showShopBar: sc === 'shop',
+      showTabs: sc !== 'shop',
+      expSoon: soon,
+      expBg: soon ? (urgent ? t.warningSoft : t.surface2) : t.successSoft,
+      expFg: soon ? (urgent ? t.warning : t.text2) : t.success,
+      expIcon: soon ? 'clock' : 'checkCircle',
+      expText: soon ? 'Sử dụng đến 13/10/2026 · còn 25 ngày' : 'Sử dụng đến 13/10/2027',
+      shopFields: [
+        { id: 'sh-name', label: 'Tên xưởng', icon: 'building', type: 'text', mode: 'text', ac: 'organization', value: 'Nhôm kính Tân Phong', req: true },
+        { id: 'sh-phone', label: 'Số điện thoại', icon: 'phone', type: 'tel', mode: 'tel', ac: 'tel', value: '0908 123 456', req: false },
+        { id: 'sh-addr', label: 'Địa chỉ', icon: 'pin', type: 'text', mode: 'text', ac: 'street-address', value: '12 Phan Trung, Tân Mai, Biên Hòa', req: false }
+      ],
+      snackOn: s.restored && sc === 'trash',
+      snackText: 'Đã khôi phục dự án Chị Mai – Căn hộ',
+      dlgOn: !!d,
+      dlgJustify: (d === 'delete2' || d === 'crop') ? 'flex-end' : 'center',
+      dlgPad: (d === 'delete2' || d === 'crop') ? '0' : '24px',
+      isLogout: d === 'logout', isDel1: d === 'delete1', isDel2: d === 'delete2', isPurge: d === 'purge',
+      isRemoveLogo: d === 'removeLogo', isCrop: d === 'crop',
+      askRemoveLogo: () => this.setState({ dlg: 'removeLogo' }),
+      logoErr: (this.props.logoError || 'none') !== 'none',
+      logoErrTitle: this.props.logoError === 'format' ? 'Định dạng ảnh chưa hỗ trợ' : 'Ảnh quá nặng',
+      logoErrBody: this.props.logoError === 'format' ? 'Chỉ nhận PNG hoặc JPG. Ảnh HEIC chụp từ iPhone cần đổi sang JPG.' : 'Ảnh 8,4 MB vượt mức 5 MB. Chọn ảnh nhỏ hơn hoặc chụp lại ở chế độ thường.',
+      closeDlg: () => this.setState({ dlg: null }),
+      goDel2: () => this.setState({ dlg: 'delete2' }),
+      askLogout: () => this.setState({ dlg: 'logout' }),
+      askDelete: () => this.setState({ dlg: 'delete1' }),
+      discardOn: s.discard,
+      askDiscard: () => this.setState({ discard: true }),
+      keep: () => this.setState({ discard: false }),
+      markDirty: () => { if (sc === 'shop' && !this.state.dirty) this.setState({ dirty: true }); },
+      mainRef: (el) => { this._main = el; }
+    };
+  }
+}
+</script>
+</body>
+</html>

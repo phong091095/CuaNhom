@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; }
+  </style>
+</helmet>
+<svg width="{{size}}" height="{{size}}" viewBox="{{vb}}" aria-hidden="true" style="display: block; flex-shrink: 0;">
+  <sc-if value="{{hasBg}}" hint-placeholder-val="{{ true }}"><rect x="{{bgXY}}" y="{{bgXY}}" width="{{bgWH}}" height="{{bgWH}}" rx="{{rx}}" style="fill: #0B5C75;"></rect></sc-if>
+  <sc-if value="{{hasGlass}}" hint-placeholder-val="{{ true }}"><path d="M13 11h22v26H13z" style="fill: #6CC7DE;"></path></sc-if>
+  <path d="M9 37h30 M13 37V11h22v26" style="fill: none; stroke: {{frameC}}; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;"></path>
+  <path d="M19 31V18l5 6 5-6v13" style="fill: none; stroke: {{mC}}; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;"></path>
+</svg>
+</x-dc>
+<script data-dc-script data-props='{"size":{"editor":"int","default":48},"kind":{"editor":"enum","default":"app","options":["app","ios","fg","mono","monoFg"]},"color":{"editor":"color","default":"#0B5C75"},"$preview":{"width":48,"height":48}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const k = this.props.kind || 'app';
+    const c = this.props.color ?? '#0B5C75';
+    const adaptive = k === 'fg' || k === 'monoFg';
+    const mono = k === 'mono' || k === 'monoFg';
+    return {
+      size: this.props.size ?? 48,
+      vb: adaptive ? '-3 -3 54 54' : '0 0 48 48',
+      hasBg: k === 'app' || k === 'ios',
+      bgXY: '0', bgWH: '48',
+      rx: k === 'ios' ? '0' : '10.75',
+      hasGlass: !mono,
+      frameC: mono ? c : '#FFFFFF',
+      mC: mono ? c : '#0B5C75'
+    };
+  }
+}
+</script>
+</body>
+</html>

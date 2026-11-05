@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; } a:hover { text-decoration: none; }
+    button { font-family: inherit; }
+    .num { font-variant-numeric: tabular-nums; }
+    .noscroll { scrollbar-width: none; -ms-overflow-style: none; }
+    .noscroll::-webkit-scrollbar { display: none; }
+    main > * { flex-shrink: 0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: {{rootH}}; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; display: flex; flex-direction: column;">
+
+  <div style="height: 47px; flex-shrink: 0;"><dc-import name="StatusBar" fg="{{t.text}}" hint-size="390px,47px"></dc-import></div>
+
+  <div style="height: 48px; flex-shrink: 0; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+    <a href="ProjectList.dc.html" style="height: 44px; padding: 0 12px 0 4px; display: flex; align-items: center; gap: 2px; color: {{t.primary}}; font-size: {{fz.s16}}; font-weight: 600; border-radius: 12px;">
+      <dc-import name="Icon" icon="chevL" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+      Dự án
+    </a>
+    <button type="button" aria-label="Thao tác dự án Anh Đoài" onClick="{{openActions}}" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+      <dc-import name="Icon" icon="more" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+    </button>
+  </div>
+
+  <main class="noscroll" style="flex-grow: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 0 16px 68px; display: flex; flex-direction: column; gap: 16px;">
+
+    <header style="display: flex; flex-direction: column;">
+      <h1 style="margin: 0; font-size: {{fz.s26}}; line-height: {{fz.l36}}; font-weight: 700; letter-spacing: -0.2px;">Anh Đoài</h1>
+      <div style="display: flex; align-items: center; flex-wrap: wrap; column-gap: 4px;">
+        <span style="font-size: {{fz.s15}}; line-height: {{fz.l22}}; color: {{t.text2}};">53 Bình Hạ, Đồng Nai ·</span>
+        <a href="tel:0923456789" aria-label="Gọi 0923 456 789" style="min-height: 44px; display: flex; align-items: center; gap: 4px; color: {{t.primary}}; font-size: {{fz.s15}}; line-height: {{fz.l22}}; font-weight: 600;">
+          <dc-import name="Icon" icon="phone" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+          <span class="num" style="text-decoration: underline; text-underline-offset: 3px;">0923 456 789</span>
+        </a>
+      </div>
+    </header>
+
+    <a href="#" aria-label="Mở báo giá: 10.384.357 đồng" style="border-radius: 16px; background: {{t.hero}}; color: {{t.onHero}}; padding: 14px 12px 14px 16px; display: flex; align-items: center; gap: 8px;">
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column;">
+        <span style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; font-weight: 500; color: {{t.onHero2}};">Báo giá (+10%)</span>
+        <span class="num" style="font-size: {{fz.s28}}; line-height: {{fz.l38}}; font-weight: 700; letter-spacing: -0.3px; white-space: {{numWrap}};">10.384.357&nbsp;₫</span>
+        <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.onHero2}};">Giá vốn 9.440.324&nbsp;₫ · 7&nbsp;bộ · 9,44&nbsp;m²</span>
+        <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.onHero2}};">Đơn giá TB (theo báo giá) 1.100.038&nbsp;₫/m²</span>
+        <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.onHero2}};">Biên thực tế sau hao hụt 705.535&nbsp;₫ · 7,29%</span>
+      </div>
+      <dc-import name="Icon" icon="chevR" color="{{t.onHero}}" hint-size="24px,24px"></dc-import>
+    </a>
+
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0; font-size: {{fz.s18}}; line-height: {{fz.l26}}; font-weight: 600;">Bóc tách &amp; báo giá</h2>
+      <div style="display: grid; grid-template-columns: {{gridCols}}; gap: 12px;">
+        <sc-for list="{{modules}}" as="m" hint-placeholder-count="6">
+          <a href="{{m.href}}" style="min-height: 116px; box-sizing: border-box; padding: 12px 14px; border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="width: 40px; height: 40px; border-radius: 12px; background: {{m.iconBg}}; display: flex; align-items: center; justify-content: center;">
+                <dc-import name="Icon" icon="{{m.icon}}" color="{{m.iconFg}}" hint-size="24px,24px"></dc-import>
+              </span>
+              <dc-import name="Icon" icon="chevR" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: {{fz.s16}}; line-height: {{fz.l24}}; font-weight: 600;">{{m.label}}</span>
+              <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.text2}};">{{m.meta}}</span>
+              <span class="num" style="font-size: {{fz.s15}}; line-height: {{fz.l22}}; font-weight: 600; color: {{t.text}};">{{m.value}}</span>
+              <sc-if value="{{m.isLast}}" hint-placeholder-val="{{ false }}">
+                <span style="align-self: flex-start; margin-top: 4px; height: 24px; padding: 0 8px; border-radius: 999px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; font-size: {{fz.s13}}; line-height: {{fz.l20}}; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px;">Bước cuối</span>
+              </sc-if>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="margin: 0; font-size: {{fz.s18}}; line-height: {{fz.l26}}; font-weight: 600;">Nhân công</h2>
+      <div style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column;">
+        <div style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid {{t.divider}};">
+          <span style="font-size: {{fz.s16}};">Sản xuất</span>
+          <span class="num" style="font-size: {{fz.s16}}; font-weight: 600;">660.800&nbsp;₫</span>
+        </div>
+        <div style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: {{fz.s16}};">Lắp đặt</span>
+          <span class="num" style="font-size: {{fz.s16}}; font-weight: 600;">944.000&nbsp;₫</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: {{fz.s18}}; line-height: {{fz.l26}}; font-weight: 600;">Bộ cửa (4&nbsp;loại · 7&nbsp;bộ)</h2>
+      </div>
+      <div style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column;">
+        <sc-for list="{{doors}}" as="d" hint-placeholder-count="4">
+          <a href="{{d.href}}" style="min-height: 88px; padding: 12px; border-bottom: {{d.line}}; display: flex; gap: 12px; align-items: center;">
+            <div style="width: 48px; height: 64px; flex-shrink: 0; border-radius: 8px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center; font-size: {{fz.s15}}; font-weight: 700; color: {{t.text}};">{{d.code}}</div>
+            <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: {{fz.s16}}; line-height: {{fz.l24}}; font-weight: 600;">{{d.type}}</span>
+              <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.text2}};">{{d.size}}</span>
+              <span style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.text2}};">{{d.glass}}</span>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+                <span class="num" style="font-size: {{fz.s13}}; line-height: {{fz.l18}}; color: {{t.text2}};">{{d.qty}}</span>
+                <span class="num" style="font-size: {{fz.s16}}; line-height: {{fz.l24}}; font-weight: 700; white-space: nowrap;">{{d.total}}</span>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+
+  <div style="flex-shrink: 0; padding: 12px 16px; background: {{t.surface}}; border-top: 1px solid {{t.divider}};">
+    <a href="DoorForm.dc.html" style="height: 52px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: {{fz.s16}}; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <dc-import name="Icon" icon="plus" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+      Thêm bộ cửa
+    </a>
+  </div>
+
+  <nav aria-label="Điều hướng chính" style="flex-shrink: 0; height: 98px; box-sizing: border-box; padding: 6px 8px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}}; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+    <a href="ProjectList.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; border-radius: 999px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="projects" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 700; color: {{t.onPrimarySoft}};">Dự án</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="library" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Thư viện</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="user" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Tài khoản</span>
+    </a>
+  </nav>
+  <sc-if value="{{snack}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 186px; min-height: 52px; box-sizing: border-box; padding: 4px 16px; border-radius: 12px; background: {{t.snack}}; color: {{t.onSnack}}; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
+      <span style="font-size: {{fz.s15}}; line-height: {{fz.l22}}; padding: 11px 0;">{{snackText}}</span>
+    </div>
+  </sc-if>
+  <sc-if value="{{overlayOn}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0;">
+      <dc-import name="ProjectSheets" theme="{{themeName}}" view="actions" delete-href="ProjectListDeleted.dc.html" on-close="{{closeOverlay}}" on-deleted="{{afterDelete}}" on-saved="{{onSaved}}" hint-size="390px,844px"></dc-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"full":{"editor":"boolean","default":false},"fontScale":{"editor":"float","default":1,"min":1,"max":2,"step":0.25},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { overlay: false, snack: null };
+  }
+  tokens(dark) {
+    const L = { bg:'#F3F6F7', surface:'#FFFFFF', surface2:'#E4EBEE', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', primarySoft:'#DDEFF4', onPrimarySoft:'#073F51', accent:'#C2410C', onAccent:'#FFFFFF', success:'#1A6E39', successSoft:'#DDF3E4', warning:'#8F5500', warningSoft:'#FCEFD6', hero:'#0B5C75', onHero:'#FFFFFF', onHero2:'#CFE6EE', heroChip:'rgba(255,255,255,0.16)', heroLine:'rgba(255,255,255,0.22)', glass:'#CFE7EF', snack:'#1B2B33', onSnack:'#FFFFFF' };
+    const D = { bg:'#0B1317', surface:'#141F25', surface2:'#22323A', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', primarySoft:'#12384A', onPrimarySoft:'#BFE8F3', accent:'#FF8F5A', onAccent:'#2A0E00', success:'#62C98A', successSoft:'#123524', warning:'#F0B54A', warningSoft:'#3A2A0B', hero:'#12384A', onHero:'#FFFFFF', onHero2:'#BFE8F3', heroChip:'rgba(255,255,255,0.12)', heroLine:'rgba(255,255,255,0.16)', glass:'#1E4656', snack:'#E6EDF0', onSnack:'#10212A' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const t = this.tokens(this.props.theme === 'dark');
+    const scale = Number(this.props.fontScale || 1);
+    const fz = {};
+    for (let n = 10; n <= 44; n++) { fz['s' + n] = Math.round(n * scale) + 'px'; fz['l' + n] = Math.round(n * scale) + 'px'; }
+    const base = { iconBg: t.primarySoft, iconFg: t.onPrimarySoft, href: '#', isLast: false };
+    const modules = [
+      { ...base, icon: 'door', label: 'Cửa', meta: '4 loại · 7 bộ', value: '9,44 m²', href: 'DoorDetail.dc.html' },
+      { ...base, icon: 'alu', label: 'Nhôm', meta: '70,26 m · 92,83 kg · ước tính', value: '4.241.502 ₫', href: 'AluSummary.dc.html' },
+      { ...base, icon: 'glass', label: 'Kính', meta: '9 tấm · trắng 8mm', value: '1.746.022 ₫' },
+      { ...base, icon: 'acc', label: 'Phụ kiện', meta: 'Hãng Draho', value: '1.425.000 ₫' },
+      { ...base, icon: 'vtp', label: 'VTP', meta: 'Vật tư phụ', value: '423.000 ₫' },
+      { ...base, icon: 'quote', label: 'Báo giá', meta: 'Giá vốn + 10%', value: '10.384.357 ₫', isLast: true }
+    ];
+    const rows = [
+      ['D1', 'Cửa đi 1 cánh · Quay trong', '800 × 2.200 mm · 1,76 m²', '1 bộ × 1.795.374 ₫', '1.795.374 ₫', 'DoorDetail.dc.html'],
+      ['D2', 'Cửa đi 1 cánh · Quay ngoài', '800 × 2.100 mm · 3,36 m²', '2 bộ × 1.736.997 ₫', '3.473.994 ₫', '#'],
+      ['D3', 'Cửa sổ 2 cánh · Mở quay', '1.200 × 1.400 mm · 3,36 m²', '2 bộ × 1.499.455 ₫', '2.998.910 ₫', '#'],
+      ['D4', 'Cửa sổ 1 cánh · Mở hất', '600 × 800 mm · 0,96 m²', '2 bộ × 586.023 ₫', '1.172.046 ₫', '#']
+    ];
+    const doors = rows.map(([code, type, size, qty, total, href], i) => ({ code, type, size, qty, total, href, glass: 'Kính trắng 8mm · 230.000 ₫/m²', line: i < rows.length - 1 ? '1px solid ' + t.divider : '0' }));
+    return { t, fz, numWrap: scale > 1.2 ? 'normal' : 'nowrap', gridCols: scale > 1.2 ? '1fr' : 'repeat(2, minmax(0, 1fr))', modules, doors, rootH: this.props.full ? '1880px' : '844px',
+      themeName: this.props.theme === 'dark' ? 'dark' : 'light',
+      overlayOn: this.state.overlay,
+      snack: !!this.state.snack,
+      snackText: this.state.snack || '',
+      openActions: () => this.setState({ overlay: true }),
+      closeOverlay: () => this.setState({ overlay: false }),
+      afterDelete: () => this.setState({ overlay: false, snack: 'Đã xóa dự án. Mở lại Danh sách dự án để hoàn tác.' }),
+      onSaved: (msg) => this.setState({ overlay: false, snack: msg })
+    };
+  }
+}
+</script>
+</body>
+</html>

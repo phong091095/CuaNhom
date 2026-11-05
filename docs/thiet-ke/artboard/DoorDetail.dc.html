@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; } a:hover { text-decoration: none; }
+    button { font-family: inherit; }
+    .num { font-variant-numeric: tabular-nums; }
+    .noscroll { scrollbar-width: none; -ms-overflow-style: none; }
+    .noscroll::-webkit-scrollbar { display: none; }
+    main > * { flex-shrink: 0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; display: flex; flex-direction: column;">
+
+  <div style="height: 47px; flex-shrink: 0; background: {{t.surface}};"><dc-import name="StatusBar" fg="{{t.text}}" hint-size="390px,47px"></dc-import></div>
+
+  <div style="flex-shrink: 0; background: {{t.surface}}; border-bottom: 1px solid {{t.divider}};">
+    <div style="height: 52px; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+      <a href="ProjectDetail.dc.html" style="height: 44px; padding: 0 12px 0 4px; display: flex; align-items: center; gap: 2px; color: {{t.primary}}; font-size: 16px; font-weight: 600;">
+        <dc-import name="Icon" icon="chevL" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+        Danh sách cửa
+      </a>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <a href="DoorForm.dc.html" aria-label="Sửa bộ cửa D1" style="height: 44px; padding: 0 10px 0 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; color: {{t.primary}}; font-size: 15px; font-weight: 600;">
+          <dc-import name="Icon" icon="edit" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+          Sửa
+        </a>
+        <button type="button" aria-label="Thêm thao tác cho bộ cửa D1" onClick="{{openMenu}}" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <dc-import name="Icon" icon="more" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+        </button>
+      </div>
+    </div>
+    <div style="padding: 0 16px 12px; display: flex; gap: 12px; align-items: center;">
+      <div style="width: 56px; height: 72px; flex-shrink: 0; border-radius: 10px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center;">
+        <svg width="30" height="56" viewBox="0 0 30 56" aria-hidden="true" style="display: block; fill: {{t.glass}}; stroke: {{t.text2}}; stroke-width: 1.5;"><path d="M1 1h28v54H1z M5 5h20v46H5z M21 26v5"></path></svg>
+      </div>
+      <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column;">
+        <h1 style="margin: 0; font-size: 22px; line-height: 30px; font-weight: 700;">D1 · Cửa đi 1 cánh</h1>
+        <span class="num" style="font-size: 14px; line-height: 20px; color: {{t.text2}};">800&nbsp;×&nbsp;2.200&nbsp;mm · 1&nbsp;bộ · Xingfa</span>
+      </div>
+    </div>
+    <div role="tablist" aria-label="Chi tiết bộ cửa D1" class="noscroll" style="display: flex; padding: 0 8px; overflow-x: auto;">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="5">
+        <button type="button" role="tab" aria-selected="{{tb.on}}" onClick="{{tb.pick}}" style="flex-grow: 1; height: 48px; padding: 0 4px; border: 0; border-bottom: {{tb.line}}; background: transparent; color: {{tb.fg}}; font-size: 15px; font-weight: {{tb.w}}; white-space: nowrap; cursor: pointer;">{{tb.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <main class="noscroll" style="flex-grow: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 16px 16px 68px; display: flex; flex-direction: column; gap: 16px;">
+
+    <sc-if value="{{isOverview}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Tổng tiền bộ cửa" style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 8px;">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Thành tiền (1&nbsp;bộ)</span>
+            <span class="num" style="font-size: 28px; line-height: 38px; font-weight: 700;">1.795.374&nbsp;₫</span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Diện tích</span>
+            <span class="num" style="font-size: 16px; font-weight: 600;">1,76&nbsp;m²</span>
+          </div>
+        </div>
+        <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Đơn giá TB (theo giá vốn) 1.020.099&nbsp;₫/m² · Nhôm 19,01&nbsp;kg</span>
+      </section>
+      <section style="display: flex; flex-direction: column; gap: 8px;">
+        <h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Ảnh công trình</h2>
+        <button type="button" onClick="{{openPhoto}}" aria-label="Xem ảnh công trình của bộ cửa D1" style="padding: 12px; border: 1px solid {{t.divider}}; border-radius: 16px; background: {{t.surface}}; color: {{t.text}}; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;">
+          <span aria-hidden="true" style="width: 72px; height: 72px; flex-shrink: 0; border-radius: 12px; background: {{t.surface2}}; display: flex; align-items: center; justify-content: center;">
+            <dc-import name="Icon" icon="image" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+          </span>
+          <span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 600;">anh-cong-trinh.jpg</span>
+            <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">1,2 MB · 18/09/2026</span>
+          </span>
+          <dc-import name="Icon" icon="chevR" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+        </button>
+      </section>
+      <section style="display: flex; flex-direction: column; gap: 8px;">
+        <h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Thông số</h2>
+        <div style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; padding: 4px 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px;">
+          <sc-for list="{{specs}}" as="sp" hint-placeholder-count="12">
+            <div style="padding: 10px 0; border-bottom: 1px solid {{t.divider}}; display: flex; flex-direction: column; min-width: 0;">
+              <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{sp.k}}</span>
+              <span class="num" style="font-size: 16px; line-height: 24px; font-weight: 500;">{{sp.v}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <section style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">{{listTitle}}</h2>
+        <sc-if value="{{isAlu}}" hint-placeholder-val="{{ false }}">
+          <a href="AluSummary.dc.html" style="height: 44px; padding: 0 4px; display: flex; align-items: center; gap: 6px; color: {{t.primary}}; font-size: 15px; font-weight: 600;">
+            <dc-import name="Icon" icon="cut" color="{{t.primary}}" hint-size="24px,24px"></dc-import>
+            Sơ đồ cắt của dự án
+          </a>
+        </sc-if>
+      </div>
+      <div style="border-radius: 16px; background: {{t.surface}}; border: 1px solid {{t.divider}}; display: flex; flex-direction: column;">
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+          <div style="min-height: {{r.minH}}; padding: {{r.pad}}; background: {{r.rowBg}}; border-bottom: 1px solid {{t.divider}}; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="min-width: 0; display: flex; flex-direction: column;">
+              <span style="font-size: {{r.fzA}}; line-height: 22px; font-weight: {{r.fwA}}; color: {{r.fgA}};">{{r.a}}</span>
+              <span class="num" style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{r.b}}</span>
+            </div>
+            <span class="num" style="font-size: 16px; font-weight: 600; white-space: nowrap; text-align: right; color: {{r.fgC}};">{{r.c}}</span>
+          </div>
+        </sc-for>
+        <div style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; background: {{t.surface2}}; border-radius: 0 0 15px 15px;">
+          <span style="font-size: 16px; font-weight: 700;">{{totalLabel}}</span>
+          <span class="num" style="font-size: 17px; font-weight: 700;">{{totalValue}}</span>
+        </div>
+      </div>
+      <sc-if value="{{isAlu}}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 0; font-size: 13px; line-height: 18px; color: {{t.text2}};">Tiền nhôm ở đây tính theo chiều dài dùng, chưa gồm hao hụt. Số cây thực phải mua được tính trên cả dự án ở màn Tổng hợp nhôm.</p>
+      </sc-if>
+    </section>
+  </main>
+
+  <div style="flex-shrink: 0; padding: 12px 16px; background: {{t.surface}}; border-top: 1px solid {{t.divider}};">
+    <button type="button" onClick="{{openAdd}}" style="width: 100%; height: 52px; border: 0; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+      <dc-import name="Icon" icon="plus" color="{{t.onAccent}}" hint-size="24px,24px"></dc-import>
+      Thêm cửa tiếp
+    </button>
+  </div>
+
+  <nav aria-label="Điều hướng chính" style="flex-shrink: 0; height: 98px; box-sizing: border-box; padding: 6px 8px 34px; background: {{t.surface}}; border-top: 1px solid {{t.divider}}; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+    <a href="ProjectList.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; border-radius: 999px; background: {{t.primarySoft}}; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="projects" color="{{t.onPrimarySoft}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 700; color: {{t.onPrimarySoft}};">Dự án</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="library" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Thư viện</span>
+    </a>
+    <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center;">
+        <dc-import name="Icon" icon="user" color="{{t.text2}}" hint-size="24px,24px"></dc-import>
+      </span>
+      <span style="font-size: 13px; line-height: 18px; font-weight: 500; color: {{t.text2}};">Tài khoản</span>
+    </a>
+  </nav>
+
+  <sc-if value="{{snack}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 186px; min-height: 52px; box-sizing: border-box; padding: 4px 4px 4px 16px; border-radius: 12px; background: {{t.snack}}; color: {{t.onSnack}}; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
+      <dc-import name="Icon" icon="checkCircle" color="{{t.snackOk}}" hint-size="24px,24px"></dc-import>
+      <span style="flex-grow: 1; font-size: 15px; line-height: 22px; padding: 11px 0;">{{snackText}}</span>
+      <sc-if value="{{snackUndo}}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{undo}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {{t.snackAction}}; font-size: 16px; font-weight: 700; cursor: pointer;">Hoàn tác</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{sheetAdd}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;">
+      <button type="button" aria-label="Đóng" onClick="{{close}}" style="position: absolute; inset: 0; border: 0; background: {{t.scrim}}; cursor: pointer;"></button>
+      <section role="dialog" aria-labelledby="dd-add" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}};"></div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <h2 id="dd-add" style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Thêm cửa D5</h2>
+          <button type="button" onClick="{{close}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+        </div>
+        <div role="radiogroup" aria-label="Loại cửa tiếp theo" style="display: flex; flex-direction: column; gap: 8px;">
+          <sc-for list="{{choices}}" as="c" hint-placeholder-count="2">
+            <button type="button" role="radio" aria-checked="{{c.on}}" onClick="{{c.pick}}" style="min-height: 76px; border: {{c.border}}; border-radius: 14px; background: {{c.bg}}; color: {{t.text}}; padding: 12px 14px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;">
+              <span style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; border-radius: 999px; border: {{c.dotBorder}}; display: flex; align-items: center; justify-content: center;">
+                <span style="width: 10px; height: 10px; border-radius: 999px; background: {{c.dot}};"></span>
+              </span>
+              <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px;">
+                <span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; line-height: 24px; font-weight: 600;">{{c.label}}
+                  <sc-if value="{{c.isLast}}" hint-placeholder-val="{{ false }}">
+                    <span style="height: 22px; padding: 0 8px; border-radius: 999px; background: {{t.primarySoft}}; color: {{t.onPrimarySoft}}; font-size: 13px; line-height: 20px; font-weight: 600; display: flex; align-items: center;">Lần trước</span>
+                  </sc-if>
+                </span>
+                <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">{{c.desc}}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+        <a href="{{addHref}}" style="height: 52px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center;">Tiếp tục</a>
+        <span style="font-size: 13px; line-height: 18px; color: {{t.text2}}; text-align: center;">Lựa chọn được ghi nhớ cho lần sau.</span>
+      </section>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{sheetMenu}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;">
+      <button type="button" aria-label="Đóng" onClick="{{close}}" style="position: absolute; inset: 0; border: 0; background: {{t.scrim}}; cursor: pointer;"></button>
+      <section role="dialog" aria-labelledby="dd-menu" style="position: relative; background: {{t.surface}}; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 4px;">
+        <div style="align-self: center; width: 40px; height: 4px; border-radius: 4px; background: {{t.border}}; margin-bottom: 4px;"></div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid {{t.divider}};">
+          <h2 id="dd-menu" style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600;">Bộ cửa D1</h2>
+          <button type="button" onClick="{{close}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {{t.primary}}; font-size: 16px; font-weight: 600; cursor: pointer;">Đóng</button>
+        </div>
+        <button type="button" onClick="{{duplicate}}" style="min-height: 56px; border: 0; background: transparent; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.text}}; font-size: 16px; line-height: 24px; cursor: pointer;">
+          <dc-import name="Icon" icon="copy" color="{{t.text}}" hint-size="24px,24px"></dc-import>
+          <span style="flex-grow: 1; text-align: left;">Nhân bản</span>
+          <span style="font-size: 13px; line-height: 18px; color: {{t.text2}};">Tạo D5 giống D1</span>
+        </button>
+        <div style="height: 1px; background: {{t.divider}}; margin: 8px 0;"></div>
+        <button type="button" onClick="{{askDelete}}" style="min-height: 56px; border: 0; background: transparent; display: flex; align-items: center; gap: 16px; padding: 0 4px; color: {{t.error}}; font-size: 16px; line-height: 24px; font-weight: 600; cursor: pointer;">
+          <dc-import name="Icon" icon="trash" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+          <span style="flex-grow: 1; text-align: left;">Xóa bộ cửa</span>
+        </button>
+      </section>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{dialogDelete}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: {{t.scrim}}; display: flex; align-items: center; justify-content: center; padding: 24px;">
+      <section role="alertdialog" aria-labelledby="dd-del" style="width: 100%; box-sizing: border-box; background: {{t.surface}}; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="width: 48px; height: 48px; border-radius: 999px; background: {{t.errorSoft}}; display: flex; align-items: center; justify-content: center;">
+          <dc-import name="Icon" icon="trash" color="{{t.error}}" hint-size="24px,24px"></dc-import>
+        </div>
+        <h2 id="dd-del" style="margin: 0; font-size: 20px; line-height: 28px; font-weight: 700;">Xóa bộ cửa D1?</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: {{t.text2}};">Cửa đi 1 cánh · 1&nbsp;bộ · 1.795.374&nbsp;₫ sẽ được chuyển vào Đã xóa gần đây và tự xóa hẳn sau 30&nbsp;ngày.</p>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 8px;">
+          <button type="button" onClick="{{close}}" style="height: 52px; border: 1px solid {{t.border}}; border-radius: 14px; background: transparent; color: {{t.text}}; font-size: 16px; font-weight: 600; cursor: pointer;">Hủy</button>
+          <button type="button" onClick="{{confirmDelete}}" style="height: 52px; border: 0; border-radius: 14px; background: {{t.error}}; color: {{t.onError}}; font-size: 16px; font-weight: 600; cursor: pointer;">Xóa bộ cửa</button>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"light","options":["light","dark"]},"saved":{"editor":"boolean","default":false},"tab":{"editor":"enum","default":"overview","options":["overview","alu","glass","acc","vtp"]},"overlay":{"editor":"enum","default":"none","options":["none","add","menu","delete"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: props.tab || 'overview', snackGone: false, sheet: props.overlay && props.overlay !== 'none' ? props.overlay : null, last: 'same', pick: 'same', msg: null };
+  }
+  componentDidMount() {
+    if (this.props.saved) this._tm = setTimeout(() => this.setState({ snackGone: true }), 6000);
+  }
+  componentWillUnmount() { clearTimeout(this._tm); }
+  tokens(dark) {
+    const L = { bg:'#F3F6F7', surface:'#FFFFFF', surface2:'#E4EBEE', text:'#10212A', text2:'#4B5D66', border:'#77878F', divider:'#D8E0E4', primary:'#0B5C75', primarySoft:'#DDEFF4', onPrimarySoft:'#073F51', accent:'#C2410C', onAccent:'#FFFFFF', snack:'#1B2B33', onSnack:'#FFFFFF', snackOk:'#7FDCA2', snackAction:'#8FD6E8', scrim:'rgba(8,20,26,0.5)', error:'#B42318', onError:'#FFFFFF', errorSoft:'#FDE5E3', glass:'#CFE7EF' };
+    const D = { bg:'#0B1317', surface:'#141F25', surface2:'#22323A', text:'#E6EDF0', text2:'#A3B3BB', border:'#71838C', divider:'#27363E', primary:'#6CC7DE', primarySoft:'#12384A', onPrimarySoft:'#BFE8F3', accent:'#FF8F5A', onAccent:'#2A0E00', snack:'#E6EDF0', onSnack:'#10212A', snackOk:'#1A6E39', snackAction:'#0B5C75', scrim:'rgba(0,0,0,0.62)', error:'#FF8C82', onError:'#2B0704', errorSoft:'#3D1512', glass:'#1E4656' };
+    return dark ? D : L;
+  }
+  renderVals() {
+    const t = this.tokens(this.props.theme === 'dark');
+    const tab = this.state.tab;
+    const defs = [['overview', 'Tổng quan'], ['alu', 'Nhôm'], ['glass', 'Kính'], ['acc', 'Phụ kiện'], ['vtp', 'VTP']];
+    const tabs = defs.map(([id, label]) => ({
+      id, label, on: tab === id,
+      fg: tab === id ? t.primary : t.text2,
+      w: tab === id ? '700' : '500',
+      line: tab === id ? '3px solid ' + t.primary : '3px solid transparent',
+      pick: () => this.setState({ tab: id })
+    }));
+    const r = (a, b, c) => ({ a, b, c, head: false });
+    const hd = (a, b) => ({ a, b, c: '', head: true });
+    const data = {
+      overview: { title: 'Chi phí 1 bộ', total: ['Thành tiền', '1.795.374 ₫'], rows: [
+        r('Nhôm', '2 mã profile · 11,62 m · 19,01 kg', '872.224 ₫'),
+        r('Kính', '1,365 m² × 230.000 ₫', '313.950 ₫'),
+        r('Phụ kiện', '3 mục · Draho', '241.000 ₫'),
+        r('Vật tư phụ', '3 mục', '69.000 ₫'),
+        r('Nhân công sản xuất', '1,76 m² × 70.000 ₫', '123.200 ₫'),
+        r('Nhân công lắp đặt', '1,76 m² × 100.000 ₫', '176.000 ₫')
+      ]},
+      alu: { title: 'Nhôm · 2 mã profile', total: ['Nhôm 1 bộ', '872.224 ₫'], rows: [
+        hd('C3328 · Khung bao cửa đi', '520.000 ₫/cây · cây 5.800 mm · 1,95 kg/m'),
+        r('Khung trên', 'Cắt 45° / 45° · 1 thanh', '800 mm'),
+        r('Khung dưới', 'Cắt 45° / 45° · 1 thanh', '800 mm'),
+        r('Khung đứng trái & phải', 'Cắt 45° / 45° · 2 thanh', '2.200 mm'),
+        r('Cộng C3328', '6,00 m = 1,03 cây · 11,70 kg', '537.931 ₫'),
+        hd('C3303 · Cánh cửa đi mở quay', '345.000 ₫/cây · cây 5.800 mm · 1,30 kg/m'),
+        r('Ngang cánh trên', 'Cắt 45° / 45° · 1 thanh', '690 mm'),
+        r('Ngang cánh dưới', 'Cắt 45° / 45° · 1 thanh', '690 mm'),
+        r('Đứng cánh trái & phải', 'Cắt 45° / 45° · 2 thanh', '2.120 mm'),
+        r('Cộng C3303', '5,62 m = 0,97 cây · 7,31 kg', '334.293 ₫')
+      ]},
+      glass: { title: 'Kính', total: ['Tổng kính', '313.950 ₫'], rows: [
+        r('Kính trắng 8mm', '650 × 2.100 mm · 1 tấm', '1,365 m²'),
+        r('Đơn giá', 'Theo Thư viện', '230.000 ₫/m²')
+      ]},
+      acc: { title: 'Phụ kiện · Draho', total: ['Tổng phụ kiện', '241.000 ₫'], rows: [
+        r('TN · Tay nắm cửa đi', '1 cặp', '120.000 ₫'),
+        r('LK · Lõi khóa 1 đầu chìa', '1 cái', '109.000 ₫'),
+        r('MK · Miệng khóa', '1 cái', '12.000 ₫')
+      ]},
+      vtp: { title: 'Vật tư phụ', total: ['Tổng VTP', '69.000 ₫'], rows: [
+        r('Vít lắp đặt', '10 con × 500 ₫', '5.000 ₫'),
+        r('Ke góc', '5 cái × 8.000 ₫', '40.000 ₫'),
+        r('Ke inox', '8 cái × 3.000 ₫', '24.000 ₫')
+      ]}
+    }[tab];
+    const choices = [
+      ['same', 'Cửa cùng loại', 'Giữ mẫu và thông số của D1, chỉ sửa kích thước'],
+      ['other', 'Cửa khác loại', 'Chọn lại hệ nhôm và mẫu cửa']
+    ].map(([id, label, desc]) => {
+      const on = this.state.pick === id;
+      return { id, label, desc, on, isLast: this.state.last === id,
+        border: on ? '2px solid ' + t.primary : '1px solid ' + t.divider,
+        bg: on ? t.primarySoft : 'transparent',
+        dotBorder: '2px solid ' + (on ? t.primary : t.border),
+        dot: on ? t.primary : 'transparent',
+        pick: () => this.setState({ pick: id }) };
+    });
+    const specs = [
+      ['Kiểu mở', 'Quay trong'], ['Màu sắc', 'Trắng sữa'], ['Rộng × Cao', '800 × 2.200 mm'], ['Số bộ', '1 bộ'],
+      ['Loại kính', 'Kính trắng 8mm'], ['Thanh ốp chân', 'Có'], ['Khe hở chân', '8 mm'], ['Ngang cánh dưới', '45°'],
+      ['Bản lề', '3 cái · 3D'], ['Loại khóa', 'Đơn điểm'], ['Lõi khóa', 'Một đầu chìa'], ['Hãng phụ kiện', 'Draho']
+    ].map(([k, v]) => ({ k, v }));
+    return {
+      t, tabs, specs,
+      isOverview: tab === 'overview',
+      isAlu: tab === 'alu',
+      listTitle: data.title,
+      openPhoto: () => {},
+      rows: data.rows.map((x) => ({ ...x,
+        minH: x.head ? '44px' : '56px', pad: x.head ? '8px 16px' : '10px 16px',
+        rowBg: x.head ? t.surface2 : 'transparent',
+        fzA: x.head ? '15px' : '16px', fwA: x.head ? '700' : '400',
+        fgA: x.head ? t.text : t.text, fgC: t.text })),
+      totalLabel: data.total[0],
+      totalValue: data.total[1],
+      snack: !!this.state.msg || (!!this.props.saved && !this.state.snackGone),
+      snackText: this.state.msg === 'deleted' ? 'Đã xóa bộ cửa D1' : (this.state.msg || 'Đã lưu cửa D1'),
+      snackUndo: this.state.msg === 'deleted',
+      sheetAdd: this.state.sheet === 'add',
+      sheetMenu: this.state.sheet === 'menu',
+      dialogDelete: this.state.sheet === 'delete',
+      choices,
+      addHref: this.state.pick === 'same' ? 'DoorFormNew.dc.html' : '#',
+      openAdd: () => this.setState({ sheet: 'add', pick: this.state.last }),
+      openMenu: () => this.setState({ sheet: 'menu' }),
+      close: () => this.setState({ sheet: null }),
+      askDelete: () => this.setState({ sheet: 'delete' }),
+      confirmDelete: () => this.setState({ sheet: null, msg: 'deleted', snackGone: true }),
+      duplicate: () => this.setState({ sheet: null, msg: 'Đã nhân bản D1 thành D5', snackGone: true }),
+      undo: () => this.setState({ msg: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "note": "Đáp án mẫu lấy nguyên văn từ SRS v1.0 mục 10.4. Mỗi mẫu 'verified' phải có ít nhất một ca ở đây (SRS 4.4). Thêm ca mới khi xưởng xác nhận bảng cắt thật.",
+  "doors": [
+    {
+      "id": "TC-01",
+      "requirement": "FR-BOM-01, NFR-ACC-01",
+      "template": "xf55-cua-di-1-canh",
+      "input": { "W": 800, "H": 2200, "qty": 1 },
+      "expect": {
+        "profiles": { "canh_ngang": [718, 2], "canh_dung": [2149, 2], "nep_dung": [2012.6, 2] },
+        "glass": { "kinh": [574, 2007.6, 1] }
+      }
+    },
+    {
+      "id": "TC-02",
+      "requirement": "FR-BOM-01",
+      "template": "xf55-cua-so-lua",
+      "input": { "W": 2500, "H": 1350, "qty": 1, "params": { "soCanh": 4 } },
+      "expect": {
+        "profiles": { "canh_dung": [1272, 8], "canh_ngang": [625, 8], "trung_gian": [1272, 1] },
+        "glass": { "kinh": [525, 1172, 4] }
+      }
+    },
+    {
+      "id": "TC-03",
+      "requirement": "BR-04",
+      "template": "xf55-cua-di-1-canh",
+      "input": { "W": 800, "H": 2200, "qty": 3 },
+      "expect": { "accessories": { "PK-SILICONE": [8.64, 9] } }
+    },
+    {
+      "id": "TC-05",
+      "requirement": "FR-DOR-07, BR-11",
+      "template": "xf55-cua-di-1-canh",
+      "input": { "W": 1500, "H": 2200, "qty": 1 },
+      "expect": { "ok": false, "checks": [["error", "W", "nên trong khoảng 600–1200 mm"]] }
+    },
+    {
+      "id": "TC-06",
+      "requirement": "derived soBanLe",
+      "template": "xf55-cua-di-1-canh",
+      "input": { "W": 900, "H": 2600, "qty": 1 },
+      "expect": { "ok": true, "accessories": { "PK-BANLE-3D": [4, 4] }, "checks": [["info", null, "4 bản lề"]] }
+    }
+  ],
+  "projects": [
+    {
+      "id": "TC-04",
+      "requirement": "FR-BOM-04",
+      "doors": [
+        { "symbol": "D1", "template": "xf55-cua-di-1-canh", "input": { "W": 800, "H": 2200, "qty": 2 } },
+        { "symbol": "S1", "template": "xf55-cua-so-lua", "input": { "W": 1400, "H": 1350, "qty": 1, "params": { "soCanh": 2 } } }
+      ],
+      "expect": { "accessories": { "PK-NEM-5": 18 }, "perDoorRoundingWouldGive": { "PK-NEM-5": 19 } }
+    },
+    {
+      "id": "TC-07",
+      "requirement": "FR-QUO-01",
+      "doors": [
+        { "symbol": "D1", "template": "xf55-cua-di-1-canh", "input": { "W": 850, "H": 2250, "qty": 2 } },
+        { "symbol": "S1", "template": "xf55-cua-so-lua", "input": { "W": 2600, "H": 1400, "qty": 1, "params": { "soCanh": 4 } } }
+      ],
+      "expect": { "area": 7.465, "op1FromSrs": 17628149, "op2Suggested": 2370000 }
+    }
+  ],
+  "cut": [
+    {
+      "id": "TC-10",
+      "requirement": "FR-CUT-03",
+      "template": "xf55-cua-di-1-canh",
+      "input": { "W": 800, "H": 2200, "qty": 1 },
+      "settings": { "barLength": 2000, "kerf": 4, "trim": 10 },
+      "expect": { "tooLong": [["XF-C3328", 2200]] }
+    }
+  ]
+}

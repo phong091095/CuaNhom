@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; }
+  </style>
+</helmet>
+<div style="width: 1680px; height: 900px; box-sizing: border-box; background: #FFFFFF; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px;">
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 20px; font-weight: 600; color: #10212A;">Đang tải (skeleton)</span>
+    <dc-import name="ProjectList" screen-state="loading" hint-size="390px,844px"></dc-import>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 20px; font-weight: 600; color: #10212A;">Trống</span>
+    <dc-import name="ProjectList" screen-state="empty" hint-size="390px,844px"></dc-import>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 20px; font-weight: 600; color: #10212A;">Lỗi tải dữ liệu</span>
+    <dc-import name="ProjectList" screen-state="error" hint-size="390px,844px"></dc-import>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <span style="height: 40px; display: flex; align-items: center; font-size: 20px; font-weight: 600; color: #10212A;">Không có mạng</span>
+    <dc-import name="ProjectList" screen-state="offline" hint-size="390px,844px"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1680,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
