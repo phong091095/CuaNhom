@@ -67,7 +67,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | 3 | Khung app Expo, token, font, component nền, thanh tab | ✅ 2026-11-05 |
 | 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ✅ 2026-11-05 |
 | 5 | Nhóm B: dự án | ✅ 2026-11-05 |
-| 6a | Nhóm D: chọn mẫu (D3), nhập cửa (D5) kèm bản vẽ | ☐ |
+| 6a | Nhóm D: chọn mẫu (D3), nhập cửa (D5) kèm bản vẽ | ✅ 2026-11-06 |
 | 6b | Nhóm D: chi tiết cửa (D6), thông số hệ (D4), chọn nhiều/sắp xếp (D1) | ☐ |
 | 7 | Nhóm E: cắt nhôm, phiếu cắt | ☐ |
 | 8 | Nhóm F: tổng hợp kính, phụ kiện | ☐ |
@@ -194,6 +194,17 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 - Nhân bản dự án: chép bộ cửa và tham số; không chép báo giá; trạng thái về "Báo giá".
 
 ### GĐ 6 · Nhóm D – Bộ cửa (tách 6a: D3 + D5 + bản vẽ; 6b: D6 + D4 + D1)
+> **GĐ 6a đã làm (2026-11-06):** xem nhật ký Phiên 6; ảnh chụp ở `docs/anh-chup/gd6a-*.png`.
+>
+> **Lệch artboard và lý do:**
+> - Các ô của D5 sắp theo tham số của mẫu cửa (dữ liệu, NFR-MNT-01), không theo artboard (kiểu mở, khóa, lõi khóa chưa có trong mẫu). Mục: Thông tin chung · Kích thước (kèm bản vẽ) · Kính · Vị trí & ghi chú · Kiểm tra kỹ thuật · Giá theo Thư viện.
+> - Giá chỉ xem, ghi nguồn "Theo Thư viện"; không có ô sửa giá kính / nhân công riêng từng cửa (quy tắc "một nguồn giá duy nhất").
+> - Không có "Ảnh công trình" (Q6), không có "Hãng phụ kiện" (một hệ nhôm).
+> - Dòng "Còn N ô cần sửa · Xem" nằm ở thanh đáy, không ở đầu trang (gõ W/H thì không bị đẩy lệch).
+> - Lưu cửa mới xong hiện sheet "Thêm cửa cùng loại / khác loại / Xong" (artboard D6), chưa mở D6.
+> - Chạm dòng cửa ở B3 tạm mở form sửa, cho tới khi có D6 (GĐ 6b).
+> - Tắt `typedRoutes`: kiểu route do Expo sinh khi chạy dev server, CI không có nên typecheck lệch giữa máy và CI.
+
 - **D3 chọn mẫu:**
   - Chip lọc theo nhóm (cửa đi, cửa sổ, vách), chỉ hiện nhóm đang có mẫu.
   - Nhãn "Lần trước".
@@ -294,7 +305,12 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | TC-04 qua lưu trữ | `src/domain/projectCalc.ts` | `projectCalc.test.ts` |
 | FR-PRJ-01…04 (giao diện B1, B2/B6, B3, B4, B7) | `src/app/(tabs)/index.tsx`, `src/app/du-an/*`, `src/features/projects/*` | `src/app-tests/projects-list.test.tsx`, `project-form.test.tsx`, `project-detail.test.tsx` |
 | Q2 (giao diện: Hoàn tác 10 giây, Đã xóa gần đây) | `ProjectActions.tsx`, `src/app/da-xoa.tsx` | `projects-list.test.tsx`, `trash.test.tsx` |
-| NFR-REL-01 (nháp form dự án, hỏi khi rời) | `src/features/projects/ProjectForm.tsx` | `project-form.test.tsx` |
+| NFR-REL-01 (nháp form dự án, hỏi khi rời) | `src/features/projects/ProjectForm.tsx`, `src/features/forms/useFormGuard.tsx` | `project-form.test.tsx`, `doors.test.tsx` |
+| FR-DOR-01 (D3: lưới mẫu có hình, lọc nhóm, "Lần trước") | `src/app/du-an/[id]/them-cua.tsx` | `src/app-tests/doors.test.tsx` |
+| FR-DOR-02…05, 07, 08 (D5) | `src/features/doors/DoorForm.tsx`, `src/domain/doorForm.ts` | `src/domain/__tests__/doorForm.test.ts`, `doors.test.tsx` (TC-05, TC-06, TC-02 qua giao diện) |
+| FR-DOR-06 (bản vẽ theo tỉ lệ, hướng mở) | `src/features/doors/DoorDrawing.tsx` | ảnh chụp `gd6a-*.png` (kiểm bằng mắt) |
+| NFR-PER-01 (đánh giá form mỗi lần gõ) | `src/domain/doorForm.ts` | `doorForm.test.ts` (trung bình < 5 ms/lần trên máy test) |
+| SRS 10.3 (đo thời gian một bộ cửa) | sự kiện `door_started` / `door_saved` | `doors.test.tsx` |
 | TC-08 (giao diện), TC-09 | — | GĐ 9, GĐ 13 |
 
 ## 5. Quyết định đã chốt

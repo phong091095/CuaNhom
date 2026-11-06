@@ -13,6 +13,7 @@ import {
   pricePerKg,
   salePriceOf,
   SYSTEMS,
+  findSystem,
   TEMPLATES,
   toPricedMaterial,
   validateFactor,
@@ -48,6 +49,16 @@ describe('bảng vật tư mặc định', () => {
 });
 
 describe('mẫu cửa', () => {
+  it('hệ nhôm có danh sách màu gợi ý (tên không trùng, mã màu hợp lệ)', () => {
+    for (const sys of SYSTEMS) {
+      assert.ok(sys.colors.length > 0, sys.id);
+      assert.equal(new Set(sys.colors.map((c) => c.name)).size, sys.colors.length);
+      for (const c of sys.colors) assert.match(c.hex, /^#[0-9A-F]{6}$/i);
+    }
+    assert.equal(findSystem('xingfa55')?.name, 'Xingfa hệ 55');
+    assert.equal(findSystem('khong-co'), undefined);
+  });
+
   it('id không trùng, thuộc hệ nhôm có thật, nhóm hợp lệ', () => {
     const ids = new Set<string>();
     for (const t of TEMPLATES) {

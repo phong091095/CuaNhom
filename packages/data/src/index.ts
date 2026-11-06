@@ -15,12 +15,21 @@ export * from './pricing';
 /** Phiên bản gói dữ liệu (đổi khi đổi bất kỳ mẫu hoặc bảng giá mặc định nào). */
 export const DATA_VERSION = '2026.11.05-1';
 
+export interface AluminumColor {
+  name: string;
+  /** Màu ô mẫu trong sheet chọn màu. */
+  hex: string;
+}
+
 export interface AluminumSystem {
   id: string;
   brand: string;
   name: string;
   barLengthMm: number;
+  /** Màu nhôm gợi ý (FR-DOR-05 – chỉ ghi nhận, không đổi giá). */
+  colors: AluminumColor[];
   note?: string;
+  colorNote?: string;
 }
 
 export const TEMPLATES: readonly DoorTemplate[] = [cuaDi1Canh, cuaSoLua] as unknown as DoorTemplate[];
@@ -28,6 +37,10 @@ export const TEMPLATES: readonly DoorTemplate[] = [cuaDi1Canh, cuaSoLua] as unkn
 export const MATERIALS: readonly MaterialRecord[] = materialsJson.materials as MaterialRecord[];
 
 export const SYSTEMS: readonly AluminumSystem[] = systemsJson.systems;
+
+export function findSystem(id: string): AluminumSystem | undefined {
+  return SYSTEMS.find((s) => s.id === id);
+}
 
 /** Mẫu hiện cho người dùng: bản phát hành chỉ hiện mẫu đã kiểm (SRS 4.4); bản dev hiện cả mẫu nháp. */
 export function visibleTemplates(includeDrafts: boolean): DoorTemplate[] {

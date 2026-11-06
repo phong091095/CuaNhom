@@ -5,7 +5,30 @@
       "brand": "Xingfa",
       "name": "Xingfa hệ 55",
       "barLengthMm": 5800,
-      "note": "MVP chỉ có một hệ nhôm (SRS 1.2). Thêm hệ nhôm ở giai đoạn 2 chỉ cần thêm dữ liệu."
+      "note": "MVP chỉ có một hệ nhôm (SRS 1.2). Thêm hệ nhôm ở giai đoạn 2 chỉ cần thêm dữ liệu.",
+      "colors": [
+        {
+          "name": "Trắng sữa",
+          "hex": "#F4F1E8"
+        },
+        {
+          "name": "Nâu cà phê",
+          "hex": "#5A3E2B"
+        },
+        {
+          "name": "Ghi xám",
+          "hex": "#8A9096"
+        },
+        {
+          "name": "Đen mờ",
+          "hex": "#1F2224"
+        },
+        {
+          "name": "Vân gỗ",
+          "hex": "#9A6B3F"
+        }
+      ],
+      "colorNote": "Màu nhôm chỉ ghi nhận, không đổi giá ở MVP (FR-DOR-05). Danh sách theo artboard D5; xưởng chọn \"Màu khác…\" để gõ tên."
     }
   ]
 }

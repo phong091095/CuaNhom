@@ -9,10 +9,10 @@ import type { SqlDb } from '@/db/sql';
 import type { Project } from './types';
 
 const DOORS: { templateId: string; W: number; H: number; qty: number; params?: Record<string, number>; location?: string; color?: string }[] = [
-  { templateId: 'xf55-cua-di-1-canh', W: 850, H: 2250, qty: 2, location: 'Tầng 1 – P. khách', color: 'Trắng sứ' },
-  { templateId: 'xf55-cua-so-lua', W: 2600, H: 1400, qty: 1, params: { soCanh: 4 }, location: 'Tầng 1 – P. khách', color: 'Trắng sứ' },
-  { templateId: 'xf55-cua-di-1-canh', W: 900, H: 2600, qty: 1, location: 'Tầng 2 – Ban công', color: 'Trắng sứ' },
-  { templateId: 'xf55-cua-so-lua', W: 1400, H: 1350, qty: 2, params: { soCanh: 2 }, location: 'Tầng 2 – P. ngủ', color: 'Trắng sứ' },
+  { templateId: 'xf55-cua-di-1-canh', W: 850, H: 2250, qty: 2, location: 'Tầng 1 – P. khách', color: 'Trắng sữa' },
+  { templateId: 'xf55-cua-so-lua', W: 2600, H: 1400, qty: 1, params: { soCanh: 4 }, location: 'Tầng 1 – P. khách', color: 'Trắng sữa' },
+  { templateId: 'xf55-cua-di-1-canh', W: 900, H: 2600, qty: 1, location: 'Tầng 2 – Ban công', color: 'Trắng sữa' },
+  { templateId: 'xf55-cua-so-lua', W: 1400, H: 1350, qty: 2, params: { soCanh: 2 }, location: 'Tầng 2 – P. ngủ', color: 'Trắng sữa' },
 ];
 
 export async function createSampleProject(db: SqlDb): Promise<Project> {

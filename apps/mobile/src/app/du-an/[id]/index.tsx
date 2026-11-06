@@ -2,7 +2,7 @@
  * Chi tiết dự án (B3 · SRS SCR-02): thông tin khách, thẻ báo giá, khối "Bóc tách & báo giá",
  * danh sách bộ cửa. Mọi con số tính lại bằng engine khi mở (SRS 5.2), bộ cửa theo bản chụp mẫu của nó.
  *
- * Còn thiếu so với artboard (làm ở giai đoạn sau): nút "Thêm bộ cửa" và mở chi tiết cửa (GĐ 6);
+ * Còn thiếu so với artboard (làm ở giai đoạn sau): chi tiết cửa D6 (GĐ 6b – tạm thời chạm dòng cửa mở form sửa);
  * ô Nhôm/Kính/Phụ kiện/Báo giá bấm được (GĐ 7–9); "Biên thực tế sau hao hụt" cần số cây thực mua (GĐ 7),
  * tạm thay bằng "Lãi dự kiến".
  */
@@ -32,6 +32,7 @@ import { useColors } from '@/theme/ThemeProvider';
 import {
   Badge,
   Body,
+  BottomBar,
   Button,
   Card,
   EmptyState,
@@ -104,10 +105,11 @@ export default function ProjectDetailScreen() {
   }
 
   const { project: p, summary: s, doors } = data;
+  const addDoor = () => router.push(`/du-an/${p.id}/them-cua`);
   return (
     <Screen>
       {header}
-      <Body>
+      <Body bottomBar={1}>
         <ProjectHead data={data} onStatus={() => setShowStatus(true)} />
         {s.sets > 0 ? <Hero data={data} /> : null}
         {s.invalidDoors.length > 0 ? (
@@ -116,15 +118,18 @@ export default function ProjectDetailScreen() {
         {s.sets > 0 ? <Modules data={data} /> : null}
         <SectionTitle>{s.doors > 0 ? `Bộ cửa (${s.doors} loại · ${s.sets} bộ)` : 'Bộ cửa'}</SectionTitle>
         {doors.length === 0 ? (
-          <EmptyState icon="door" title="Chưa có bộ cửa nào" message="Bộ cửa của dự án sẽ hiện ở đây cùng kích thước và giá từng bộ." />
+          <EmptyState icon="door" title="Chưa có bộ cửa nào" message="Thêm bộ cửa đầu tiên: chọn mẫu, nhập rộng × cao, app tính cắt nhôm, kính, phụ kiện và giá." />
         ) : (
           <Card style={{ padding: 0, overflow: 'hidden' }}>
             {doors.map((d, i) => (
-              <DoorRow key={d.door.id} item={d} last={i === doors.length - 1} />
+              <DoorRow key={d.door.id} item={d} last={i === doors.length - 1} onPress={() => router.push(`/du-an/${p.id}/cua/${d.door.id}/sua`)} />
             ))}
           </Card>
         )}
       </Body>
+      <BottomBar>
+        <Button label="Thêm bộ cửa" icon="plus" onPress={addDoor} testID="add-door" />
+      </BottomBar>
       <ProjectActions
         target={showActions ? { project: p, doorCount: s.doors, setCount: s.sets, op1: s.op1 } : null}
         onClose={() => setShowActions(false)}
@@ -255,7 +260,7 @@ function Module({ icon, label, meta, value, tag }: { icon: IconName; label: stri
   );
 }
 
-function DoorRow({ item, last }: { item: ComputedDoor; last: boolean }) {
+function DoorRow({ item, last, onPress }: { item: ComputedDoor; last: boolean; onPress: () => void }) {
   const c = useColors();
   const { door: d, result: r, template } = item;
   const name = template?.name ?? findTemplate(d.templateId)?.name ?? d.templateId;
@@ -270,10 +275,11 @@ function DoorRow({ item, last }: { item: ComputedDoor; last: boolean }) {
     ...(d.location ? [d.location] : []),
   ];
   return (
-    <View
-      style={[styles.door, !last && { borderBottomWidth: 1, borderBottomColor: c.divider }]}
-      accessible
-      accessibilityLabel={`${d.symbol}, ${name}, ${formatSize(d.W, d.H)}, ${d.qty} bộ${errors ? ', có lỗi' : `, thành tiền ${formatMoney(unit * d.qty)}`}`}
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.door, !last && { borderBottomWidth: 1, borderBottomColor: c.divider }, pressed && { backgroundColor: c.surface2 }]}
+      accessibilityRole="button"
+      accessibilityLabel={`${d.symbol}, ${name}, ${formatSize(d.W, d.H)}, ${d.qty} bộ${errors ? ', có lỗi' : `, thành tiền ${formatMoney(unit * d.qty)}`}. Mở để sửa`}
       testID={`door-row-${d.symbol}`}
     >
       <View style={{ flex: 1, gap: 2 }}>
@@ -304,7 +310,7 @@ function DoorRow({ item, last }: { item: ComputedDoor; last: boolean }) {
           </Txt>
         </View>
       ) : null}
-    </View>
+    </Pressable>
   );
 }
 

@@ -2,14 +2,15 @@
  * Form tạo / sửa dự án (B2, B6). Chỉ tên công trình bắt buộc (FR-PRJ-01); SĐT sai dạng chỉ nhắc.
  * Nháp tự lưu sau mỗi thay đổi (NFR-REL-01); rời màn khi chưa lưu thì hỏi.
  */
-import { router, usePreventRemove } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { router } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { getDb } from '@/db/client';
-import { clearDraft, loadDraft, saveDraft } from '@/db/repos/drafts';
+import { loadDraft } from '@/db/repos/drafts';
 import { createProject, getProject, PHONE_HELP, phoneHint, updateProject } from '@/db/repos/projects';
 import { logEvent } from '@/db/repos/events';
 import { ValidationError } from '@/domain/errors';
-import { Body, BottomBar, Button, Dialog, ErrorState, Header, Screen, SkeletonCard, TextField, Txt, useSnackbar } from '@/ui';
+import { useFormGuard } from '@/features/forms/useFormGuard';
+import { Body, BottomBar, Button, ErrorState, Header, Screen, SkeletonCard, TextField, Txt, useSnackbar } from '@/ui';
 
 export interface ProjectFormValues {
   name: string;
@@ -24,7 +25,6 @@ function same(a: ProjectFormValues, b: ProjectFormValues): boolean {
   return a.name === b.name && a.customer === b.customer && a.phone === b.phone && a.address === b.address;
 }
 
-export const DRAFT_DEBOUNCE_MS = 500;
 
 
 export function ProjectForm({ projectId }: { projectId?: string }) {
@@ -36,11 +36,6 @@ export function ProjectForm({ projectId }: { projectId?: string }) {
   const [errors, setErrors] = useState<Partial<Record<keyof ProjectFormValues, string>>>({});
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  /** Lần rời màn bị chặn: gọi `repeat` để thực hiện lại khi người dùng chọn "Bỏ thay đổi". */
-  const [pendingLeave, setPendingLeave] = useState<{ repeat: () => void } | null>(null);
-  /** Đã chọn bỏ thay đổi: tắt chặn rồi mới gửi lại lệnh rời màn (nếu không lệnh sẽ bị chặn lần nữa). */
-  const [discarding, setDiscarding] = useState(false);
-  const saved = useRef(false);
 
   // Tải dự án (khi sửa) và nháp còn dở.
   useEffect(() => {
@@ -72,24 +67,7 @@ export function ProjectForm({ projectId }: { projectId?: string }) {
 
   const dirty = initial !== null && !same(values, initial);
 
-  // Lưu nháp sau mỗi thay đổi (chờ 500 ms sau lần gõ cuối).
-  useEffect(() => {
-    if (initial === null || saved.current) return;
-    const t = setTimeout(() => {
-      getDb()
-        .then((db) => (dirty ? saveDraft(db, draftKey, values) : clearDraft(db, draftKey)))
-        .catch(() => {});
-    }, DRAFT_DEBOUNCE_MS);
-    return () => clearTimeout(t);
-  }, [values, dirty, initial, draftKey]);
-
-  usePreventRemove(dirty && !saving && !discarding, ({ repeat }) => {
-    setPendingLeave({ repeat });
-  });
-
-  useEffect(() => {
-    if (discarding && pendingLeave) pendingLeave.repeat();
-  }, [discarding, pendingLeave]);
+  const guard = useFormGuard({ draftKey, values, dirty, ready: initial !== null, saving });
 
   const set = useCallback(
     (k: keyof ProjectFormValues) => (v: string) => {
@@ -108,14 +86,12 @@ export function ProjectForm({ projectId }: { projectId?: string }) {
       } else {
         const p = await createProject(db, values);
         await logEvent(db, 'project_created', { projectId: p.id });
-        saved.current = true;
-        await clearDraft(db, draftKey);
+        await guard.markSaved();
         snack.show(`Đã tạo dự án “${p.name}”`, { tone: 'success' });
         router.replace(`/du-an/${p.id}`);
         return;
       }
-      saved.current = true;
-      await clearDraft(db, draftKey);
+      await guard.markSaved();
       snack.show('Đã lưu thông tin dự án', { tone: 'success' });
       if (router.canGoBack()) router.back();
       else router.replace(`/du-an/${projectId}`);
@@ -206,22 +182,7 @@ export function ProjectForm({ projectId }: { projectId?: string }) {
           onPress={submit}
         />
       </BottomBar>
-      <Dialog
-        visible={pendingLeave !== null && !discarding}
-        title="Bỏ thay đổi?"
-        message="Những gì bạn vừa nhập chưa được lưu."
-        confirmLabel="Bỏ thay đổi"
-        cancelLabel="Tiếp tục sửa"
-        destructive
-        onConfirm={() => {
-          saved.current = true;
-          getDb()
-            .then((db) => clearDraft(db, draftKey))
-            .catch(() => {})
-            .finally(() => setDiscarding(true));
-        }}
-        onCancel={() => setPendingLeave(null)}
-      />
+      {guard.dialog}
     </Screen>
   );
 }

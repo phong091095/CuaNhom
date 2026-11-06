@@ -13,6 +13,9 @@ import TrashScreen from '@/app/da-xoa';
 import ProjectDetailScreen from '@/app/du-an/[id]/index';
 import EditProjectScreen from '@/app/du-an/[id]/sua';
 import NewProjectScreen from '@/app/du-an/moi';
+import PickTemplateScreen from '@/app/du-an/[id]/them-cua';
+import NewDoorScreen from '@/app/du-an/[id]/cua/moi';
+import EditDoorScreen from '@/app/du-an/[id]/cua/[doorId]/sua';
 import { setDbForTests } from '@/db/client';
 import type { SqlDb } from '@/db/sql';
 import { freshDb, installTestClock } from '@/db/testing/setup';
@@ -54,6 +57,9 @@ export function renderApp(initialUrl = '/') {
       'du-an/moi': NewProjectScreen,
       'du-an/[id]/index': ProjectDetailScreen,
       'du-an/[id]/sua': EditProjectScreen,
+      'du-an/[id]/them-cua': PickTemplateScreen,
+      'du-an/[id]/cua/moi': NewDoorScreen,
+      'du-an/[id]/cua/[doorId]/sua': EditDoorScreen,
       'da-xoa': TrashScreen,
     },
     { initialUrl },

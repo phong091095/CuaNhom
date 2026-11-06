@@ -17,42 +17,32 @@
 
 ## Phiên tới bắt đầu từ đây
 
-**GĐ 6a · Chọn mẫu (D3) và nhập cửa (D5) kèm bản vẽ.** Bố cục xem artboard `DoorForm`, `GalleryD*`, `canvas.json` (DoorsModel, DoorFormError, DoorFormNew). GĐ 6 nhiều việc nên tách: 6a là D3 + D5; 6b là D6 + D4 + D1.
+**GĐ 6b · Chi tiết cửa (D6), thông số hệ (D4), chọn nhiều và sắp xếp (D1).** Artboard: `DoorDetail`, `DoorsList*`, `DoorsSetup*`, `canvas.json`.
 
-1. **Vào luồng:** B3 thêm nút "Thêm bộ cửa" (thanh đáy) → D3 `src/app/du-an/[id]/them-cua.tsx`.
-2. **D3 – chọn mẫu:**
-   - Lưới thẻ mẫu `visibleTemplates(__DEV__)`, có hình vẽ nhỏ.
-   - Chip lọc theo `group`, chỉ hiện nhóm đang có mẫu, kèm số mẫu, ví dụ "Cửa đi (1)".
-   - Nhãn "Lần trước": mẫu dùng gần nhất, lưu ở cài đặt `lastTemplateId`.
-3. **D5 – nhập cửa** `src/app/du-an/[id]/cua/moi.tsx` (thêm) và `.../cua/[doorId]/sua.tsx` (sửa):
-   - **Kích thước:** W, H (`parseDecimal`, 1 chữ số thập phân); số bộ (Stepper).
-   - **Ký hiệu:** gợi ý bằng `suggestSymbol`; lỗi trùng hiện dưới ô.
-   - **Tham số mẫu:** choice → Segmented hoặc Select; number → TextField có đơn vị.
-   - **Kính:** Select kính không ẩn, nhớ kính dùng lần trước.
-   - **Màu nhôm:** danh sách gợi ý + "Màu khác…".
-   - **Vị trí:** chip gợi ý từ các vị trí đã dùng trong dự án. Ghi chú.
-   - **Bản vẽ SVG theo tỉ lệ** (FR-DOR-06):
-     - cửa mở quay: bản lề, chiều mở theo `hingeParam` / `openInParam`;
-     - cửa lùa: số cánh, mũi tên lùa;
-     - có kích thước tổng; ô kính dùng token `glass`.
-   - **Giá và kiểm tra cập nhật ngay** (`computeDoor` bằng bản chụp mẫu mới nhất + `loadPriceBook`):
-     - lỗi hiện dưới đúng ô theo `check.field`;
-     - còn lỗi thì khóa nút Lưu; thanh đáy có "Còn N ô cần sửa · Xem".
-   - **Giá chỉ xem**, kèm nguồn ("Theo Thư viện") – một nguồn giá duy nhất.
-   - **Nháp và rời màn:** nháp `door:new:<projectId>` / `door:edit:<id>`; hỏi khi rời (mẫu `ProjectForm`: `usePreventRemove` + `repeat()`).
-   - **Nhật ký sử dụng:** `door_started` khi mở D3; `door_saved` kèm số giây từ D3 tới lúc lưu (SRS 10.3).
-4. **Hiệu năng:** đo thời gian `computeDoor` mỗi lần gõ (NFR-PER-01: ≤ 50 ms tính, ≤ 200 ms cập nhật). Cân nhắc debounce 100 ms.
+1. **D6** `src/app/du-an/[id]/cua/[doorId]/index.tsx` (SRS SCR-05):
+   - Thẻ đầu: bản vẽ nhỏ, ký hiệu, mẫu, kích thước, số bộ, giá bán 1 bộ, giá vốn, lãi.
+   - Tab Tổng quan (bản vẽ lớn, thông số, chi phí theo nhóm) · Nhôm · Kính · Phụ kiện · Nhân công.
+   - Tab Nhôm (FR-BOM-01): mã, tên, chiều dài 0,1 mm, góc cắt, vị trí, số lượng, kg; nhóm theo mã nhôm.
+   - Tab Kính (FR-BOM-02): rộng × cao, số tấm, m², kg/tấm.
+   - Tab Phụ kiện (FR-BOM-03): số lẻ và số lấy, đơn vị.
+   - Thanh tiêu đề: "Sửa" (mở D5 sửa) và "⋯" (sheet: nhân bản `duplicateDoor`, xóa mềm `softDeleteDoors` + Hoàn tác `restoreDoor`).
+   - "Mẫu đã cập nhật": chỉ hiện huy hiệu; phần so sánh và cập nhật làm ở GĐ 11.
+2. **Đổi luồng:**
+   - Chạm dòng cửa ở B3 → mở D6 (không mở thẳng form sửa nữa).
+   - Lưu cửa mới ở D5 → sheet "Thêm cửa tiếp" vẫn giữ; thêm lựa chọn "Xem bộ cửa vừa lưu" → D6.
+   - Sửa xong → về D6.
+3. **D4** `src/app/mau/[templateId].tsx` (chỉ xem, Q4):
+   - Tab Khe hở (hằng số kèm ghi chú) · Profile nhôm (vai trò, mã, công thức dài, số lượng, góc) · Giới hạn (các kiểm tra kỹ thuật).
+   - Biểu thức đổi sang chữ: thêm hàm `describeExpr` vào engine (ví dụ `soCanh == 2 and W < 800` → "Số cánh = 2 và Rộng < 800"), có test.
+   - Vào từ D5 (thẻ mẫu) và D6 ("Thông số hệ").
+4. **D1 trong B3** (artboard `DoorsListSelect`):
+   - Nút "Chọn" hoặc nhấn giữ một dòng để vào chế độ chọn nhiều; thanh đáy Xong · Nhân bản · Xóa (xóa mềm + Hoàn tác).
+   - Chế độ "Sắp xếp" với nút ↑ ↓ (`moveDoor`).
 5. **Test:**
-   - Jest + `renderRouter` (mỗi nhóm màn một file, xem `src/app-tests/harness.tsx`):
-     - TC-05 qua giao diện: W 1500 → lỗi dưới ô W và khóa Lưu;
-     - TC-06: 900 × 2600 → thông báo 4 bản lề;
-     - ký hiệu trùng; nháp.
+   - D6 hiện đúng TC-01: cánh ngang 718 × 2, cánh đứng 2149 × 2, nẹp đứng 2012,6 × 2, kính 574 × 2007,6.
+   - Nhân bản / xóa / Hoàn tác ở D6; chọn nhiều xóa 2 bộ rồi Hoàn tác; sắp xếp lại.
+   - `describeExpr` (engine, node:test).
    - Chụp web 390/360, sáng/tối.
-6. **Lưu ý test giao diện** (từ GĐ 5):
-   - RNTL 14 có `fireEvent`/`render` bất đồng bộ, luôn `await`.
-   - `renderRouter` bật đồng hồ giả.
-   - Store Zustand phải đặt lại trong `setupDb()`.
-   - Ca có chặn rời màn để cuối file.
 
 ## Việc tồn
 
@@ -63,6 +53,56 @@
 - [ ] **Mã ứng dụng** `vn.matadoor.app` (Android package, iOS bundle id) là tạm: chốt trước khi đưa lên cửa hàng.
 
 ## Các phiên
+
+### 2026-11-06 · Phiên 6 · GĐ 6a – Chọn mẫu (D3), nhập cửa (D5), bản vẽ
+
+- **Bối cảnh:** chủ dự án nhắn "làm tiếp đi". Phiên mới (container còn nguyên `node_modules`). Đã đọc mục "Phiên tới".
+- **Môi trường:** thêm setup script cho môi trường cloud cá nhân "Phongtt": `npm ci` trong thư mục repo (`cuanhom` hoặc `CuaNhom`). Đã chạy thử script trong phiên này (43 giây, 1291 gói). Script chỉ chạy khi một phiên mới tạo container từ đầu, nên chưa kiểm ở phiên thật.
+- **Đã làm:**
+  - **D3** `src/app/du-an/[id]/them-cua.tsx`:
+    - Lưới thẻ mẫu (bản vẽ nhỏ + tên + nhóm).
+    - Chip lọc "Tất cả (2)", "Cửa đi (1)", "Cửa sổ (1)", chỉ hiện nhóm đang có mẫu.
+    - Nhãn "Lần trước"; ghi sự kiện `door_started`.
+  - **D5** `src/features/doors/DoorForm.tsx` (route `cua/moi.tsx`, `cua/[doorId]/sua.tsx`):
+    - Dải chip nhảy nhanh (cuộn ngang).
+    - Thông tin chung: ký hiệu gợi ý, chặn trùng; số bộ (stepper); tham số lựa chọn dạng segmented; màu nhôm.
+    - Kích thước: W, H nhận "2012,6"; tham số số; bản vẽ cập nhật ngay; diện tích 1 bộ.
+    - Kính: chỉ kính không ẩn, nhớ kính dùng lần trước theo mẫu; dòng kích thước tấm, số tấm, kg/tấm.
+    - Vị trí (chip gợi ý) và ghi chú.
+    - Khối "Kiểm tra kỹ thuật": lỗi/cảnh báo/thông tin không gắn được với ô nào.
+    - Giá theo Thư viện: giá vốn theo nhóm, giá vốn và giá bán 1 bộ.
+    - Thanh đáy: "Tạm tính · N bộ · m²" + tổng, hoặc "Còn N ô cần sửa · Xem" (nhảy tới ô lỗi); Lưu khóa khi còn lỗi.
+    - Sau khi lưu: sheet Thêm cửa cùng loại (giữ mẫu, tham số, kính, màu, vị trí; ký hiệu kế tiếp) · Khác loại (về D3) · Xong.
+    - Sửa bộ cửa tính theo bản chụp đúng phiên bản mẫu của bộ đó.
+    - Sự kiện `door_saved` ghi số giây kể từ lúc mở D3.
+  - **Bản vẽ** `src/features/doors/DoorDrawing.tsx` (SVG theo tỉ lệ):
+    - Cửa mở quay: khung 3 cạnh + đường nền, cánh, kính; tam giác hướng mở có đỉnh ở phía bản lề (nét đứt = mở vào trong); tay nắm.
+    - Cửa lùa: các cánh chồng nhau, mũi tên lùa.
+    - Có kích thước W, H và nhãn cho trình đọc màn hình.
+  - **Nghiệp vụ** `src/domain/doorForm.ts`: đọc số, gắn lỗi/cảnh báo theo ô, đếm ô lỗi, `canSave`, chuyển sang đầu vào DB, gợi ý vị trí.
+  - **Dùng chung:**
+    - `src/features/forms/useFormGuard.tsx` (nháp tự lưu + hỏi khi rời); `ProjectForm` đã chuyển sang dùng.
+    - `ColorField` (ô màu mẫu + "Màu khác…"); `Body` nhận ref.
+    - Dữ liệu: danh sách màu nhôm của hệ Xingfa 55 trong `systems.json` (tên và mã màu theo artboard).
+  - **B3:** thanh đáy "Thêm bộ cửa"; chạm dòng cửa mở form sửa (tạm, tới khi có D6).
+  - **Cài đặt:** khóa `lastTemplateId`, `lastGlass.<mẫu>`, `afterSaveChoice`.
+- **Kiểm thử:**
+  - App 152/152 (16 bộ). Engine 87, dữ liệu 26. Typecheck, lint sạch.
+  - Nghiệp vụ form: 14 ca, gồm TC-05, TC-06 và hiệu năng (NFR-PER-01: trung bình < 5 ms mỗi lần đánh giá).
+  - Giao diện: 10 ca trên router thật:
+    - D3: lọc nhóm.
+    - D5:
+      - TC-05 qua giao diện (lỗi dưới ô W, "Còn 1 ô cần sửa", Lưu khóa);
+      - TC-06 (4 bản lề) → lưu → B3;
+      - W/H trống khi bấm Lưu;
+      - ký hiệu trùng;
+      - cửa lùa 2 → 4 cánh ra đúng kính 1130,5 × 1172 rồi 525 × 1172 × 4 (TC-02);
+      - thêm cửa cùng loại; "Lần trước";
+      - sửa từ B3; nháp; hỏi khi rời.
+  - Web (dev server, Chromium): chạy hết luồng B3 → D3 → D5 (TC-05, TC-06, màu, lưu, thêm cùng loại) → B3 ở 390 sáng, 390 tối, 360. Không lỗi console.
+- **Lỗi bắt được và đã sửa:** chip nhảy nhanh xuống 2 dòng; dự án mẫu ghi "Trắng sứ" không khớp danh sách màu; lint React Compiler (ref và `Date.now()` lúc render).
+- **Commit:** "GĐ 6a: chọn mẫu, nhập bộ cửa, bản vẽ".
+- **Bước tiếp theo:** GĐ 6b (xem mục "Phiên tới bắt đầu từ đây").
 
 ### 2026-11-05 · Phiên 5 · GĐ 5 – Nhóm B: dự án
 

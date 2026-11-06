@@ -2,7 +2,7 @@
  * Khung màn hình: nền bg, vùng an toàn, thanh tiêu đề, thanh nút cố định đáy,
  * trạng thái rỗng / lỗi (mỗi màn danh sách đều có).
  */
-import type { ReactNode } from 'react';
+import { forwardRef, type ComponentRef, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -75,10 +75,11 @@ export function Screen({ children }: { children: ReactNode }) {
  * Vùng cuộn. Màn có thanh nút cố định: đệm đáy = cao thanh nút + 16 (68 một nút, 84 hai nút)
  * để thẻ cuối luôn cuộn hết.
  */
-export function Body({ children, bottomBar, ...rest }: ScrollViewProps & { bottomBar?: 0 | 1 | 2 }) {
+export const Body = forwardRef<ComponentRef<typeof ScrollView>, ScrollViewProps & { bottomBar?: 0 | 1 | 2 }>(function Body({ children, bottomBar, ...rest }, ref) {
   const pad = bottomBar === 2 ? SIZE.bottomBarPad2 : bottomBar === 1 ? SIZE.bottomBarPad : 24;
   return (
     <ScrollView
+      ref={ref}
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={[styles.body, { paddingBottom: pad + (bottomBar ? 16 : 0) }]}
       {...rest}
@@ -86,7 +87,7 @@ export function Body({ children, bottomBar, ...rest }: ScrollViewProps & { botto
       {children}
     </ScrollView>
   );
-}
+});
 
 /** Thanh nút cố định đáy màn (nút chính trong tầm ngón cái – SRS mục 6). */
 export function BottomBar({ children }: { children: ReactNode }) {

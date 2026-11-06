@@ -8,6 +8,12 @@ export const SETTING_KEYS = {
   lastBackupAt: 'device.lastBackupAt',
   dataVersionSeen: 'device.dataVersionSeen',
   quoteSeqPrefix: 'quoteSeq.',
+  /** Mẫu cửa dùng gần nhất (nhãn "Lần trước" ở D3). */
+  lastTemplateId: 'lastTemplateId',
+  /** Kính dùng gần nhất theo mẫu: "lastGlass.<templateId>" → JSON {key: mã kính}. */
+  lastGlassPrefix: 'lastGlass.',
+  /** Lựa chọn sau khi lưu bộ cửa: "same" | "other" (artboard D6 – nhớ lựa chọn). */
+  afterSaveChoice: 'afterSaveChoice',
 } as const;
 
 export async function getSetting(db: SqlDb, key: string): Promise<string | null> {
