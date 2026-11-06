@@ -61,4 +61,5 @@ npm run lock -w @matadoor/data
 | 4 | Lưu trữ SQLite, sao lưu/khôi phục, store | Xong |
 | 5 | Màn Dự án: danh sách, tạo/sửa, chi tiết, xóa + hoàn tác, đã xóa gần đây | Xong |
 | 6a | Chọn mẫu cửa, nhập bộ cửa có bản vẽ và giá cập nhật ngay | Xong |
-| 6b–13 | Chi tiết cửa, cắt nhôm, vật tư, báo giá, thư viện, cài đặt, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |
+| 6b | Chi tiết bộ cửa (nhôm, kính, phụ kiện, nhân công), thông số hệ, chọn nhiều và sắp xếp bộ cửa | Xong |
+| 7–13 | Cắt nhôm, vật tư, báo giá, thư viện, cài đặt, nghiệm thu | Xem `docs/KE_HOACH_TRIEN_KHAI.md` |

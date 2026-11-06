@@ -78,6 +78,16 @@ export function doorValues(door: DoorItem, template: DoorTemplate): DoorFormValu
   };
 }
 
+/**
+ * "Cửa cùng loại" từ chi tiết cửa (D6): chép tham số, kính, màu, vị trí; rộng, cao, ghi chú để trống; 1 bộ.
+ * Bộ mới theo mẫu mới nhất: tham số không còn trong mẫu thì bỏ, tham số mới thì lấy mặc định.
+ */
+export function copyDoorValues(source: DoorItem, template: DoorTemplate, symbol: string): DoorFormValues {
+  const v = doorValues(source, template);
+  const keys = new Set(template.params.map((p) => p.key));
+  return { ...v, symbol, W: '', H: '', qty: 1, note: '', params: Object.fromEntries(Object.entries(v.params).filter(([k]) => keys.has(k))) };
+}
+
 export interface DoorFormEvaluation {
   /** Đầu vào cho engine; null nếu W/H/tham số chưa đọc được. */
   input: EngineInput | null;

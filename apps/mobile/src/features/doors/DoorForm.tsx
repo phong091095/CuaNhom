@@ -33,6 +33,7 @@ import { getProject } from '@/db/repos/projects';
 import { getSetting, setSetting, SETTING_KEYS } from '@/db/repos/settings';
 import { getTemplateSnapshot } from '@/db/repos/snapshots';
 import {
+  copyDoorValues,
   doorValues,
   evaluateDoorForm,
   fieldOrder,
@@ -99,7 +100,20 @@ function sectionOf(field: string, template: DoorTemplate): SectionId {
   return 'info';
 }
 
-export function DoorForm({ projectId, templateId, doorId, startedAt }: { projectId: string; templateId?: string; doorId?: string; startedAt?: number }) {
+export function DoorForm({
+  projectId,
+  templateId,
+  doorId,
+  copyFromId,
+  startedAt,
+}: {
+  projectId: string;
+  templateId?: string;
+  doorId?: string;
+  /** Thêm "cửa cùng loại" từ chi tiết cửa (D6): chép tham số, kính, màu, vị trí của bộ này; rộng/cao để trống. */
+  copyFromId?: string;
+  startedAt?: number;
+}) {
   const c = useColors();
   const snack = useSnackbar();
   const editing = !!doorId;
@@ -110,7 +124,7 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
   const [touched, setTouched] = useState<{ W?: boolean; H?: boolean }>({});
   const [submitted, setSubmitted] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [afterSave, setAfterSave] = useState<string | null>(null);
+  const [afterSave, setAfterSave] = useState<{ id: string; symbol: string } | null>(null);
   const [width, setWidth] = useState(358);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   /** Vị trí đầu từng mục trong vùng cuộn (để nhảy tới). */
@@ -137,13 +151,19 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
       } else {
         template = templateId ? findTemplate(templateId) : undefined;
         if (!template) throw new Error('Không tìm thấy mẫu cửa đã chọn.');
-        const lastGlassRaw = await getSetting(db, `${SETTING_KEYS.lastGlassPrefix}${template.id}`);
-        const lastColor = [...doors].sort((a, b) => b.updatedAt - a.updatedAt).find((d) => d.color)?.color ?? null;
-        base = newDoorValues(template, {
-          symbol: await suggestSymbol(db, projectId, template.symbolPrefix),
-          ...(lastGlassRaw ? { lastGlass: JSON.parse(lastGlassRaw) as Record<string, string> } : {}),
-          color: lastColor,
-        });
+        const symbol = await suggestSymbol(db, projectId, template.symbolPrefix);
+        const source = copyFromId ? await getDoor(db, copyFromId) : null;
+        if (source && source.deletedAt === null && source.templateId === template.id) {
+          base = copyDoorValues(source, template, symbol);
+        } else {
+          const lastGlassRaw = await getSetting(db, `${SETTING_KEYS.lastGlassPrefix}${template.id}`);
+          const lastColor = [...doors].sort((a, b) => b.updatedAt - a.updatedAt).find((d) => d.color)?.color ?? null;
+          base = newDoorValues(template, {
+            symbol,
+            ...(lastGlassRaw ? { lastGlass: JSON.parse(lastGlassRaw) as Record<string, string> } : {}),
+            color: lastColor,
+          });
+        }
       }
       const glass = (await listMaterials(db, 'kinh')).filter((m) => !m.hidden || currentGlass.includes(m.code));
       // Kính đã nhớ mà nay bị ẩn/xóa thì về kính mặc định của mẫu.
@@ -177,7 +197,7 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
     return () => {
       alive = false;
     };
-  }, [projectId, templateId, doorId, draftKey, snack]);
+  }, [projectId, templateId, doorId, copyFromId, draftKey, snack]);
 
   const ev = useMemo(
     () =>
@@ -233,7 +253,7 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
         ...(startedAt ? { value: Math.round((now() - startedAt) / 1000) } : {}),
       });
       setSaving(false);
-      setAfterSave(door.symbol);
+      setAfterSave({ id: door.id, symbol: door.symbol });
     } catch (e) {
       setSaving(false);
       if (e instanceof ValidationError && e.field === 'symbol') {
@@ -320,6 +340,18 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
               <Button kind="ghost" compact label="Đổi mẫu" testID="change-template" onPress={() => router.replace(`/du-an/${projectId}/them-cua`)} />
             ) : null}
           </View>
+          <Pressable
+            onPress={() => router.push({ pathname: '/mau/[templateId]', params: { templateId: t.id, v: String(t.version) } })}
+            accessibilityRole="link"
+            accessibilityLabel="Xem thông số hệ của mẫu: công thức cắt, khe hở, giới hạn"
+            style={styles.specLink}
+            testID="open-template-spec"
+          >
+            <Icon name="ruler" color={c.primary} size={20} />
+            <Txt variant="bodyStrong" style={{ color: c.primary }}>
+              Xem thông số hệ
+            </Txt>
+          </Pressable>
           <SectionTitle>Thông tin chung</SectionTitle>
           <View style={styles.row}>
             <View style={{ flex: 1 }}>
@@ -534,7 +566,7 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
         <Button testID="save-door" label="Lưu bộ cửa" icon="check" loading={saving} disabled={ev.errorCount > 0} onPress={save} />
       </BottomBar>
 
-      <BottomSheet visible={afterSave !== null} onClose={() => router.back()} title={`Đã lưu bộ cửa ${afterSave ?? ''}`}>
+      <BottomSheet visible={afterSave !== null} onClose={() => router.back()} title={`Đã lưu bộ cửa ${afterSave?.symbol ?? ''}`}>
         <ListRow icon="copy" title="Thêm cửa cùng loại" subtitle="Giữ mẫu, tham số, kính, màu; chỉ nhập kích thước" onPress={addSame} testID="after-same" />
         <ListRow
           icon="door"
@@ -547,6 +579,17 @@ export function DoorForm({ projectId, templateId, doorId, startedAt }: { project
               .then((db) => setSetting(db, SETTING_KEYS.afterSaveChoice, 'other'))
               .catch(() => {});
             router.replace(`/du-an/${projectId}/them-cua`);
+          }}
+        />
+        <ListRow
+          icon="file"
+          title="Xem bộ cửa vừa lưu"
+          subtitle="Chi tiết cắt nhôm, kính, phụ kiện"
+          testID="after-view"
+          onPress={() => {
+            const saved = afterSave;
+            setAfterSave(null);
+            if (saved) router.replace(`/du-an/${projectId}/cua/${saved.id}`);
           }}
         />
         <ListRow
@@ -592,4 +635,5 @@ const styles = StyleSheet.create({
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   sep: { height: 1 },
   barInfo: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  specLink: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' },
 });

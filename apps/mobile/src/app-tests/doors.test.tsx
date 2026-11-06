@@ -127,17 +127,19 @@ describe('D5 – nhập bộ cửa', () => {
     await text('Lần trước');
   });
 
-  it('sửa bộ cửa từ dòng ở B3: mở đúng số đã lưu, lưu xong về dự án', async () => {
-    await createDoor(db, pid, { symbol: 'D1', templateId: 'xf55-cua-di-1-canh', templateVersion: 1, W: 800, H: 2200, qty: 1, location: 'Tầng 1' });
+  it('sửa bộ cửa: B3 → chi tiết cửa → Sửa; mở đúng số đã lưu, lưu xong về chi tiết cửa', async () => {
+    const d = await createDoor(db, pid, { symbol: 'D1', templateId: 'xf55-cua-di-1-canh', templateVersion: 1, W: 800, H: 2200, qty: 1, location: 'Tầng 1' });
     const r = await renderApp(`/du-an/${pid}`);
     await fireEvent.press(await screen.findByTestId('door-row-D1'));
+    await fireEvent.press(await screen.findByTestId('door-edit'));
     await waitFor(() => expect(screen.getByTestId('field-W').props.value).toBe('800'));
     expect(screen.getByTestId('field-location').props.value).toBe('Tầng 1');
     await fireEvent.press(screen.getByLabelText('Tăng số bộ'));
     await typeIn('field-H', '2100,5');
     await fireEvent.press(screen.getByTestId('save-door'));
-    await waitFor(() => expect(r.getPathname()).toBe(`/du-an/${pid}`));
+    await waitFor(() => expect(r.getPathname()).toBe(`/du-an/${pid}/cua/${d.id}`));
     expect((await listDoors(db, pid))[0]).toMatchObject({ qty: 2, H: 2100.5 });
+    await text('Thành tiền (2 bộ)');
   });
 
   it('còn nháp từ lần trước thì mở form điền lại', async () => {

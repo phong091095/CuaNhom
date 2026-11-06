@@ -135,6 +135,46 @@ export function Segmented<T extends string>({
   );
 }
 
+// ---------------------------------------------------------------- Tabs
+
+/** Thanh tab ngang (D4, D6): chữ + gạch chân 3 px màu primary; cuộn ngang khi chật. */
+export function Tabs<T extends string>({
+  options,
+  value,
+  onChange,
+  accessibilityLabel,
+}: {
+  options: SegmentOption<T>[];
+  value: T;
+  onChange: (v: T) => void;
+  accessibilityLabel: string;
+}) {
+  const c = useColors();
+  return (
+    <View style={{ borderBottomWidth: 1, borderBottomColor: c.divider }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityRole="tablist" accessibilityLabel={accessibilityLabel}>
+        {options.map((o) => {
+          const on = o.value === value;
+          return (
+            <Pressable
+              key={o.value}
+              testID={`tab-${o.value}`}
+              onPress={() => onChange(o.value)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: on }}
+              style={({ pressed }) => [styles.tab, { borderBottomColor: on ? c.primary : 'transparent' }, pressed && { backgroundColor: c.surface2 }]}
+            >
+              <Txt variant="bodyStrong" weight={on ? 'bold' : 'medium'} style={{ color: on ? c.primary : c.text2 }}>
+                {o.label}
+              </Txt>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+}
+
 // ---------------------------------------------------------------- Badge
 
 export type BadgeTone = 'neutral' | 'primary' | 'success' | 'warning' | 'error' | 'info';
@@ -292,6 +332,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   seg: { minHeight: SIZE.segmented, borderRadius: RADIUS.input, padding: 4, flexDirection: 'row', gap: 4 },
+  tab: { minHeight: SIZE.touch, paddingHorizontal: 12, justifyContent: 'center', borderBottomWidth: 3 },
   segBtn: { flex: 1, minHeight: SIZE.touch, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
   badge: {
     alignSelf: 'flex-start',

@@ -84,7 +84,39 @@ export function Button({
   );
 }
 
+/** Nút chỉ có biểu tượng, vùng chạm 48 × 48, luôn có nhãn đọc (thanh tiêu đề, nút ↑ ↓ khi sắp xếp). */
+export function IconButton({
+  icon,
+  label,
+  onPress,
+  disabled,
+  testID,
+}: {
+  icon: IconName;
+  /** Nhãn cho trình đọc màn hình. */
+  label: string;
+  onPress: () => void;
+  disabled?: boolean;
+  testID?: string;
+}) {
+  const c = useColors();
+  return (
+    <Pressable
+      testID={testID}
+      onPress={disabled ? undefined : onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: !!disabled }}
+      hitSlop={4}
+      style={({ pressed }) => [styles.icon, { opacity: disabled ? 0.35 : 1 }, pressed && { backgroundColor: c.surface2 }]}
+    >
+      <Icon name={icon} color={c.primary} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  icon: { width: SIZE.touch, height: SIZE.touch, borderRadius: RADIUS.button, alignItems: 'center', justifyContent: 'center' },
   base: {
     borderRadius: RADIUS.button,
     borderWidth: 1,

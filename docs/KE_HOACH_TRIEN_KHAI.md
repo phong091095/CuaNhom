@@ -68,7 +68,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | 4 | Lưu trữ SQLite, store, sao lưu và khôi phục | ✅ 2026-11-05 |
 | 5 | Nhóm B: dự án | ✅ 2026-11-05 |
 | 6a | Nhóm D: chọn mẫu (D3), nhập cửa (D5) kèm bản vẽ | ✅ 2026-11-06 |
-| 6b | Nhóm D: chi tiết cửa (D6), thông số hệ (D4), chọn nhiều/sắp xếp (D1) | ☐ |
+| 6b | Nhóm D: chi tiết cửa (D6), thông số hệ (D4), chọn nhiều/sắp xếp (D1) | ✅ 2026-11-06 |
 | 7 | Nhóm E: cắt nhôm, phiếu cắt | ☐ |
 | 8 | Nhóm F: tổng hợp kính, phụ kiện | ☐ |
 | 9 | Nhóm G: báo giá, PDF/ảnh, lịch sử | ☐ |
@@ -193,7 +193,7 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 - C1b "Đã xóa gần đây".
 - Nhân bản dự án: chép bộ cửa và tham số; không chép báo giá; trạng thái về "Báo giá".
 
-### GĐ 6 · Nhóm D – Bộ cửa (tách 6a: D3 + D5 + bản vẽ; 6b: D6 + D4 + D1)
+### GĐ 6 · Nhóm D – Bộ cửa (tách 6a: D3 + D5 + bản vẽ; 6b: D6 + D4 + D1) ✅
 > **GĐ 6a đã làm (2026-11-06):** xem nhật ký Phiên 6; ảnh chụp ở `docs/anh-chup/gd6a-*.png`.
 >
 > **Lệch artboard và lý do:**
@@ -201,9 +201,19 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 > - Giá chỉ xem, ghi nguồn "Theo Thư viện"; không có ô sửa giá kính / nhân công riêng từng cửa (quy tắc "một nguồn giá duy nhất").
 > - Không có "Ảnh công trình" (Q6), không có "Hãng phụ kiện" (một hệ nhôm).
 > - Dòng "Còn N ô cần sửa · Xem" nằm ở thanh đáy, không ở đầu trang (gõ W/H thì không bị đẩy lệch).
-> - Lưu cửa mới xong hiện sheet "Thêm cửa cùng loại / khác loại / Xong" (artboard D6), chưa mở D6.
-> - Chạm dòng cửa ở B3 tạm mở form sửa, cho tới khi có D6 (GĐ 6b).
+> - Lưu cửa mới xong hiện sheet "Thêm cửa cùng loại / khác loại / Xem bộ cửa vừa lưu / Xong" (artboard về thẳng D6 kèm snackbar; giữ sheet để nhập liên tục nhanh hơn).
 > - Tắt `typedRoutes`: kiểu route do Expo sinh khi chạy dev server, CI không có nên typecheck lệch giữa máy và CI.
+>
+> **GĐ 6b đã làm (2026-11-06):** xem nhật ký Phiên 7; ảnh chụp ở `docs/anh-chup/gd6b-*.png`.
+>
+> **Lệch artboard và lý do (6b):**
+> - D6 không có "Ảnh công trình" (Q6) và không có tab "Vật tư phụ": vít, ke, silicone là phụ kiện trong mẫu cửa (SRS chỉ có 4 nhóm giá Nhôm · Kính · Phụ kiện · Nhân công). Tab thứ năm là Nhân công.
+> - D6 không có "Sơ đồ cắt của dự án" ở tab Nhôm: làm cùng màn cắt nhôm (GĐ 7).
+> - Thẻ đầu D6 ghi "Thành tiền (N bộ)" theo giá bán, kèm giá vốn, lãi dự kiến, đơn giá TB **theo giá bán** (artboard ghi "theo giá vốn"; SRS BR-09 định nghĩa đơn giá/m² theo giá bán). Các tab ghi số **cho 1 bộ, giá gốc** (Q23).
+> - Thông số ở D6 là các tham số của mẫu (dữ liệu), không phải danh sách cố định của artboard (khóa, lõi khóa, hãng phụ kiện chưa có trong mẫu).
+> - Sheet "Thêm cửa tiếp" ghi tiêu đề chung (không ghi sẵn "Thêm cửa D5") vì cửa khác loại có thể khác tiền tố ký hiệu; ký hiệu kế tiếp ghi trong lựa chọn "Cửa cùng loại".
+> - D4 bỏ artboard "Chọn hãng nhôm" (D2): một hệ nhôm. D4 chỉ xem (Q4), không có ô ghi đè giá theo hệ: một nguồn giá là Thư viện.
+> - D1 nằm ngay trong B3 (không tách màn riêng): chọn nhiều bằng nút "Chọn" hoặc nhấn giữ; sắp xếp bằng nút ↑ ↓ 48 × 48 có nhãn đọc (không kéo thả – khó dùng với găng tay, khó cho trình đọc màn hình).
 
 - **D3 chọn mẫu:**
   - Chip lọc theo nhóm (cửa đi, cửa sổ, vách), chỉ hiện nhóm đang có mẫu.
@@ -311,6 +321,11 @@ Ký hiệu trạng thái: ✅ xong · ⏳ đang làm · ☐ chưa làm. Bảng n
 | FR-DOR-06 (bản vẽ theo tỉ lệ, hướng mở) | `src/features/doors/DoorDrawing.tsx` | ảnh chụp `gd6a-*.png` (kiểm bằng mắt) |
 | NFR-PER-01 (đánh giá form mỗi lần gõ) | `src/domain/doorForm.ts` | `doorForm.test.ts` (trung bình < 5 ms/lần trên máy test) |
 | SRS 10.3 (đo thời gian một bộ cửa) | sự kiện `door_started` / `door_saved` | `doors.test.tsx` |
+| FR-BOM-01…03 (giao diện D6: nhôm theo mã, kính, phụ kiện, nhân công cho 1 bộ) | `src/features/doors/DoorDetail.tsx`, `src/domain/doorDetail.ts`, `computeSingleDoor` ở `src/domain/projectCalc.ts` | `src/domain/__tests__/doorDetail.test.ts`, `src/app-tests/door-detail.test.tsx` (TC-01 qua giao diện) |
+| SRS SCR-05 thao tác (nhân bản, xóa mềm + Hoàn tác, Thêm cửa tiếp nhớ lựa chọn) | `DoorDetail.tsx`, `src/store/dataRevision.ts`, `copyDoorValues` ở `src/domain/doorForm.ts` | `door-detail.test.tsx`, `doorForm.test.ts` |
+| Q4 (D4 thông số hệ chỉ xem, công thức thành chữ) | `packages/engine/src/expr/describe.ts`, `src/domain/templateText.ts`, `src/features/templates/TemplateSpec.tsx` | `packages/engine/test/describe.test.ts`, `templateText.test.ts`, `door-detail.test.tsx` |
+| FR-DOR "thứ tự", Q2 (giao diện D1: chọn nhiều, nhân bản, xóa + Hoàn tác, sắp xếp ↑ ↓) | `src/app/du-an/[id]/index.tsx` | `src/app-tests/door-list.test.tsx` |
+| SRS 5.2 (D6 và D4 theo đúng phiên bản mẫu của bộ cửa; huy hiệu "Mẫu đã cập nhật") | `computeSingleDoor`, `TemplateSpec.tsx` (tham số `v`) | `doorDetail.test.ts` |
 | TC-08 (giao diện), TC-09 | — | GĐ 9, GĐ 13 |
 
 ## 5. Quyết định đã chốt
@@ -335,6 +350,8 @@ Q1–Q6 ở `KE_HOACH_GIAO_DIEN.md`. Các câu dưới đây chốt theo đề x
 | Q20 | VAT mặc định | Tắt, thuế suất 8% khi bật, sửa được | Hồ sơ thiết kế: "mặc định tắt, đang để 8%". |
 | Q21 | Số báo giá | `BG-YYMM-NNN`, đánh lại từ 001 mỗi tháng, theo từng máy | Ngắn, đọc qua điện thoại được; MVP chỉ một máy (SRS 2.2). |
 | Q22 | Khôi phục sao lưu | Thay toàn bộ dữ liệu trong một giao dịch. Giữ nháp, nhật ký và cài đặt riêng của máy. Từ chối file từ bản app mới hơn | SRS 5.2; an toàn khi file hỏng hoặc khôi phục lỗi giữa chừng. Tự sao lưu trước khi khôi phục làm ở GĐ 10 (cần file hệ thống). |
+| Q23 | Chi tiết cửa (D6) ghi số cho 1 bộ hay cả N bộ? | Thẻ đầu: thành tiền **N bộ** (= đơn giá 1 bộ × N, như báo giá – Q8). Các tab: số **cho 1 bộ**, giá gốc | Giống artboard ("Chi phí 1 bộ") và khối giá ở D5; thợ cắt theo từng bộ. Tổng cắt/mua cả dự án ở E2, F1, F2. |
+| Q24 | "Cửa cùng loại" từ D6 chép những gì? | Mẫu (phiên bản mới nhất), tham số, kính, màu, vị trí. **Không** chép rộng, cao, số bộ, ghi chú | Cửa cùng loại thường khác kích thước; ghi chú là của riêng bộ cũ. Tham số không còn trong mẫu mới thì bỏ. |
 
 **Q14 – Tiêu chí chất lượng cắt (SRS 4.3).** Tiêu chí "≤ cận dưới + 1 cây" **không phải lúc nào cũng đạt được** về mặt toán học.
 - Phản ví dụ, có test: 49 cửa 1200 × 2800. Mỗi cây chỉ chứa được 2 thanh 2800 và không còn chỗ cho thanh 1200, nên tối ưu thật là 62 cây, trong khi cận dưới theo SRS là 58.

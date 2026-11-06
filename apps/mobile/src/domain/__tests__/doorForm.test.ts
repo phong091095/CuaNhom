@@ -1,6 +1,6 @@
 import { NBSP } from '@matadoor/engine';
 import { buildPriceBook, findTemplate, MATERIALS } from '@matadoor/data';
-import { doorValues, evaluateDoorForm, fieldOrder, locationSuggestions, newDoorValues, toDoorInput } from '../doorForm';
+import { copyDoorValues, doorValues, evaluateDoorForm, fieldOrder, locationSuggestions, newDoorValues, toDoorInput } from '../doorForm';
 import type { DoorItem } from '../types';
 
 const BOOK = buildPriceBook(MATERIALS);
@@ -104,5 +104,36 @@ describe('form nhập bộ cửa (D5)', () => {
 
   it('vị trí gợi ý: đã dùng trước, rồi vị trí thường gặp, không trùng, tối đa 8', () => {
     expect(locationSuggestions(['Tầng 2 – P. ngủ', null, 'Tầng 1', ''])).toEqual(['Tầng 2 – P. ngủ', 'Tầng 1', 'Tầng 2', 'P. khách', 'P. ngủ', 'Bếp', 'WC', 'Ban công']);
+  });
+});
+
+describe('cửa cùng loại (D6 → D5)', () => {
+  it('chép tham số, kính, màu, vị trí; để trống rộng, cao, ghi chú', () => {
+    const t = DI;
+    const v = copyDoorValues(
+      {
+        id: 'x',
+        projectId: 'p',
+        symbol: 'D1',
+        templateId: t.id,
+        templateVersion: 1,
+        W: 800,
+        H: 2200,
+        qty: 3,
+        params: { huongMo: 1, kheHoChan: 8.5, cu: 4 },
+        glass: { kinh: 'KINH-TRANG-5' },
+        color: 'Nâu cà phê',
+        location: 'Tầng 2',
+        note: 'Ghi chú riêng',
+        sortOrder: 1,
+        createdAt: 0,
+        updatedAt: 0,
+        deletedAt: null,
+      },
+      t,
+      'D4',
+    );
+    expect(v).toMatchObject({ symbol: 'D4', W: '', H: '', qty: 1, note: '', color: 'Nâu cà phê', location: 'Tầng 2', glass: { kinh: 'KINH-TRANG-5' } });
+    expect(v.params).toEqual({ kheHoChan: '8,5', huongMo: '1', benBanLe: '0' });
   });
 });

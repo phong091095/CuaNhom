@@ -4,9 +4,9 @@
  */
 import { computeDoor, summarizeProject, type DoorResult, type DoorTemplate, type PriceBook, type ProjectSummary } from '@matadoor/engine';
 import { findTemplate } from '@matadoor/data';
-import { listDoors } from '@/db/repos/doors';
+import { getDoor, listDoors } from '@/db/repos/doors';
 import { getProject } from '@/db/repos/projects';
-import { loadTemplateSnapshots } from '@/db/repos/snapshots';
+import { getTemplateSnapshot, loadTemplateSnapshots } from '@/db/repos/snapshots';
 import type { SqlDb } from '@/db/sql';
 import { NotFoundError } from './errors';
 import { loadPriceBook } from './pricing';
@@ -107,4 +107,20 @@ export async function computeProjectTotals(db: SqlDb, projectIds: readonly strin
     out.set(id, { op1: s.op1, cost: s.cost.total, area: s.area, sets: s.sets, invalidDoors: s.invalidDoors.length });
   }
   return out;
+}
+
+export interface ComputedSingleDoor extends ComputedDoor {
+  project: Project;
+  book: PriceBook;
+}
+
+/** Tính một bộ cửa (D6) theo bản chụp đúng phiên bản mẫu của nó. */
+export async function computeSingleDoor(db: SqlDb, doorId: string): Promise<ComputedSingleDoor> {
+  const door = await getDoor(db, doorId);
+  if (!door || door.deletedAt !== null) throw new NotFoundError('bộ cửa');
+  const project = await getProject(db, door.projectId);
+  if (!project || project.deletedAt !== null) throw new NotFoundError('dự án');
+  const [template, book] = await Promise.all([getTemplateSnapshot(db, door.templateId, door.templateVersion), loadPriceBook(db)]);
+  const [computed] = computeDoors([door], new Map(template ? [[`${door.templateId}@${door.templateVersion}`, template]] : []), book);
+  return { ...computed!, project, book };
 }

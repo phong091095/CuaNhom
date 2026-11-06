@@ -41,6 +41,8 @@ const PATHS = {
   lock: 'M6 11h12v10H6z M8 11V8a4 4 0 0 1 8 0v3',
   minus: 'M5 12h14',
   arrowR: 'M5 12h14 M13 6l6 6-6 6',
+  arrowUp: 'M12 19V5 M6 11l6-6 6 6',
+  arrowDown: 'M12 5v14 M6 13l6 6 6-6',
   clock: 'M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18z M12 7v5l3 2',
   shield: 'M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z M9 12l2 2 4-4',
   restore: 'M4 12a8 8 0 1 0 2.3-5.7 M4 4v4h4 M12 8v4l3 2',

@@ -1,9 +1,9 @@
 /**
  * Chi tiết dự án (B3 · SRS SCR-02): thông tin khách, thẻ báo giá, khối "Bóc tách & báo giá",
- * danh sách bộ cửa. Mọi con số tính lại bằng engine khi mở (SRS 5.2), bộ cửa theo bản chụp mẫu của nó.
+ * danh sách bộ cửa (D1): chạm mở chi tiết cửa; "Chọn" hoặc nhấn giữ để chọn nhiều (nhân bản, xóa + Hoàn tác);
+ * "Sắp xếp" đổi thứ tự bằng nút ↑ ↓ (thứ tự dùng cho báo giá, phiếu cắt). Mọi con số tính lại bằng engine khi mở (SRS 5.2), bộ cửa theo bản chụp mẫu của nó.
  *
- * Còn thiếu so với artboard (làm ở giai đoạn sau): chi tiết cửa D6 (GĐ 6b – tạm thời chạm dòng cửa mở form sửa);
- * ô Nhôm/Kính/Phụ kiện/Báo giá bấm được (GĐ 7–9); "Biên thực tế sau hao hụt" cần số cây thực mua (GĐ 7),
+ * Còn thiếu so với artboard (làm ở giai đoạn sau): ô Nhôm/Kính/Phụ kiện/Báo giá bấm được (GĐ 7–9); "Biên thực tế sau hao hụt" cần số cây thực mua (GĐ 7),
  * tạm thay bằng "Lãi dự kiến".
  */
 import {
@@ -20,14 +20,16 @@ import {
 } from '@matadoor/engine';
 import { findTemplate } from '@matadoor/data';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback, useState, type ReactNode } from 'react';
-import { Linking, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { BackHandler, Linking, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { getDb } from '@/db/client';
+import { duplicateDoor, moveDoor, restoreDoor, softDeleteDoors } from '@/db/repos/doors';
 import { updateProject } from '@/db/repos/projects';
 import { computeProject, type ComputedDoor, type ComputedProject } from '@/domain/projectCalc';
 import { PROJECT_STATUS_BADGE, PROJECT_STATUS_LABELS, type ProjectStatus } from '@/domain/types';
 import { ProjectActions } from '@/features/projects/ProjectActions';
 import { StatusSheet } from '@/features/projects/StatusSheet';
+import { useDataRevision } from '@/store/dataRevision';
 import { useColors } from '@/theme/ThemeProvider';
 import {
   Badge,
@@ -35,10 +37,12 @@ import {
   BottomBar,
   Button,
   Card,
+  Dialog,
   EmptyState,
   ErrorState,
   Header,
   Icon,
+  IconButton,
   Screen,
   SectionTitle,
   SkeletonCard,
@@ -50,10 +54,15 @@ import {
 export default function ProjectDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const snack = useSnackbar();
+  const bump = useDataRevision((st) => st.bump);
   const [data, setData] = useState<ComputedProject | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showActions, setShowActions] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
+  const [mode, setMode] = useState<ListMode>('normal');
+  const [selected, setSelected] = useState<string[]>([]);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -68,6 +77,26 @@ export default function ProjectDetailScreen() {
     useCallback(() => {
       load();
     }, [load]),
+  );
+  // Nút lùi Android khi đang chọn nhiều / sắp xếp: thoát chế độ, không rời màn.
+  useFocusEffect(
+    useCallback(() => {
+      if (mode === 'normal') return undefined;
+      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+        setMode('normal');
+        setSelected([]);
+        return true;
+      });
+      return () => sub.remove();
+    }, [mode]),
+  );
+  // Dữ liệu đổi từ nơi khác khi màn này đang hiện (Hoàn tác xóa bộ cửa ở snackbar) thì tải lại.
+  useEffect(
+    () =>
+      useDataRevision.subscribe(() => {
+        load();
+      }),
+    [load],
   );
 
   const changeStatus = async (s: ProjectStatus) => {
@@ -106,6 +135,62 @@ export default function ProjectDetailScreen() {
 
   const { project: p, summary: s, doors } = data;
   const addDoor = () => router.push(`/du-an/${p.id}/them-cua`);
+  // Bộ đã chọn theo thứ tự trong danh sách (bỏ bộ không còn).
+  const picked = doors.filter((d) => selected.includes(d.door.id));
+  const toggle = (id: string) => setSelected((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+  const exitMode = () => {
+    setMode('normal');
+    setSelected([]);
+  };
+
+  const removePicked = async () => {
+    const ids = picked.map((d) => d.door.id);
+    setConfirmDelete(false);
+    await softDeleteDoors(await getDb(), ids);
+    exitMode();
+    await load();
+    snack.show(`Đã xóa ${ids.length} bộ cửa`, {
+      onUndo: async () => {
+        const db = await getDb();
+        const renamed: string[] = [];
+        for (const id of ids) {
+          const r = await restoreDoor(db, id);
+          if (r.renamed) renamed.push(r.symbol);
+        }
+        bump();
+        if (renamed.length > 0) snack.show(`Đã khôi phục; ký hiệu trùng nên đổi thành ${renamed.join(', ')}`);
+      },
+    });
+  };
+
+  const duplicatePicked = async () => {
+    setBusy(true);
+    try {
+      const db = await getDb();
+      const made: string[] = [];
+      for (const d of picked) made.push((await duplicateDoor(db, d.door.id)).symbol);
+      exitMode();
+      await load();
+      snack.show(`Đã nhân bản thành ${made.join(', ')}`, { tone: 'success' });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const move = async (id: string, dir: -1 | 1) => {
+    await moveDoor(await getDb(), id, dir);
+    await load();
+  };
+
+  const onRowPress = (d: ComputedDoor) => {
+    if (mode === 'select') toggle(d.door.id);
+    else router.push(`/du-an/${p.id}/cua/${d.door.id}`);
+  };
+  const onRowLongPress = (d: ComputedDoor) => {
+    if (mode !== 'normal') return;
+    setMode('select');
+    setSelected([d.door.id]);
+  };
   return (
     <Screen>
       {header}
@@ -116,20 +201,87 @@ export default function ProjectDetailScreen() {
           <Badge tone="error" icon="alert" label={`${s.invalidDoors.join(', ')} có lỗi – chưa tính vào tổng`} />
         ) : null}
         {s.sets > 0 ? <Modules data={data} /> : null}
-        <SectionTitle>{s.doors > 0 ? `Bộ cửa (${s.doors} loại · ${s.sets} bộ)` : 'Bộ cửa'}</SectionTitle>
+        <View style={styles.listHead}>
+          <View style={{ flex: 1 }}>
+            <SectionTitle>{s.doors > 0 ? `Bộ cửa (${s.doors} loại · ${s.sets} bộ)` : 'Bộ cửa'}</SectionTitle>
+          </View>
+          {mode === 'normal' && doors.length > 0 ? (
+            <View style={styles.listActions}>
+              <Button kind="ghost" compact icon="check" label="Chọn" testID="doors-select" onPress={() => setMode('select')} />
+              {doors.length > 1 ? <Button kind="ghost" compact icon="sort" label="Sắp xếp" testID="doors-sort" onPress={() => setMode('sort')} /> : null}
+            </View>
+          ) : null}
+        </View>
+        {mode === 'select' ? (
+          <Txt variant="caption" color="text2">
+            Chạm để chọn hoặc bỏ chọn bộ cửa.
+          </Txt>
+        ) : null}
+        {mode === 'sort' ? (
+          <Txt variant="caption" color="text2">
+            Dùng nút lên, xuống để đổi thứ tự. Thứ tự này dùng cho báo giá và phiếu cắt.
+          </Txt>
+        ) : null}
         {doors.length === 0 ? (
           <EmptyState icon="door" title="Chưa có bộ cửa nào" message="Thêm bộ cửa đầu tiên: chọn mẫu, nhập rộng × cao, app tính cắt nhôm, kính, phụ kiện và giá." />
         ) : (
           <Card style={{ padding: 0, overflow: 'hidden' }}>
             {doors.map((d, i) => (
-              <DoorRow key={d.door.id} item={d} last={i === doors.length - 1} onPress={() => router.push(`/du-an/${p.id}/cua/${d.door.id}/sua`)} />
+              <DoorRow
+                key={d.door.id}
+                item={d}
+                first={i === 0}
+                last={i === doors.length - 1}
+                mode={mode}
+                selected={selected.includes(d.door.id)}
+                onPress={() => onRowPress(d)}
+                onLongPress={() => onRowLongPress(d)}
+                onMove={(dir) => move(d.door.id, dir)}
+              />
             ))}
           </Card>
         )}
       </Body>
       <BottomBar>
-        <Button label="Thêm bộ cửa" icon="plus" onPress={addDoor} testID="add-door" />
+        {mode === 'normal' ? <Button label="Thêm bộ cửa" icon="plus" onPress={addDoor} testID="add-door" /> : null}
+        {mode === 'select' ? (
+          <>
+            <Txt variant="caption" color="text2" testID="picked-count">
+              {picked.length === 0 ? 'Chưa chọn bộ cửa nào' : `Đã chọn ${picked.length} bộ cửa (${picked.reduce((a, d) => a + d.door.qty, 0)} bộ)`}
+            </Txt>
+            <View style={styles.barRow}>
+              <Button kind="secondary" label="Xong" onPress={exitMode} testID="select-done" style={{ flex: 1 }} />
+              <Button
+                kind="secondary"
+                label={`Nhân bản (${picked.length})`}
+                disabled={picked.length === 0}
+                loading={busy}
+                onPress={duplicatePicked}
+                testID="select-duplicate"
+                style={{ flex: 1 }}
+              />
+              <Button
+                kind="destructive"
+                label={`Xóa (${picked.length})`}
+                disabled={picked.length === 0}
+                onPress={() => setConfirmDelete(true)}
+                testID="select-delete"
+                style={{ flex: 1 }}
+              />
+            </View>
+          </>
+        ) : null}
+        {mode === 'sort' ? <Button label="Xong" icon="check" onPress={exitMode} testID="sort-done" /> : null}
       </BottomBar>
+      <Dialog
+        visible={confirmDelete}
+        title={`Xóa ${picked.length} bộ cửa?`}
+        message={`${picked.map((d) => d.door.symbol).join(', ')} (${picked.reduce((a, d) => a + d.door.qty, 0)} bộ) sẽ được chuyển vào Đã xóa gần đây và tự xóa hẳn sau 30 ngày.`}
+        confirmLabel={`Xóa ${picked.length} bộ cửa`}
+        destructive
+        onConfirm={removePicked}
+        onCancel={() => setConfirmDelete(false)}
+      />
       <ProjectActions
         target={showActions ? { project: p, doorCount: s.doors, setCount: s.sets, op1: s.op1 } : null}
         onClose={() => setShowActions(false)}
@@ -260,7 +412,27 @@ function Module({ icon, label, meta, value, tag }: { icon: IconName; label: stri
   );
 }
 
-function DoorRow({ item, last, onPress }: { item: ComputedDoor; last: boolean; onPress: () => void }) {
+type ListMode = 'normal' | 'select' | 'sort';
+
+function DoorRow({
+  item,
+  first,
+  last,
+  mode,
+  selected,
+  onPress,
+  onLongPress,
+  onMove,
+}: {
+  item: ComputedDoor;
+  first: boolean;
+  last: boolean;
+  mode: ListMode;
+  selected: boolean;
+  onPress: () => void;
+  onLongPress: () => void;
+  onMove: (dir: -1 | 1) => void;
+}) {
   const c = useColors();
   const { door: d, result: r, template } = item;
   const name = template?.name ?? findTemplate(d.templateId)?.name ?? d.templateId;
@@ -274,14 +446,14 @@ function DoorRow({ item, last, onPress }: { item: ComputedDoor; last: boolean; o
     ...(glass ? [glass] : []),
     ...(d.location ? [d.location] : []),
   ];
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [styles.door, !last && { borderBottomWidth: 1, borderBottomColor: c.divider }, pressed && { backgroundColor: c.surface2 }]}
-      accessibilityRole="button"
-      accessibilityLabel={`${d.symbol}, ${name}, ${formatSize(d.W, d.H)}, ${d.qty} bộ${errors ? ', có lỗi' : `, thành tiền ${formatMoney(unit * d.qty)}`}. Mở để sửa`}
-      testID={`door-row-${d.symbol}`}
-    >
+  const summary = `${d.symbol}, ${name}, ${formatSize(d.W, d.H)}, ${d.qty} bộ${errors ? ', có lỗi' : `, thành tiền ${formatMoney(unit * d.qty)}`}`;
+  const content = (
+    <>
+      {mode === 'select' ? (
+        <View style={[styles.check, { borderColor: selected ? c.primary : c.border, backgroundColor: selected ? c.primary : 'transparent' }]}>
+          {selected ? <Icon name="check" color={c.surface} size={18} /> : null}
+        </View>
+      ) : null}
       <View style={{ flex: 1, gap: 2 }}>
         <Txt variant="bodyStrong">
           {d.symbol} · {name}
@@ -300,16 +472,45 @@ function DoorRow({ item, last, onPress }: { item: ComputedDoor; last: boolean; o
         {errors ? <Badge tone="error" icon="alert" label={r.dataErrors[0] ?? r.checks.find((x) => x.level === 'error')?.message ?? 'Có lỗi'} /> : null}
         {item.newerTemplateVersion ? <Badge tone="info" icon="info" label="Mẫu đã cập nhật" /> : null}
       </View>
-      {!errors ? (
+      {mode === 'sort' ? (
+        <View style={styles.moveBtns}>
+          <IconButton icon="arrowUp" label={`Đưa ${d.symbol} lên`} disabled={first} onPress={() => onMove(-1)} testID={`move-up-${d.symbol}`} />
+          <IconButton icon="arrowDown" label={`Đưa ${d.symbol} xuống`} disabled={last} onPress={() => onMove(1)} testID={`move-down-${d.symbol}`} />
+        </View>
+      ) : !errors ? (
         <View style={{ alignItems: 'flex-end', gap: 2 }}>
-          <Txt variant="caption" color="text2" tabular>
-            {d.qty} bộ × {formatMoney(unit)}
-          </Txt>
+          {mode === 'normal' ? (
+            <Txt variant="caption" color="text2" tabular>
+              {d.qty} bộ × {formatMoney(unit)}
+            </Txt>
+          ) : null}
           <Txt variant="bodyStrong" weight="bold" tabular>
             {formatMoney(unit * d.qty)}
           </Txt>
         </View>
       ) : null}
+    </>
+  );
+  const rowStyle = [styles.door, !last && { borderBottomWidth: 1, borderBottomColor: c.divider }, selected && { backgroundColor: c.primarySoft }];
+  if (mode === 'sort') {
+    return (
+      <View style={rowStyle} testID={`door-row-${d.symbol}`} accessibilityLabel={summary}>
+        {content}
+      </View>
+    );
+  }
+  return (
+    <Pressable
+      onPress={onPress}
+      onLongPress={onLongPress}
+      style={({ pressed }) => [...rowStyle, pressed && { backgroundColor: c.surface2 }]}
+      accessibilityRole={mode === 'select' ? 'checkbox' : 'button'}
+      accessibilityState={mode === 'select' ? { checked: selected } : {}}
+      accessibilityLabel={mode === 'select' ? summary : `${summary}. Mở chi tiết`}
+      accessibilityHint={mode === 'normal' ? 'Nhấn giữ để chọn nhiều' : undefined}
+      testID={`door-row-${d.symbol}`}
+    >
+      {content}
     </Pressable>
   );
 }
@@ -322,4 +523,9 @@ const styles = StyleSheet.create({
   moduleTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   moduleIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   door: { flexDirection: 'row', gap: 12, padding: 16, alignItems: 'flex-start' },
+  listHead: { flexDirection: 'row', alignItems: 'flex-end', gap: 4, flexWrap: 'wrap' },
+  listActions: { flexDirection: 'row' },
+  check: { width: 24, height: 24, borderRadius: 6, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+  moveBtns: { flexDirection: 'row', alignSelf: 'center' },
+  barRow: { flexDirection: 'row', gap: 8 },
 });

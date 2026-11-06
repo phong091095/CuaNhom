@@ -17,32 +17,30 @@
 
 ## Phiên tới bắt đầu từ đây
 
-**GĐ 6b · Chi tiết cửa (D6), thông số hệ (D4), chọn nhiều và sắp xếp (D1).** Artboard: `DoorDetail`, `DoorsList*`, `DoorsSetup*`, `canvas.json`.
+**GĐ 7 · Nhóm E – Cắt nhôm: thiết lập cắt (E1), tổng hợp nhôm (E2), sơ đồ cắt (E3), phiếu cắt PDF.** Artboard: `GalleryE`, mục E1–E3 trong `KE_HOACH_GIAO_DIEN.md` (dòng 73–77, 191–202).
 
-1. **D6** `src/app/du-an/[id]/cua/[doorId]/index.tsx` (SRS SCR-05):
-   - Thẻ đầu: bản vẽ nhỏ, ký hiệu, mẫu, kích thước, số bộ, giá bán 1 bộ, giá vốn, lãi.
-   - Tab Tổng quan (bản vẽ lớn, thông số, chi phí theo nhóm) · Nhôm · Kính · Phụ kiện · Nhân công.
-   - Tab Nhôm (FR-BOM-01): mã, tên, chiều dài 0,1 mm, góc cắt, vị trí, số lượng, kg; nhóm theo mã nhôm.
-   - Tab Kính (FR-BOM-02): rộng × cao, số tấm, m², kg/tấm.
-   - Tab Phụ kiện (FR-BOM-03): số lẻ và số lấy, đơn vị.
-   - Thanh tiêu đề: "Sửa" (mở D5 sửa) và "⋯" (sheet: nhân bản `duplicateDoor`, xóa mềm `softDeleteDoors` + Hoàn tác `restoreDoor`).
-   - "Mẫu đã cập nhật": chỉ hiện huy hiệu; phần so sánh và cập nhật làm ở GĐ 11.
-2. **Đổi luồng:**
-   - Chạm dòng cửa ở B3 → mở D6 (không mở thẳng form sửa nữa).
-   - Lưu cửa mới ở D5 → sheet "Thêm cửa tiếp" vẫn giữ; thêm lựa chọn "Xem bộ cửa vừa lưu" → D6.
-   - Sửa xong → về D6.
-3. **D4** `src/app/mau/[templateId].tsx` (chỉ xem, Q4):
-   - Tab Khe hở (hằng số kèm ghi chú) · Profile nhôm (vai trò, mã, công thức dài, số lượng, góc) · Giới hạn (các kiểm tra kỹ thuật).
-   - Biểu thức đổi sang chữ: thêm hàm `describeExpr` vào engine (ví dụ `soCanh == 2 and W < 800` → "Số cánh = 2 và Rộng < 800"), có test.
-   - Vào từ D5 (thẻ mẫu) và D6 ("Thông số hệ").
-4. **D1 trong B3** (artboard `DoorsListSelect`):
-   - Nút "Chọn" hoặc nhấn giữ một dòng để vào chế độ chọn nhiều; thanh đáy Xong · Nhân bản · Xóa (xóa mềm + Hoàn tác).
-   - Chế độ "Sắp xếp" với nút ↑ ↓ (`moveDoor`).
-5. **Test:**
-   - D6 hiện đúng TC-01: cánh ngang 718 × 2, cánh đứng 2149 × 2, nẹp đứng 2012,6 × 2, kính 574 × 2007,6.
-   - Nhân bản / xóa / Hoàn tác ở D6; chọn nhiều xóa 2 bộ rồi Hoàn tác; sắp xếp lại.
-   - `describeExpr` (engine, node:test).
-   - Chụp web 390/360, sáng/tối.
+Đã có sẵn: engine `optimizeAll`, `optimizeCuts`, `collectCutPieces`, `cutGroupKey` (nhóm theo mã + màu – Q7), `lowerBoundL2`, `validateCutSettings`, `DEFAULT_CUT_SETTINGS`; DB đã lưu `bar_length`, `kerf`, `trim` cho từng dự án (`Project.cut`) và mặc định của xưởng (`Workshop.defaultCut`).
+
+1. **Nghiệp vụ** `src/domain/cutPlan.ts` (không công thức mới, chỉ gọi engine):
+   - `computeCutPlan(db, projectId)`: tính dự án (`computeProject`) → `collectCutPieces` → `optimizeAll` theo thiết lập cắt của dự án.
+   - Mỗi nhóm (mã, màu): số cây thực mua, kg, tiền ước tính (theo mét dùng) và tiền thực mua (số cây × giá cây), hao hụt %; cận dưới L2 để đối chiếu.
+   - Đoạn dài hơn cây dùng được → báo lỗi rõ (không xếp được), không làm vỡ màn.
+   - Đo: dự án 50 bộ ≤ 1 giây (NFR-PER-02) – test hiệu năng như `doorForm.test.ts`.
+2. **E1** `src/app/du-an/[id]/cat/thiet-lap.tsx`: dài cây, mạch cưa, bỏ đầu cho dự án (FR-CUT-02); nút "Về mặc định của xưởng"; kiểm tra bằng `validateCutSettings`; lưu qua `updateProject(…, { cut })`.
+3. **E2** `src/app/du-an/[id]/cat/index.tsx` (FR-CUT-04):
+   - Danh sách theo (mã, màu): số cây, kg, tiền ước tính → tiền thực mua, hao hụt (dưới 10% chữ thường; từ 10% màu cảnh báo kèm icon).
+   - Tổng cộng; không có thanh dư/kho (FR-CUT-05 sau MVP).
+   - Ô "Nhôm" ở B3 bấm được → E2; B3 đổi "Lãi dự kiến" thành "Biên thực tế sau hao hụt" (dùng tiền thực mua).
+4. **E3** `src/app/du-an/[id]/cat/[nhom].tsx` (FR-CUT-01, 03):
+   - Vẽ từng cây đúng tỉ lệ (SVG), đoạn ghi ký hiệu bộ cửa + vai trò + dài; chạm đoạn → sheet chi tiết (bộ cửa, vị trí, góc cắt).
+   - Dòng kiểm tra mỗi cây: "đoạn + mạch cưa × (n−1) + bỏ đầu × 2 + dư = dài cây" (engine không tính mạch cưa sau đoạn cuối).
+   - Đoạn chạm ≥ 44 px cao; chữ không đè khi đoạn ngắn (chỉ ghi dài, chi tiết trong sheet).
+   - Tab D6 Nhôm thêm liên kết "Sơ đồ cắt của dự án" → E2.
+5. **Phiếu cắt PDF** (FR-BOM-05): cài `expo-print` và `expo-sharing` (lấy phiên bản trong `node_modules/expo/bundledNativeModules.json`, cài bằng `npm install -w @matadoor/mobile …` – proxy chặn `npx expo install`). HTML phiếu cắt in theo nhóm, có tên dự án, ngày, thiết lập cắt; không có giá. Ghi sự kiện `cut_sheet_exported`. Phần dựng HTML viết thành hàm thuần (có test), phần in/chia sẻ mỏng.
+6. **Test:**
+   - Nghiệp vụ: TC-10 qua lưu trữ (dự án nhiều bộ → số cây đúng engine); nhóm khác màu không gộp; đổi thiết lập cắt thì số cây đổi; hiệu năng 50 bộ.
+   - Giao diện: B3 → E2 → E3; sửa E1 → E2 tính lại; đoạn quá dài báo lỗi; HTML phiếu cắt có đủ đoạn.
+   - Chụp web 390/360, sáng/tối (Metro trong container không tự nạp lại file: sửa code xong phải khởi động lại `expo start --clear` trước khi chụp).
 
 ## Việc tồn
 
@@ -53,6 +51,42 @@
 - [ ] **Mã ứng dụng** `vn.matadoor.app` (Android package, iOS bundle id) là tạm: chốt trước khi đưa lên cửa hàng.
 
 ## Các phiên
+
+### 2026-11-06 · Phiên 7 · GĐ 6b – Chi tiết cửa (D6), thông số hệ (D4), chọn nhiều và sắp xếp (D1)
+
+- **Bối cảnh:** chủ dự án nhắn "làm tiếp đi". Đã đọc mục "Phiên tới".
+- **Đã làm:**
+  - **Engine** `describeExpr` (`packages/engine/src/expr/describe.ts`): biểu thức → chữ ("Số cánh = 2 và (Rộng < 800 hoặc …)", "nếu Cao > 2400 thì 4, không thì 3"); chỉ thêm ngoặc khi cần; số dùng dấu phẩy; biểu thức hỏng thì trả nguyên văn.
+  - **Nghiệp vụ app:**
+    - `src/domain/templateText.ts`: tên biến tiếng Việt của mẫu (W → Rộng, vai trò thanh → nhãn, kính, số thanh…), hằng số hiện bằng giá trị; nhãn giá trị tham số.
+    - `src/domain/doorDetail.ts`: nhôm gom theo mã (giá cây, dài cây, kg/m, mét dùng, số cây quy đổi, kg, tiền – cho 1 bộ), bảng thông số đã nhập, chữ phụ của thanh (góc cắt, số thanh, vị trí), đơn giá theo đơn vị.
+    - `computeSingleDoor` (tính một bộ theo bản chụp đúng phiên bản mẫu); `copyDoorValues` ("Cửa cùng loại" – Q24).
+  - **D6** `src/features/doors/DoorDetail.tsx` (route `du-an/[id]/cua/[doorId]/index.tsx`):
+    - Thẻ đầu: bản vẽ nhỏ, ký hiệu · mẫu, kích thước · số bộ · hệ, màu, vị trí; thành tiền N bộ (+ "N bộ × đơn giá"); diện tích, giá vốn, lãi dự kiến (%), đơn giá TB theo giá bán, kg nhôm; huy hiệu "Mẫu đã cập nhật" nếu có.
+    - Tab Tổng quan (thông số + "Thông số hệ" + chi phí 1 bộ theo nhóm, giá vốn và giá bán 1 bộ) · Nhôm (theo mã: dòng đầu nhóm, từng thanh dài 0,1 mm, góc, số thanh, vị trí, dòng cộng: mét = cây · kg, tiền) · Kính (kích thước, số tấm, kg/tấm, m², đơn giá) · Phụ kiện (số lẻ × đơn giá, ghi chú) · Nhân công. Đổi tab thì cuộn thanh tab lên đầu.
+    - Thanh tiêu đề: "Sửa" và "⋯" (sheet: Sửa bộ cửa · Nhân bản "Tạo D5 giống D1" · Xóa bộ cửa → hộp xác nhận như artboard → về dự án + snackbar Hoàn tác).
+    - Thanh đáy "Thêm cửa tiếp" → sheet Cửa cùng loại / Cửa khác loại, chọn sẵn lựa chọn lần trước (nhãn "Lần trước"), "Lựa chọn được ghi nhớ cho lần sau."
+  - **D4** `src/features/templates/TemplateSpec.tsx` (route `mau/[templateId].tsx`, tham số `v` = phiên bản bộ cửa đang dùng): thẻ mẫu (hệ, phiên bản, "Đã khớp đáp án mẫu trong đặc tả"); tab Khe hở & hằng số (tham số: mặc định, khoảng, lựa chọn; hằng số kèm ghi chú; giá trị tính thêm) · Profile nhôm (công thức dài, số thanh, góc, vị trí theo mã) · Kính & phụ kiện (công thức kính, phụ kiện, nhân công) · Giới hạn (mức Lỗi/Cảnh báo/Thông tin + điều kiện thành chữ). Vào từ D5 ("Xem thông số hệ") và D6.
+  - **D1 trong B3:** nút "Chọn" / nhấn giữ → chọn nhiều (ô đánh dấu, nền primarySoft, thanh đáy "Đã chọn n bộ cửa (m bộ)" + Xong · Nhân bản (n) · Xóa (n)); xóa có hộp xác nhận + Hoàn tác (khôi phục đổi ký hiệu nếu trùng – Q19); nút "Sắp xếp" → nút ↑ ↓ 48 × 48 có nhãn "Đưa D2 lên", tắt ở đầu/cuối. Nút lùi Android khi đang chọn/sắp xếp thì thoát chế độ, không rời màn.
+  - **Đổi luồng:** chạm dòng cửa ở B3 → D6; sửa xong → về D6; lưu cửa mới → sheet thêm "Xem bộ cửa vừa lưu" → D6.
+  - **Dùng chung:** `Tabs` (thanh tab cuộn ngang, gạch chân 3 px), `IconButton` (48 × 48, có nhãn đọc), `RowGroup` / `InfoRow` (`src/ui/Table.tsx`), icon `arrowUp` / `arrowDown`; store `useDataRevision` (Hoàn tác từ snackbar sau khi đã rời D6 → B3 tự tải lại).
+- **File chính:** `packages/engine/src/expr/describe.ts`, `apps/mobile/src/features/doors/DoorDetail.tsx`, `src/features/templates/TemplateSpec.tsx`, `src/app/du-an/[id]/index.tsx`, `src/domain/{doorDetail,templateText}.ts`.
+- **Kiểm thử:**
+  - `npm run check` → typecheck, lint sạch; dữ liệu 26, engine 91 (thêm 4 ca `describeExpr`), app 176/176 (20 bộ, thêm 24 ca).
+  - `npm run coverage` → engine 99,55% dòng; app (db, domain, store) 98,3% dòng.
+  - Nghiệp vụ: TC-01 qua lưu trữ (718 × 2, 2149 × 2, 2012,6 × 2, kính 574 × 2007,6); nhôm gom theo mã, số cho 1 bộ không đổi theo số bộ; thiếu vật tư/bản chụp vẫn mở được; bộ/dự án đã xóa → không tìm thấy; chữ công thức; `copyDoorValues`.
+  - Giao diện (router thật): D6 TC-01 qua các tab; nhân bản; xóa từ B3 → D6 → về B3 → Hoàn tác hiện lại; cửa cùng loại (giữ tham số, màu, vị trí; W/H, ghi chú trống; ký hiệu D2) và nhớ lựa chọn; cửa khác loại → D3; D4 (hằng số, "Dài = Rộng − 36 × 2 − 5 × 2", giới hạn); D5 "Xem bộ cửa vừa lưu"; bộ cửa không còn; D1 chọn 2 → xóa → Hoàn tác; nhấn giữ; nhân bản 2 bộ (bản sao đặt sau bộ gốc); sắp xếp ↑ ↓; nút lùi Android thoát chế độ chọn.
+  - Web (Chromium, dev server): luồng B3 → D6 (5 tab, sheet thêm tiếp, thao tác, xóa) → D4 (3 tab) → B3 chọn nhiều, sắp xếp ở 390 và 360, sáng và tối; không lỗi console. Ảnh: `docs/anh-chup/gd6b-d6.png`, `gd6b-thao-tac-d1.png`, `gd6b-d4.png`, `gd6b-toi-360.png`.
+- **Con số:** dự án mẫu không đổi (D6 chỉ hiển thị kết quả engine).
+- **Lệch so với kế hoạch và lý do:** ghi ở `KE_HOACH_TRIEN_KHAI.md` GĐ 6 ("Lệch artboard và lý do (6b)") và Q23, Q24. Tóm tắt: không có ảnh công trình, không tab Vật tư phụ (thay bằng Nhân công), đơn giá TB theo giá bán (BR-09), sắp xếp bằng nút thay kéo thả, D1 nằm trong B3.
+- **Lỗi bắt được và đã sửa:**
+  - Trên web, ref của ScrollView không gắn khi khung chờ và màn chính dùng chung một `Body` (đổi tab không cuộn) → đặt `key` để dựng mới.
+  - Metro trong container không tự nạp lại file khi sửa: ảnh chụp lần đầu là bản cũ → khởi động lại với `--clear` trước khi chụp.
+  - Lint React Compiler: gọi tải lại trong effect → đăng ký `useDataRevision.subscribe` thay vì đọc số đếm trong effect.
+  - Nhãn tham số dùng khoảng trắng thường giữa số và đơn vị → khoảng trắng không ngắt.
+- **Việc dở / phát sinh:** không.
+- **Commit:** "GĐ 6b: chi tiết cửa, thông số hệ, chọn nhiều và sắp xếp".
+- **Bước tiếp theo:** GĐ 7 (xem mục "Phiên tới bắt đầu từ đây").
 
 ### 2026-11-06 · Phiên 6 · GĐ 6a – Chọn mẫu (D3), nhập cửa (D5), bản vẽ
 

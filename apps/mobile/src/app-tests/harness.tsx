@@ -16,9 +16,12 @@ import NewProjectScreen from '@/app/du-an/moi';
 import PickTemplateScreen from '@/app/du-an/[id]/them-cua';
 import NewDoorScreen from '@/app/du-an/[id]/cua/moi';
 import EditDoorScreen from '@/app/du-an/[id]/cua/[doorId]/sua';
+import DoorDetailScreen from '@/app/du-an/[id]/cua/[doorId]/index';
+import TemplateSpecScreen from '@/app/mau/[templateId]';
 import { setDbForTests } from '@/db/client';
 import type { SqlDb } from '@/db/sql';
 import { freshDb, installTestClock } from '@/db/testing/setup';
+import { useDataRevision } from '@/store/dataRevision';
 import { useProjects } from '@/store/projects';
 import { AppThemeProvider } from '@/theme/ThemeProvider';
 import { SnackbarProvider } from '@/ui';
@@ -40,6 +43,7 @@ function TestRoot() {
 export async function setupDb(): Promise<SqlDb> {
   // Store là singleton: đặt lại để ca test trước (ví dụ chữ tìm) không ảnh hưởng ca sau.
   useProjects.setState({ items: [], totals: {}, query: '', loading: false, error: null });
+  useDataRevision.setState({ rev: 0 });
   installTestClock(Date.now());
   const db = await freshDb();
   setDbForTests(db);
@@ -59,7 +63,9 @@ export function renderApp(initialUrl = '/') {
       'du-an/[id]/sua': EditProjectScreen,
       'du-an/[id]/them-cua': PickTemplateScreen,
       'du-an/[id]/cua/moi': NewDoorScreen,
+      'du-an/[id]/cua/[doorId]/index': DoorDetailScreen,
       'du-an/[id]/cua/[doorId]/sua': EditDoorScreen,
+      'mau/[templateId]': TemplateSpecScreen,
       'da-xoa': TrashScreen,
     },
     { initialUrl },

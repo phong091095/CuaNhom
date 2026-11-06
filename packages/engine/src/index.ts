@@ -5,6 +5,8 @@
 export * from './types';
 export { compile, evaluate, ExprError } from './expr';
 export type { CompiledExpr, ExprNode, Scope, ExprErrorCode } from './expr';
+export { describeExpr } from './expr/describe';
+export type { NameResolver } from './expr/describe';
 export { roundHalfAway, roundMm, roundMoney, ceilEps, ceilTo, CEIL_EPS } from './round';
 export * from './format';
 export { computeDoor, validateInput, interpolate, glassKey, GLASS_KG_PER_M2_MM, RESERVED_VARS } from './compute';
